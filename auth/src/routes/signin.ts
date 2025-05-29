@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
 import cookieSession from "cookie-session";
 import { NotFoundError, ValidateRequestMiddleware } from "@tabletennisshop/common";
+import { Client } from "../../models/ClientModel";
 const router = express.Router();
 
 const validationRules = [
@@ -18,28 +19,32 @@ const validationRules = [
         .withMessage("Password must be between 4 and 20 characters"),
 ]
 
-let users: { email: string, password: string }[] = [{email: "superherodung123@gmail.com", password: "1234"}];
 router.post("/api/users/signin", 
     validationRules,
     ValidateRequestMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         const {email, password} = req.body;
 
-        const user = users.find(user => user.email === email && user.password === password);
-        if (!user) {
+        const client = await Client.findOne({
+            email: email,
+            password: password
+        });
+
+        
+        if (!client) {
             throw new NotFoundError("Email or Password is incorrect!");
         }
         
-        const userJwt = jwt.sign(
+        const clientJwt = jwt.sign(
             {
                 email: email,
             },
             "secretkey"
         );
         req.session = {
-            jwt: userJwt,
+            jwt: clientJwt,
         };
-        res.status(200).send();
+        res.status(200).send("Sucessfully Sign In");
         return;
     }
 );
