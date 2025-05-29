@@ -1,0 +1,31 @@
+{
+  "name": "@tabletennisshop/common",
+  "version": "1.0.5",
+  "description": "",
+  "main": "./build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "clean": "del-cli ./build/*",
+    "build": "npm run clean && tsc",
+    "pub": "npm version patch && npm run build && npm publish"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tabletennisshop/common": "^1.0.1",
+    "@types/express": "^5.0.2",
+    "axios": "^1.9.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "uninstall": "^0.0.0"
+  },
+  "devDependencies": {
+    "del-cli": "^6.0.0",
+    "typescript": "^5.8.3"
+  }
+}
