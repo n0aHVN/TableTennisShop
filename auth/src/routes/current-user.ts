@@ -1,17 +1,18 @@
-import express, { Request, Response, NextFunction } from "express";
-import { body, validationResult } from "express-validator";
-import { NotAuthorizedError } from "@tabletennisshop/common";
-
+import { CurrentUserMiddleware } from "@tabletennisshop/common";
+import express, { Request, Response } from "express";
 
 const router = express.Router();
 
 router.get(
     "/api/users/current-user",
+    CurrentUserMiddleware,
     (req: Request,res: Response)=>{
-        if (!req.session?.jwt){
-            throw new NotAuthorizedError("Not Authorized!");
-        }
-        res.status(200).send({message: "Authorized!"});
+        res.status(200).send(
+            req.currentUser ?
+            {message: "Authorized", currentUser: req.currentUser}
+            :
+            {message: "Not Authorized", currentUser: null}
+        );
     }
 );
 router.post(

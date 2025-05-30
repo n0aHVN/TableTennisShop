@@ -4,6 +4,7 @@ import { body, validationResult } from "express-validator";
 import cookieSession from "cookie-session";
 import { NotFoundError, ValidateRequestMiddleware } from "@tabletennisshop/common";
 import { Client } from "../../models/ClientModel";
+import { Password } from "../../services/password";
 const router = express.Router();
 
 const validationRules = [
@@ -26,20 +27,25 @@ router.post("/api/users/signin",
         const {email, password} = req.body;
 
         const client = await Client.findOne({
-            email: email,
-            password: password
+            email: email
         });
-
         
         if (!client) {
             throw new NotFoundError("Email or Password is incorrect!");
         }
+
+        const isPasswordCorrect = await Password.compare(password, client.password);
         
+        if (!isPasswordCorrect) {
+            throw new NotFoundError("Email or Password is incorrect!");
+        }
+
         const clientJwt = jwt.sign(
             {
-                email: email,
+                id: client.id,
+                email: client.email,
             },
-            "secretkey"
+            "secretkey",
         );
         req.session = {
             jwt: clientJwt,

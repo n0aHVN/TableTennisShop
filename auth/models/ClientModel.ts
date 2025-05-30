@@ -1,10 +1,11 @@
 import mongoose, { Schema, Model, Document, model} from 'mongoose';
 import mongooseSequence from 'mongoose-sequence';
+import { Password } from '../services/password';
 
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // 1. Define an interface for your Client fields
-interface ClientAttrs {
+export interface ClientAttrs {
   email: string;
   password: string;
   full_name: string;
@@ -57,8 +58,17 @@ ClientSchema.statics.build = (attrs: ClientAttrs) => {
   return new Client(attrs);
 };
 
-ClientSchema.pre('save', function (next) {
-  
+ClientSchema.pre('save', async function (next) {
+  if (this.isModified('email')){
+    const existingUser = await Client.findOne({ email: this.email });
+    if (existingUser){
+      throw new Error("Email already exists!");
+    }
+  }
+
+  if (this.isModified('password')){
+    this.password = await Password.toHash(this.password);
+  }
   next();
 });
 
