@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seed-products-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: seed
+          image: nguyennoah/seed-ttshop
+      restartPolicy: Never
+  backoffLimit: 1

@@ -4,12 +4,18 @@ metadata:
   name: TableTennisShop
 build:
   artifacts:
+  # Services
     - image: nguyennoah/auth-ttshop
       context: auth
       docker:
         dockerfile: Dockerfile
     - image: nguyennoah/product-ttshop
       context: product
+      docker:
+        dockerfile: Dockerfile
+  # Seeder
+    - image: nguyennoah/seed-ttshop
+      context: seed
       docker:
         dockerfile: Dockerfile
 manifests:

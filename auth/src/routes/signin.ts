@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
 import cookieSession from "cookie-session";
 import { NotFoundError, ValidateRequestMiddleware } from "@tabletennisshop/common";
-import { Client } from "../../models/ClientModel";
+import { Client } from "../../models/client-model";
 import { Password } from "../../services/password";
 const router = express.Router();
 

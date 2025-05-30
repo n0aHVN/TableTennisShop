@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
-import { Client, ClientAttrs } from "../../models/ClientModel";
+import { Client, ClientAttrs } from "../../models/client-model";
 import { ValidateRequestMiddleware } from "@tabletennisshop/common";
 
 
