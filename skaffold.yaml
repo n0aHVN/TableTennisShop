@@ -8,6 +8,10 @@ build:
       context: auth
       docker:
         dockerfile: Dockerfile
+    - image: nguyennoah/product-ttshop
+      context: product
+      docker:
+        dockerfile: Dockerfile
 manifests:
   rawYaml:
     - infra/k8s/*
