@@ -4,3 +4,4 @@ const app = express();
 
 app.use(json());
 
+export {app};
