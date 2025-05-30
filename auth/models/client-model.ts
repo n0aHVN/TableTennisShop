@@ -1,5 +1,4 @@
 import mongoose, { Schema, Model, Document, model} from 'mongoose';
-import mongooseSequence from 'mongoose-sequence';
 import { Password } from '../services/password';
 
 const AutoIncrement = require('mongoose-sequence')(mongoose);
