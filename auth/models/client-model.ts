@@ -49,7 +49,7 @@ const ClientSchema = new Schema({
   timestamps: true, // Adds createdAt and updatedAt fields automatically
   _id: false
 });
-ClientSchema.plugin(AutoIncrement, { inc_field: '_id' });
+ClientSchema.plugin(AutoIncrement, { inc_field: '_id', id: "client_id_seq" });
 
 
 
