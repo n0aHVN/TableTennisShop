@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
-import { body, validationResult } from "express-validator";
-import { Client, ClientAttrs } from "../../models/client-model";
+import { body } from "express-validator";
+import {  ClientModel } from "@tabletennisshop/common";
 import { ValidateRequestMiddleware } from "@tabletennisshop/common";
 
 
@@ -32,7 +32,7 @@ router.post("/api/users/signup",
             ward,
             phone_number
         } = req.body;
-        const client = new Client({
+        const client = new ClientModel({
             email,
             password,
             full_name,

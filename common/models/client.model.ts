@@ -54,12 +54,12 @@ ClientSchema.plugin(AutoIncrement, { inc_field: '_id', id: "client_id_seq" });
 
 
 ClientSchema.statics.build = (attrs: ClientAttrs) => {
-  return new Client(attrs);
+  return new ClientModel(attrs);
 };
 
 ClientSchema.pre('save', async function (next) {
   if (this.isModified('email')){
-    const existingUser = await Client.findOne({ email: this.email });
+    const existingUser = await ClientModel.findOne({ email: this.email });
     if (existingUser){
       throw new Error("Email already exists!");
     }
@@ -71,4 +71,4 @@ ClientSchema.pre('save', async function (next) {
   next();
 });
 
-export const Client = model<ClientDoc, ClientModel>('Client', ClientSchema);
+export const ClientModel = model<ClientDoc, ClientModel>('Client', ClientSchema);

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { Client } from './models/client.model';
-import { RacketModel } from './models/racket.model';
-import { ProductEnum } from './enums/product.enum';
+import { ClientModel } from '@tabletennisshop/common';
+import { RacketModel } from '@tabletennisshop/common';
+import { ProductEnum } from '@tabletennisshop/common';
 const start = async () => {
     try{
         await mongoose.connect("mongodb://mongo-service:27017/");
@@ -12,7 +12,7 @@ const start = async () => {
         throw new Error("Cannot Connect to MongoDB");
     }
     try{
-        const client = new Client({
+        const client = ClientModel.build({
             email: "superherodung123@gmail.com",
             password: "tridung123",
             full_name: "Nguyen Tri Dung",

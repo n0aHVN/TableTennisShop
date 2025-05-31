@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
 import cookieSession from "cookie-session";
 import { NotFoundError, ValidateRequestMiddleware } from "@tabletennisshop/common";
-import { Client } from "../../models/client-model";
-import { Password } from "../../services/password";
+import { ClientModel } from "@tabletennisshop/common";
+import { Password } from "@tabletennisshop/common";
 const router = express.Router();
 
 const validationRules = [
@@ -26,7 +26,7 @@ router.post("/api/users/signin",
     async (req: Request, res: Response, next: NextFunction) => {
         const {email, password} = req.body;
 
-        const client = await Client.findOne({
+        const client = await ClientModel.findOne({
             email: email
         });
         
