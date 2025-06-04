@@ -22,4 +22,3 @@ shirtSchema.statics.build = (attrs: ShirtAttrs)=>{
 
 const ShirtModel = ProductModel.discriminator(ProductEnum.Shirt, new Schema({
 }));
-

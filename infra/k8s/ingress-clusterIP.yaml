@@ -24,7 +24,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: products-service
+                name: product-service
                 port:
                   number: 3000
           

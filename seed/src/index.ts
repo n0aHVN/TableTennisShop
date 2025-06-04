@@ -25,7 +25,6 @@ const start = async () => {
         await client.save();
         console.log(client);
         
-
         let racket = RacketModel.build({
             type: ProductEnum.Racket,
             name: "Viscaria ALC",
