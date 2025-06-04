@@ -6,7 +6,7 @@ export interface ProductAttrsBase {
   brand: string,
   description: string,
   sport: string,
-  details: any,
+  attributes: any,
   price: number,
 }
 
@@ -16,7 +16,7 @@ export interface ProductDoc extends Document {
   description: string,
   type: ProductEnum,
   sport: string,
-  details: any,
+  attributes: any,
   slug: string,
   price: number
 }
@@ -24,7 +24,8 @@ export interface ProductDoc extends Document {
 //We don't need "interface ProductModel extends Model<>" for this
 const baseOptions = {
   discriminatorKey: 'type',
-  collection: 'products'
+  collection: 'products',
+  timestamps: true
 };
 
 const ProductSchema = new Schema<ProductDoc>({
@@ -33,7 +34,7 @@ const ProductSchema = new Schema<ProductDoc>({
   description: { type: String, required: false },
   type: { type: String, required: true },
   sport: { type: String, required: true },
-  details: { type: [Schema.Types.Mixed], require: false },
+  attributes: { type: [Schema.Types.Mixed], require: false },
   slug: { type: String, required: true, unique: true },
   price: { type: Number, require: true }
 }, baseOptions);
