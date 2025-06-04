@@ -19,7 +19,8 @@ const VendorSchema = new Schema<VendorDoc>({
     name: {type: String, required: true},
     address: {type: AddressSchema, required: true}
 },{
-    timestamps: true
+    timestamps: true,
+    collection: "vendor"
 });
 
 VendorSchema.statics.build = (attrs: VendorAttrs)=>{

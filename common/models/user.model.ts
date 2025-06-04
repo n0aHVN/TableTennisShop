@@ -49,6 +49,7 @@ const UserSchema = new Schema<UserDoc>({
   type: { type: String, enum: Object.values(UserEnum), required: true },
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields automatically
+  collection: "user"
 });
 
 

@@ -46,7 +46,7 @@ const OrderSchema = new Schema<OrderDoc>(
     statusTimestamps: {type: StatusTimestampsSchema, require: true},
     payment_method: { type: String, enum: PaymentMethodEnum,required: true }
   },
-  { collection: 'orders'}
+  { collection: 'order'}
 );
 
 OrderSchema.statics.build = (attrs: OrderAttrs) => {

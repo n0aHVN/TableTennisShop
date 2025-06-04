@@ -24,7 +24,7 @@ export interface ProductDoc extends Document {
 //We don't need "interface ProductModel extends Model<>" for this
 const baseOptions = {
   discriminatorKey: 'type',
-  collection: 'products',
+  collection: 'product',
   timestamps: true
 };
 

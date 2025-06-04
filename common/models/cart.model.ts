@@ -28,6 +28,8 @@ const CartSchema = new Schema<CartDoc>({
         }],
         required: true
     }
+},{
+    collection: "cart"
 })
 
 CartSchema.statics.build = (attrs: CartAttrs) => {
