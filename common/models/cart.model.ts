@@ -21,10 +21,13 @@ interface CartModel extends Model<CartDoc>{
 }
 const CartSchema = new Schema<CartDoc>({
     userId: {type: String, required: true},
-    products: [{
-        product_id: {type: String, required: true},
-        quantity: {type: Number, required: true}
-    }]
+    products: {
+        type: [{
+            product_id: { type: String, required: true },
+            quantity: { type: Number, required: true }
+        }],
+        required: true
+    }
 })
 
 CartSchema.statics.build = (attrs: CartAttrs) => {

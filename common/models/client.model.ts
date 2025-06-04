@@ -1,15 +1,15 @@
-import mongoose, { Schema, Model, Document, model} from 'mongoose';
+import { Schema, Model, Document, model} from 'mongoose';
 import { Password } from '../services/password';
 import { UserEnum } from '../enums/user.enum';
+import { AddressSchema, IAddress } from './address.schema';
 
-const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // 1. Define an interface for your User fields
 export interface UserAttrs {
   email: string;
   password: string;
   full_name: string;
-  address: string;
+  addresses: IAddress[];
   type: string;
   province: string;
   district: string;
@@ -24,7 +24,7 @@ interface UserDoc extends Document{
     email: string;
     password: string;
     full_name: string;
-    address: string;
+    addresses: IAddress[];
     type: string;
     province: string;
     district: string;
@@ -39,16 +39,14 @@ interface UserModel extends Model<UserDoc>{
     build(attrs: UserAttrs): UserDoc;
 }
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<UserDoc>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 4 },
   full_name: { type: String, required: true },
-  address: { type: String, required: true },
+  addresses: [
+    {type: AddressSchema, required: true}
+  ],
   type: { type: String, enum: Object.values(UserEnum), required: true },
-  province: { type: String, required: true },
-  district: { type: String, required: true },
-  ward: { type: String, required: true },
-  phone_number: { type: String, required: true }
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields automatically
 });
