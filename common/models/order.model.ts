@@ -4,7 +4,7 @@ import { OrderStatusEnum } from '../enums/order-status.enum';
 import { IStatusTimestamps, StatusTimestampsSchema } from './status-timestamp.schema';
 import { PaymentMethodEnum } from '../enums/payment-method.enum';
 
-interface IOrderProduct {
+export interface IOrderProduct {
   product_id: Types.ObjectId; // FK to Product
   quantity: number;
 }
