@@ -2,34 +2,31 @@ import { Schema, Model, Document, model} from 'mongoose';
 import { Password } from '../services/password';
 import { UserEnum } from '../enums/user.enum';
 import { AddressSchema, IAddress } from './address.schema';
+import { OrderStatusEnum } from '../enums/order-status.enum';
+import { UserStatusEnum } from '../enums/user-status.enum';
 
 
 // 1. Define an interface for your User fields
 export interface UserAttrs {
+  username: string;
   email: string;
   password: string;
   full_name: string;
   addresses: IAddress[];
   type: string;
-  province: string;
-  district: string;
-  ward: string;
-  phone_number: string;
-  status: string;
+  status: UserStatusEnum;
 }
 
 
 //UserDoc defines the shape of Users inside the MongoDB
 interface UserDoc extends Document{
+    username: string;
     email: string;
     password: string;
     full_name: string;
     addresses: IAddress[];
     type: string;
-    province: string;
-    district: string;
-    ward: string;
-    phone_number: string;
+    status: UserStatusEnum;
 }
 
 
@@ -40,6 +37,7 @@ interface UserModel extends Model<UserDoc>{
 }
 
 const UserSchema = new Schema<UserDoc>({
+  username: { type: String, required: true, unique: true, minlength: 5 },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 4 },
   full_name: { type: String, required: true },
@@ -47,6 +45,7 @@ const UserSchema = new Schema<UserDoc>({
     {type: AddressSchema, required: true}
   ],
   type: { type: String, enum: Object.values(UserEnum), required: true },
+  status: {type: String, enum: Object.values(UserStatusEnum), required: true}
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields automatically
   collection: "user"
