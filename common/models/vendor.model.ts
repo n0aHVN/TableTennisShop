@@ -1,14 +1,14 @@
 import { Document, model, Model, Schema } from "mongoose";
 import { AddressSchema, IAddress } from "./address.schema";
 
-interface VendorAttrs{
+export interface VendorAttrs{
     name: string;
-    address: IAddress;
+    addresses: IAddress[];
 }
 
 interface VendorDoc extends Document{
     name: string;
-    address: IAddress;
+    addresses: IAddress[];
 }
 
 interface VendorModel extends Model<VendorDoc>{
@@ -17,7 +17,9 @@ interface VendorModel extends Model<VendorDoc>{
 
 const VendorSchema = new Schema<VendorDoc>({
     name: {type: String, required: true},
-    address: {type: AddressSchema, required: true}
+    addresses: [
+        {type: AddressSchema, required: true}
+    ]
 },{
     timestamps: true,
     collection: "vendor"

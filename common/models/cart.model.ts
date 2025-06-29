@@ -1,23 +1,23 @@
 import { Document, model, Model, Schema, Types } from "mongoose";
 
-interface CartAttrs{
+export interface ICartAttrs{
     user_id: Types.ObjectId,
-    products: [{
+    products: {
         product_id: Types.ObjectId,
         quantity: number
-    }]
+    }[];
 }
 
 interface CartDoc extends Document{
     user_id: Types.ObjectId,
-    products: [{
+    products: {
         product_id: Types.ObjectId,
         quantity: number
-    }]
+    }[];
 }
 
 interface CartModel extends Model<CartDoc>{
-    build(attrs: CartAttrs): CartDoc;
+    build(attrs: ICartAttrs): CartDoc;
 }
 const CartSchema = new Schema<CartDoc>({
     user_id: {type: Schema.Types.ObjectId, ref:'User',required: true},
@@ -32,7 +32,7 @@ const CartSchema = new Schema<CartDoc>({
     collection: "cart"
 })
 
-CartSchema.statics.build = (attrs: CartAttrs) => {
+CartSchema.statics.build = (attrs: ICartAttrs) => {
   return new CartModel(attrs);
 };
 

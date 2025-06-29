@@ -1,6 +1,6 @@
 import { Schema, model, Types, Document } from 'mongoose';
 
-interface IVendorPurchase {
+export interface IVendorPurchase {
   vendor_id: Types.ObjectId;
   products: {
     product_id: Types.ObjectId;

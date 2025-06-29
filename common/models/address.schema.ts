@@ -1,3 +1,4 @@
+//This is subdocument schema
 import { Schema } from "mongoose";
 
 export interface IAddress {

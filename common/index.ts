@@ -18,11 +18,11 @@ export * from './models/order.model';
 export * from './models/cart.model';
 export * from './models/status-timestamp.schema';
 export * from './models/vendor.model';
-export * from './models/vendor-purchased';
+export * from './models/vendor-purchased.model';
 
 export * from './services/password';
 
-export * from './enums/product.enum';
+export * from './enums/product-type.enum';
 export * from './enums/order-status.enum';
 export * from './enums/payment-method.enum';
 export * from './enums/user-status.enum';
