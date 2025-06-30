@@ -1,4 +1,4 @@
 export enum PaymentMethodEnum{
-    Banking = 'banking',
+    BANKING = 'banking',
     COD = 'cod'
 }

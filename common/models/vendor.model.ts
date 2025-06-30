@@ -17,9 +17,10 @@ interface VendorModel extends Model<VendorDoc>{
 
 const VendorSchema = new Schema<VendorDoc>({
     name: {type: String, required: true},
-    addresses: [
-        {type: AddressSchema, required: true}
-    ]
+    addresses: {
+        type: [AddressSchema],
+        required: true
+    }
 },{
     timestamps: true,
     collection: "vendor"

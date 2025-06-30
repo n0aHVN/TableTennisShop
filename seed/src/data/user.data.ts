@@ -9,7 +9,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Nguyen Tri Dung",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Ho Chi Minh City",
@@ -26,7 +26,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Tran Quang",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Ha Noi",
@@ -43,7 +43,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Le Thi Thu",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Da Nang",
@@ -60,7 +60,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Pham Minh Tam",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Can Tho",
@@ -77,7 +77,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Hoang Nam",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Hue",
@@ -94,7 +94,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Nguyen Bich Ngoc",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Nha Trang",
@@ -111,7 +111,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Le Duc Thang",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Hai Phong",
@@ -128,7 +128,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Do Huyen Anh",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Vung Tau",
@@ -145,7 +145,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Nguyen Manh Khoa",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Dak Lak",
@@ -162,7 +162,7 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
       password: "123",
       full_name: "Pham Thanh Loan",
       type: "Client",
-      status: UserStatusEnum.Enalble,
+      status: UserStatusEnum.ENABLE,
       addresses: [
         {
           province: "Quang Ninh",

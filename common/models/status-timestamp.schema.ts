@@ -11,11 +11,11 @@ export interface IStatusTimestamps{
 }
 
 export const StatusTimestampsSchema = new Schema<IStatusTimestamps>({
-  pending_at: { type: Date },
-  confirmed_at: { type: Date },
-  delivering_at: { type: Date },
-  finished_at: { type: Date },
-  cancelled_at: { type: Date },
-  returned_at: { type: Date },
-  failed_at: { type: Date },
+  pending_at: { type: Date, required: false },
+  confirmed_at: { type: Date, required: false },
+  delivering_at: { type: Date, required: false },
+  finished_at: { type: Date, required: false },
+  cancelled_at: { type: Date, required: false },
+  returned_at: { type: Date, required: false },
+  failed_at: { type: Date, required: false },
 }, { _id: false });

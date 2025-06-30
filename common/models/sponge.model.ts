@@ -3,11 +3,11 @@ import { ProductTypeEnum } from "../enums/product-type.enum";
 import { ProductAttrsBase, ProductDoc, ProductModel } from "./product.model";
 
 export interface SpongeAttrs extends ProductAttrsBase{
-    type: ProductTypeEnum.Sponge;
+    type: ProductTypeEnum.SPONGE;
 }
 
 export interface SpongeDoc extends ProductDoc {
-  type: ProductTypeEnum.Sponge;
+  type: ProductTypeEnum.SPONGE;
 }
 
 interface SpongeModel extends Model<SpongeDoc>{
@@ -19,4 +19,4 @@ spongeSchema.statics.build = (attrs: SpongeAttrs)=>{
   return new SpongeModel(attrs);
 }
 // ─────────── Sponge ───────────
-const SpongeModel = ProductModel.discriminator<SpongeDoc, SpongeModel>(ProductTypeEnum.Sponge, new Schema({}));
+export const SpongeModel = ProductModel.discriminator<SpongeDoc, SpongeModel>(ProductTypeEnum.SPONGE, new Schema({}));

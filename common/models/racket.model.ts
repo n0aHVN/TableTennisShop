@@ -3,11 +3,11 @@ import { ProductTypeEnum } from "../enums/product-type.enum";
 import { ProductAttrsBase, ProductDoc, ProductModel } from "./product.model";
 
 export interface RacketAttrs extends ProductAttrsBase{
-    type: ProductTypeEnum.Racket;
+    type: ProductTypeEnum.RACKET;
 };
 
 export interface RacketDoc extends ProductDoc {
-  type: ProductTypeEnum.Racket;
+  type: ProductTypeEnum.RACKET;
 }
 
 
@@ -20,4 +20,4 @@ racketSchema.statics.build = (attrs: RacketAttrs)=>{
   return new RacketModel(attrs);
 };
 
-export const RacketModel = ProductModel.discriminator<RacketDoc, RacketModel>(ProductTypeEnum.Racket, racketSchema);
+export const RacketModel = ProductModel.discriminator<RacketDoc, RacketModel>(ProductTypeEnum.RACKET, racketSchema);

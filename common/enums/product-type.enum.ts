@@ -1,5 +1,5 @@
 export enum ProductTypeEnum{
-    Racket = 'racket',
-    Shirt = 'shirt',
-    Sponge = 'sponge'
+    RACKET = 'racket',
+    SHIRT = 'shirt',
+    SPONGE = 'sponge'
 }

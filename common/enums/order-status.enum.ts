@@ -1,9 +1,9 @@
 export enum OrderStatusEnum {
-    Pending = 'pending',         // Order placed but not yet processed
-    Confirmed = 'confirmed',
-    Delivering = 'delivering',   // Order is being shipped
-    Finished = 'finished',       // Order completed/delivered
-    Cancelled = 'cancelled',      // Order canceled by user or system
-    Returned = 'returned',
-    Failed = 'failed'
+    PENDING = 'pending',         // Order placed but not yet processed
+    CONFIRMED = 'confirmed',
+    DELIVERING = 'delivering',   // Order is being shipped
+    FINISHED = 'finished',       // Order completed/delivered
+    CANCELLED = 'cancelled',      // Order canceled by user or system
+    RETURNED = 'returned',
+    FAILED = 'failed'
 }

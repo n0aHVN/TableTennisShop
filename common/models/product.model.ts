@@ -1,17 +1,17 @@
 // src/models/product.model.ts
 import mongoose, { Document, Schema } from 'mongoose';
 import { ProductTypeEnum } from '../enums/product-type.enum';
-import { ProductStatus } from '../enums/product-status.enum';
+import { ProductStatusEnum } from '../enums/product-status.enum';
 export interface ProductAttrsBase {
   name: string,
   slug: string,
   brand: string,
   description: string,
-  type: ProductTypeEnum, // This is the discriminator key, will be overridden in child schemas
   sport: string,
-  attributes: any,
-  status: ProductStatus,
+  type: ProductTypeEnum, // This is the discriminator key, will be overridden in child schemas
+  attributes?: any,
   price: number,
+  status: ProductStatusEnum,
 }
 
 export interface ProductDoc extends Document {
@@ -21,10 +21,10 @@ export interface ProductDoc extends Document {
   description: string,
   type: ProductTypeEnum, // This is the discriminator key, will be overridden in child schemas
   sport: string,
-  attributes: any,
-  status: ProductStatus,
+  attributes?: any,
+  status: ProductStatusEnum,
   price: number,
-  // Mongoose Timestamp
+  // Mongoose Timestamps
   createdAt: Date,
   updatedAt: Date,
 }
@@ -47,10 +47,10 @@ const ProductSchema = new Schema<ProductDoc>({
   slug: { type: String, required: true, unique: true },
   brand: { type: String, required: true },
   description: { type: String, required: false },
-  type: { type: String, enum: Object.values(ProductTypeEnum), required: true },
+  type: { type: String, enum: Object.values(ProductTypeEnum), required: true }, // Discriminator key
   sport: { type: String, required: true },
   attributes: { type: [Schema.Types.Mixed], required: false },
-  status: { type: String, enum: Object.values(ProductStatus), default: ProductStatus.ENABLE },
+  status: { type: String, enum: Object.values(ProductStatusEnum), default: ProductStatusEnum.ENABLE },
   price: { type: Number, required: true },
 }, baseOptions);
 

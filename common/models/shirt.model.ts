@@ -4,11 +4,11 @@ import { ProductAttrsBase, ProductDoc, ProductModel } from "./product.model";
 
 
 export interface ShirtAttrs extends ProductAttrsBase{
-    type: ProductTypeEnum.Shirt;
+    type: ProductTypeEnum.SHIRT;
 }
 
 export interface ShirtDoc extends ProductDoc {
-  type: ProductTypeEnum.Shirt;
+  type: ProductTypeEnum.SHIRT;
 }
 
 interface ShirtModel extends Model<ShirtDoc>{
@@ -20,5 +20,5 @@ shirtSchema.statics.build = (attrs: ShirtAttrs)=>{
   return new ShirtModel(attrs);
 }
 
-const ShirtModel = ProductModel.discriminator(ProductTypeEnum.Shirt, new Schema({
+export const ShirtModel = ProductModel.discriminator(ProductTypeEnum.SHIRT, new Schema({
 }));

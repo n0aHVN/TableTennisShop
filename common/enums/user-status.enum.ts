@@ -1,4 +1,4 @@
 export enum UserStatusEnum{
-    Enalble = 'enable',
-    Disable = 'disable'
+    ENABLE = 'enable',
+    DISABLE = 'disable'
 }

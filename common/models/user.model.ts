@@ -27,6 +27,9 @@ interface UserDoc extends Document{
     addresses: IAddress[];
     type: string;
     status: UserStatusEnum;
+    // Mongoose Timestamps
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 
@@ -41,9 +44,10 @@ const UserSchema = new Schema<UserDoc>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 4 },
   full_name: { type: String, required: true },
-  addresses: [
-    {type: AddressSchema, required: true}
-  ],
+  addresses: {
+    type: [AddressSchema], // Use the AddressSchema defined in address.schema.ts
+    required: true
+  },
   type: { type: String, enum: Object.values(UserEnum), required: true },
   status: {type: String, enum: Object.values(UserStatusEnum), required: true}
 }, {
