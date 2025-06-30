@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.1.6">
   <diagram name="Trang-1" id="AHCST-kHQ4vF2EGW2saR">
-    <mxGraphModel dx="1755" dy="2863" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="5467" dy="3794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -258,7 +258,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="wQuU4w7h-8HWN77dtKja-189" value="Vendor" style="shape=table;startSize=20;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="60" y="-1350" width="180" height="210" as="geometry" />
+          <mxGeometry x="70" y="-1040" width="180" height="210" as="geometry" />
         </mxCell>
         <mxCell id="wQuU4w7h-8HWN77dtKja-190" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="wQuU4w7h-8HWN77dtKja-189" vertex="1">
           <mxGeometry y="20" width="180" height="30" as="geometry" />
@@ -313,7 +313,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="sELFFgTagLaLCqs5QByj-10" value="VendorPurchase" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="460" y="-1129.9999999999998" width="180" height="260" as="geometry" />
+          <mxGeometry x="470" y="-819.9999999999998" width="180" height="260" as="geometry" />
         </mxCell>
         <mxCell id="sELFFgTagLaLCqs5QByj-11" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="sELFFgTagLaLCqs5QByj-10" vertex="1">
           <mxGeometry y="30" width="180" height="30" as="geometry" />

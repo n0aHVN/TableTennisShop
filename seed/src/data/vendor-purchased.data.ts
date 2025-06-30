@@ -11,10 +11,36 @@ import { Types } from "mongoose";
  */
 
 export const getVendorPurchasedData = async (): Promise<IVendorPurchase[]> => {
-    const zjkRacket = await ProductModel.findOne({ name: 'Zhang Jike ALC' });
-    const fzdRacket = await ProductModel.findOne({ name: 'Fan Zhendong ALC' });
-    const vendor1 = await VendorModel.findOne({ name: 'Vendor 1' });
-    const vendor2 = await VendorModel.findOne({ name: 'Vendor 2' });
+    console.log("Adding vendor purchase data...");
+    let zjkRacket, fzdRacket, vendor1, vendor2;
+
+    try {
+        zjkRacket = await ProductModel.findOne({ name: 'Zhang Jike ALC' });
+    } catch (error) {
+        console.error('Error finding zjkRacket:', error);
+        throw new Error('Failed to find product: Zhang Jike ALC');
+    }
+
+    try {
+        fzdRacket = await ProductModel.findOne({ name: 'Fan Zhendong ALC' });
+    } catch (error) {
+        console.error('Error finding fzdRacket:', error);
+        throw new Error('Failed to find product: Fan Zhendong ALC');
+    }
+
+    try {
+        vendor1 = await VendorModel.findOne({ name: 'Vendor 1' });
+    } catch (error) {
+        console.error('Error finding vendor1:', error);
+        throw new Error('Failed to find vendor: Vendor 1');
+    }
+
+    try {
+        vendor2 = await VendorModel.findOne({ name: 'Vendor 2' });
+    } catch (error) {
+        console.error('Error finding vendor2:', error);
+        throw new Error('Failed to find vendor: Vendor 2');
+    }
 
     return [
         {

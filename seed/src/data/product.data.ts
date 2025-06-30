@@ -1,7 +1,8 @@
 import { ProductTypeEnum, RacketAttrs } from "@tabletennisshop/common";
 import { ProductStatusEnum } from "@tabletennisshop/common/build/enums/product-status.enum";
 
-export const getRacketData = async (): Promise<RacketAttrs[]> => {
+export const getProductData = (): RacketAttrs[] => {
+    console.log("Adding product data...");
     const racketData: RacketAttrs[] = [
         {
             name: "Zhang Jike ALC",

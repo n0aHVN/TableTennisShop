@@ -2,11 +2,36 @@ import { OrderAttrs, OrderStatusEnum, PaymentMethodEnum, ProductModel, UserModel
 import { Types } from "mongoose";
 
 export const getOrderData = async (): Promise<OrderAttrs[]> => {
-    const user1 = await UserModel.findOne({ username: 'superherodung123' });
-    const user2 = await UserModel.findOne({ username: 'tranquang456' });
+    console.log("Adding order data...");
+    let user1, user2, product1, product2;
 
-    const product1 = await ProductModel.findOne({ name: 'Zhang Jike ALC' });
-    const product2 = await ProductModel.findOne({ name: 'Fan Zhendong ALC' });
+    try {
+        user1 = await UserModel.findOne({ username: 'superherodung123' });
+    } catch (error) {
+        console.error('Error finding user1:', error);
+        throw new Error('Failed to find user: superherodung123');
+    }
+
+    try {
+        user2 = await UserModel.findOne({ username: 'tranquang456' });
+    } catch (error) {
+        console.error('Error finding user2:', error);
+        throw new Error('Failed to find user: tranquang456');
+    }
+
+    try {
+        product1 = await ProductModel.findOne({ name: 'Zhang Jike ALC' });
+    } catch (error) {
+        console.error('Error finding product1:', error);
+        throw new Error('Failed to find product: Zhang Jike ALC');
+    }
+
+    try {
+        product2 = await ProductModel.findOne({ name: 'Fan Zhendong ALC' });
+    } catch (error) {
+        console.error('Error finding product2:', error);
+        throw new Error('Failed to find product: Fan Zhendong ALC');
+    }
 
     const data: OrderAttrs[] = [
         {

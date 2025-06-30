@@ -1,6 +1,8 @@
 import { VendorAttrs } from "@tabletennisshop/common";
 
-export const getVendorData = async (): Promise<VendorAttrs[]> => {
+export const getVendorData = (): VendorAttrs[] => {
+    console.log("Adding vendor data...");
+    
     const VendorData: VendorAttrs[] = [
         {
             name: "Vendor 1",

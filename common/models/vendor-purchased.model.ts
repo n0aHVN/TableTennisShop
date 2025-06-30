@@ -1,4 +1,4 @@
-import { Schema, model, Types, Document } from 'mongoose';
+import { Schema, model, Types, Document, Model } from 'mongoose';
 
 export interface IVendorPurchase {
   vendor_id: Types.ObjectId;
@@ -14,6 +14,10 @@ export interface IVendorPurchase {
 interface VendorPurchaseDoc extends IVendorPurchase, Document {
   createdAt: Date;
   updatedAt: Date;
+}
+
+interface VendorPurchaseModel extends Model<VendorPurchaseDoc> {
+  build(attrs: IVendorPurchase): VendorPurchaseDoc;
 }
 
 const VendorPurchaseSchema = new Schema<VendorPurchaseDoc>(
@@ -40,7 +44,7 @@ VendorPurchaseSchema.statics.build = (attrs: IVendorPurchase) => {
 }
 
 
-export const VendorPurchaseModel = model<VendorPurchaseDoc>(
+export const VendorPurchaseModel = model<VendorPurchaseDoc, VendorPurchaseModel>(
   'VendorPurchase',
   VendorPurchaseSchema
 );

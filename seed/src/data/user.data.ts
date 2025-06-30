@@ -1,14 +1,16 @@
-import { UserAttrs } from "@tabletennisshop/common";
+import { UserAttrs, UserEnum } from "@tabletennisshop/common";
 import { UserStatusEnum } from "@tabletennisshop/common/build/enums/user-status.enum";
 
-export const getUserData = async (): Promise<UserAttrs[]> => {
+export const getUserData = (): UserAttrs[] => {
+  console.log("Adding user data...");
+  
   const userData: UserAttrs[] = [
     {
       username: "superherodung123",
       email: "superherodung123@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Nguyen Tri Dung",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -23,9 +25,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "tranquang456",
       email: "tranquang456@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Tran Quang",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -40,9 +42,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "lethu987",
       email: "lethu987@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Le Thi Thu",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -57,9 +59,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "minhtam321",
       email: "minhtam321@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Pham Minh Tam",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -74,9 +76,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "hoangnam456",
       email: "hoangnam456@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Hoang Nam",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -91,9 +93,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "bichngoc789",
       email: "bichngoc789@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Nguyen Bich Ngoc",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -108,9 +110,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "ducthang112",
       email: "ducthang112@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Le Duc Thang",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -125,9 +127,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "huyenanh2000",
       email: "huyenanh2000@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Do Huyen Anh",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -142,9 +144,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "manhkhoa654",
       email: "manhkhoa654@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Nguyen Manh Khoa",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {
@@ -159,9 +161,9 @@ export const getUserData = async (): Promise<UserAttrs[]> => {
     {
       username: "thanhloan888",
       email: "thanhloan888@gmail.com",
-      password: "123",
+      password: "1234",
       full_name: "Pham Thanh Loan",
-      type: "Client",
+      type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
       addresses: [
         {

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import {app} from './app';
 const start = async () => {
     try{
-        await mongoose.connect("mongodb://mongo-service:27017/");
+        await mongoose.connect("mongodb://mongo-service:27017/app");
         console.log("Connected to Mongo");
     }
     catch(e){

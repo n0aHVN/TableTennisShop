@@ -2,8 +2,22 @@ import { IInventory, RacketModel } from '@tabletennisshop/common';
 import { Types } from 'mongoose';
 
 export const getInventoryData = async (): Promise<IInventory[]> => {
-    const racket1 = await RacketModel.findOne({name: "Zhang Jike ALC"});
-    const racket2 = await RacketModel.findOne({name: "Viscaria ALC"});
+    console.log("Adding inventory data...");
+    let racket1, racket2;
+
+    try {
+        racket1 = await RacketModel.findOne({name: "Zhang Jike ALC"});
+    } catch (error) {
+        console.error('Error finding racket1:', error);
+        throw new Error('Failed to find racket: Zhang Jike ALC');
+    }
+
+    try {
+        racket2 = await RacketModel.findOne({name: "Viscaria ALC"});
+    } catch (error) {
+        console.error('Error finding racket2:', error);
+        throw new Error('Failed to find racket: Viscaria ALC');
+    }
     const inventoryData: IInventory[] = [
         {
             product_id: racket1!._id as Types.ObjectId,
