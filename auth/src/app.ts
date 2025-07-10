@@ -1,10 +1,10 @@
 import express, { Request,Response } from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
-import {router as signInRouter} from './routes/signin';
-import {router as signOutRouter} from './routes/signout';
-import {router as signUpRouter} from './routes/signup';
-import {router as currentUserRouter} from './routes/current-user';
+import {signinRouter} from './routes/signin.route';
+import {signoutRouter} from './routes/signout.route';
+import {signupRouter} from './routes/signup.route';
+import {currentUserRouter} from './routes/current-user.route';
 import { ErrorHandlerMiddleware } from '@tabletennisshop/common';
 import cookieSession from 'cookie-session';
 const app = express();
@@ -21,9 +21,9 @@ app.get("/api/users/hello",(req: Request, res: Response)=>{
     res.send("HelloWorld");
 });
 
-app.use(signInRouter);
-app.use(signOutRouter);
-app.use(signUpRouter);
+app.use(signinRouter);
+app.use(signoutRouter);
+app.use(signupRouter);
 app.use(currentUserRouter);
 
 app.use(ErrorHandlerMiddleware);
