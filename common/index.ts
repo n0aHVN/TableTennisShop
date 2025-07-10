@@ -22,7 +22,7 @@ export * from './models/status-timestamp.schema';
 export * from './models/vendor.model';
 export * from './models/vendor-purchased.model';
 
-export * from './services/password';
+export * from './helper/password';
 
 export * from './enums/product-type.enum';
 export * from './enums/order-status.enum';
