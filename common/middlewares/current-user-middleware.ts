@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import jwt from 'jsonwebtoken'
 interface UserPayload {
-    id?: string;
+    username: string;
     email: string;
 }
 // Another controller can access this information in the future
@@ -19,7 +19,9 @@ export const CurrentUserMiddleware = (req: Request, res: Response, next: NextFun
     }
 
     /*
-        Try to verify jwt to {id: "", email: ""}
+        When a user logs in, a JWT is created and stored "id" and "email" in the session.
+        So to verify the user, we need to decode the JWT.
+        This code try to verify and decode jwt to {id: "", email: ""}
         and save it into req.currentUser.
         Finally req.currentUser back to client.
     */
