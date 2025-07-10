@@ -1,5 +1,5 @@
 import { Schema, Model, Document, model} from 'mongoose';
-import { Password } from '../services/password';
+import { Password } from '../helper/password';
 import { UserEnum } from '../enums/user.enum';
 import { AddressSchema, IAddress } from './address.schema';
 import { OrderStatusEnum } from '../enums/order-status.enum';
