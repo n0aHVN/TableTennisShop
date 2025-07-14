@@ -1,21 +1,10 @@
 import {ProductDoc, ProductEnum, ProductModel} from '@tabletennisshop/common';
+import { ProductService } from '../services/product.service';
 export class ProductController{
-    static async getProductBaseOnId({id}:{id: number}): Promise<ProductDoc|null>{
-        return await ProductModel.findById(id);
-    }
-    static async pagingAllProducts({page}: {page: number}): Promise<ProductDoc[]|null>{
-        const limit = 24;
-        const skip = (page - 1)* limit;
-        const products = await ProductModel.find().skip(skip).limit(limit).exec();
-        return products;
-    }
-    static async pagingProductsOnType(
+    static async pagingProducts(
         {type, page}:{type: ProductEnum, page: number}
     ): Promise<ProductDoc[]|null>{
-        const limit = 24;
-        const skip = (page - 1)* limit;
-        const products = await ProductModel.find().where('type').equals(type)
-                            .skip(skip).limit(limit).exec();
+        const products = await ProductService.pagingProducts({page, type});
         return products;
     }
     static async countAllProducts(): Promise<number>{
