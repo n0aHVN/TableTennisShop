@@ -13,6 +13,11 @@ build:
       context: product
       docker:
         dockerfile: Dockerfile
+  #Order
+    - image: nguyennoah/order-ttshop
+      context: order
+      docker:
+        dockerfile: Dockerfile
   # Seeder
     - image: nguyennoah/seed-ttshop
       context: seed
