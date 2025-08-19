@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@tabletennisshop/common": "^1.0.53",
+    "@tabletennisshop/common": "^1.0.55",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.2",
     "@types/mongoose": "^5.11.96",
