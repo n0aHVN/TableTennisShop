@@ -35,6 +35,7 @@ export class UserService {
             {
                 username: client.username,
                 email: client.email,
+                type: client.type
             },
             "secretkey"
         );
@@ -48,7 +49,10 @@ export class UserService {
             message: "auth.signin.success"
         };
     }
-
+    static async getAllUsers(): Promise<UserAttrs[]> {
+        const users = await UserModel.find({});
+        return users;
+    }
     static async addUser({
         email,
         password,
