@@ -1,8 +1,6 @@
 import { Schema, Model, Document, model} from 'mongoose';
 import { Password } from '../helper/password';
 import { UserEnum } from '../enums/user.enum';
-import { AddressSchema, IAddress } from './address.schema';
-import { OrderStatusEnum } from '../enums/order-status.enum';
 import { UserStatusEnum } from '../enums/user-status.enum';
 
 
@@ -12,7 +10,7 @@ export interface UserAttrs {
   email: string;
   password: string;
   full_name: string;
-  addresses: IAddress[];
+  address: string;
   type: string;
   status: UserStatusEnum;
 }
@@ -24,7 +22,7 @@ interface UserDoc extends Document{
     email: string;
     password: string;
     full_name: string;
-    addresses: IAddress[];
+    address: string;
     type: string;
     status: UserStatusEnum;
     // Mongoose Timestamps
@@ -44,12 +42,9 @@ const UserSchema = new Schema<UserDoc>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 4 },
   full_name: { type: String, required: true },
-  addresses: {
-    type: [AddressSchema], // Use the AddressSchema defined in address.schema.ts
-    required: true
-  },
+  address: { type: String, required: true },
   type: { type: String, enum: Object.values(UserEnum), required: true },
-  status: {type: String, enum: Object.values(UserStatusEnum), required: true}
+  status: { type: String, enum: Object.values(UserStatusEnum), required: true }
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields automatically
   collection: "user"
