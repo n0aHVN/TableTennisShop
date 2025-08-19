@@ -1,13 +1,11 @@
 import mongoose from 'mongoose';
-import { UserAttrs, UserModel, VendorModel, VendorAttrs, RacketModel, InventoryModel, RatingModel, CartModel, OrderModel, VendorPurchaseModel } from '@tabletennisshop/common';
+import { UserAttrs, UserModel, RacketModel, InventoryModel, RatingModel, CartModel, OrderModel, VendorPurchaseModel } from '@tabletennisshop/common';
 import { getUserData } from './data/user.data';
-import { getVendorData } from './data/vendor.data';
 import { getProductData } from './data/product.data';
 import { getInventoryData } from './data/inventory.data';
 import { getRatingData } from './data/rating.data';
 import { getCartData } from './data/cart.data';
 import { getOrderData } from './data/order.data';
-import { getVendorPurchasedData } from './data/vendor-purchased.data';
 
 const connectDB = async () => {
     try {
@@ -23,13 +21,6 @@ const start = async () => {
     const users: UserAttrs[] = getUserData();
     for (const user of users) {
         const client = UserModel.build(user);
-        await client.save();
-        console.log(client);
-    }
-
-    const vendors: VendorAttrs[] = getVendorData();
-    for (const vendor of vendors) {
-        const client = VendorModel.build(vendor);
         await client.save();
         console.log(client);
     }
@@ -68,13 +59,5 @@ const start = async () => {
         await client.save();
         console.log(client);
     }
-
-    const vendorPurchase = await getVendorPurchasedData();
-    for (const item of vendorPurchase) {
-        const client = VendorPurchaseModel.build(item);
-        await client.save();
-        console.log(client);
-    }
-    console.log('Data seeding completed successfully!');
 }
 connectDB().then(() => console.log('Database connected.')).then(start);
