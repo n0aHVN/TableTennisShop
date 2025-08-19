@@ -36,7 +36,6 @@ export const getOrderData = async (): Promise<OrderAttrs[]> => {
     const data: OrderAttrs[] = [
         {
             user_id: user1?._id as Types.ObjectId,
-            address: user1?.addresses[0]!,
             products: [
                 {
                     product_id: product1?._id as Types.ObjectId,
@@ -66,7 +65,6 @@ export const getOrderData = async (): Promise<OrderAttrs[]> => {
             status: OrderStatusEnum.PENDING,
             statusTimestamps: {},
             payment_method: PaymentMethodEnum.BANKING,
-            address: user2?.addresses[0]!
         }
     ];
     return data;
