@@ -12,15 +12,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Nguyen Tri Dung",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Ho Chi Minh City",
-          district: "Thu Duc City",
-          ward: "Truong Tho",
-          address: "123 Truong Tho Street",
-          phone_number: "0382388607",
-        }
-      ]
+      address: "Dia chi 1"
     },
     {
       username: "tranquang456",
@@ -29,15 +21,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Tran Quang",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Ha Noi",
-          district: "Ba Dinh",
-          ward: "Lien Hoa",
-          address: "456 Hoa Binh Road",
-          phone_number: "0987654321",
-        }
-      ]
+      address: "Dia chi 2"
     },
     {
       username: "lethu987",
@@ -46,15 +30,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Le Thi Thu",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Da Nang",
-          district: "Hai Chau",
-          ward: "Hoa Thuan",
-          address: "789 Bien Hoa Street",
-          phone_number: "0911223344",
-        }
-      ]
+      address: "Dia chi 3"
     },
     {
       username: "minhtam321",
@@ -63,15 +39,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Pham Minh Tam",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Can Tho",
-          district: "Ninh Kieu",
-          ward: "Tan An",
-          address: "12 Le Loi Avenue",
-          phone_number: "0909332211",
-        }
-      ]
+      address: "Dia chi 4"
     },
     {
       username: "hoangnam456",
@@ -80,15 +48,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Hoang Nam",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Hue",
-          district: "Phu Hoi",
-          ward: "An Cuu",
-          address: "34 An Duong Vuong",
-          phone_number: "0911888777",
-        }
-      ]
+      address: "Dia chi 5"
     },
     {
       username: "bichngoc789",
@@ -97,15 +57,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Nguyen Bich Ngoc",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Nha Trang",
-          district: "Vinh Hai",
-          ward: "Vinh Tho",
-          address: "67 Tran Phu Street",
-          phone_number: "0933445566",
-        }
-      ]
+      address: "67 Tran Phu Street",
     },
     {
       username: "ducthang112",
@@ -114,15 +66,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Le Duc Thang",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Hai Phong",
-          district: "Le Chan",
-          ward: "Niem Nghia",
-          address: "88 Nguyen Van Linh",
-          phone_number: "0977223344",
-        }
-      ]
+      address: "88 Nguyen Van Linh",
     },
     {
       username: "huyenanh2000",
@@ -131,15 +75,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Do Huyen Anh",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Vung Tau",
-          district: "Thang Tam",
-          ward: "Ngoc Hien",
-          address: "101 Vo Thi Sau",
-          phone_number: "0955112233",
-        }
-      ]
+      address: "Dia chi 6",
     },
     {
       username: "manhkhoa654",
@@ -148,15 +84,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Nguyen Manh Khoa",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Dak Lak",
-          district: "Buon Ma Thuot",
-          ward: "Ea Tam",
-          address: "145 Hoang Dieu",
-          phone_number: "0944221100",
-        }
-      ]
+      address: "Dia chi 7"
     },
     {
       username: "thanhloan888",
@@ -165,15 +93,7 @@ export const getUserData = (): UserAttrs[] => {
       full_name: "Pham Thanh Loan",
       type: UserEnum.CLIENT,
       status: UserStatusEnum.ENABLE,
-      addresses: [
-        {
-          province: "Quang Ninh",
-          district: "Ha Long",
-          ward: "Bai Chay",
-          address: "55 Bai Chay Street",
-          phone_number: "0966554433",
-        }
-      ]
+      address: "Dia chi 8"
     }
   ];
   return userData;
