@@ -31,3 +31,11 @@ spec:
               '-cid',
               'ticketing',
             ]
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://nats-mongo-svc:27017/nats'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
