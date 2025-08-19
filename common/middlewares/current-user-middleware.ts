@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 interface UserPayload {
     username: string;
     email: string;
+    type: string;
 }
 // Another controller can access this information in the future
 declare global {
