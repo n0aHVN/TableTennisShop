@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { UserAttrs, UserModel, RacketModel, InventoryModel, RatingModel, CartModel, OrderModel, VendorPurchaseModel } from '@tabletennisshop/common';
+import { UserAttrs, UserModel, RacketModel, InventoryModel, RatingModel, CartModel, OrderModel } from '@tabletennisshop/common';
 import { getUserData } from './data/user.data';
 import { getProductData } from './data/product.data';
 import { getInventoryData } from './data/inventory.data';
