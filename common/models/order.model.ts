@@ -1,5 +1,4 @@
 import { Document, Model, Schema, model, Types } from 'mongoose';
-import { AddressSchema, IAddress } from './address.schema';
 import { OrderStatusEnum } from '../enums/order-status.enum';
 import { IStatusTimestamps, StatusTimestampsSchema } from './status-timestamp.schema';
 import { PaymentMethodEnum } from '../enums/payment-method.enum';
@@ -14,7 +13,6 @@ export interface IOrderProduct {
 
 export interface OrderAttrs {
   user_id: Types.ObjectId; // FK to User
-  address: IAddress;
   products: IOrderProduct[];
   status: OrderStatusEnum;
   statusTimestamps: IStatusTimestamps;
@@ -23,7 +21,6 @@ export interface OrderAttrs {
 
 export interface OrderDoc extends Document {
   user_id: Types.ObjectId;// FK to User
-  address: IAddress;
   products: IOrderProduct[];
   status: OrderStatusEnum;
   statusTimestamps: IStatusTimestamps;
@@ -37,7 +34,6 @@ interface OrderModel extends Model<OrderDoc> {
 const OrderSchema = new Schema<OrderDoc>(
   {
     user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },// FK to User
-    address: { type: AddressSchema, required: true },
     products: {
       type:[
       {
