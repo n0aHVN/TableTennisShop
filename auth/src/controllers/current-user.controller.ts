@@ -7,15 +7,7 @@ const SafeUserSchema = z.object({
   username: z.string(),
   email: z.string(),
   full_name: z.string(),
-  address: z.array(
-    z.object({
-      province: z.string(),
-      district: z.string(),
-      ward: z.string(),
-      address: z.string(),
-      phone_number: z.string()
-    })
-  ),
+  address: z.string(),
   createdAt: z.date()
 });
 
