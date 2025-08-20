@@ -20,6 +20,7 @@ export interface OrderAttrs {
 }
 
 export interface OrderDoc extends Document {
+  _id: Types.ObjectId;
   user_id: Types.ObjectId;// FK to User
   products: IOrderProduct[];
   status: OrderStatusEnum;
@@ -41,6 +42,7 @@ const OrderSchema = new Schema<OrderDoc>(
         serial: { type: String, required: false }, // Optional serial number for the product
         price: { type: Number, required: true }, // Price of the product at the time of order
         quantity: { type: Number, required: true },
+        _id: false // Disable automatic creation of _id for subdocuments
       },
     ]
     },

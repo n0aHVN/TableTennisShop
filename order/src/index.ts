@@ -30,7 +30,7 @@ const start = async () => {
         throw new Error("Cannot connect to NATS");
     }
     try{
-        await mongoose.connect("mongodb://mongo-service:27017/");
+        await mongoose.connect("mongodb://mongo-service:27017/app");
     }catch(e){
         console.log(e);
         throw new Error("Cannot Connect to MongoDB");

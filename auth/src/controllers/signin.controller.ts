@@ -18,7 +18,7 @@ export const signinController = async (
 ) => {
     const { email, password } = req.body;
     const { clientJwt, message } = await UserService.authenticateUser({ email, password });
-    req.session = { jwt: clientJwt };
+    req.session!.jwt = clientJwt;
     res.status(200).send(message);
 };
 

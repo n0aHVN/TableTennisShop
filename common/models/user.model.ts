@@ -1,4 +1,4 @@
-import { Schema, Model, Document, model} from 'mongoose';
+import { Schema, Model, Document, model, Types} from 'mongoose';
 import { Password } from '../helper/password';
 import { UserEnum } from '../enums/user.enum';
 import { UserStatusEnum } from '../enums/user-status.enum';
@@ -17,7 +17,8 @@ export interface UserAttrs {
 
 
 //UserDoc defines the shape of Users inside the MongoDB
-interface UserDoc extends Document{
+export interface UserDoc extends Document{
+    _id: Types.ObjectId; // Mongoose ObjectId
     username: string;
     email: string;
     password: string;

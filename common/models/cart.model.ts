@@ -8,7 +8,7 @@ export interface ICartAttrs{
     }[];
 }
 
-interface CartDoc extends Document{
+export interface CartDoc extends Document{
     user_id: Types.ObjectId,
     products: {
         product_id: Types.ObjectId,
@@ -24,7 +24,8 @@ const CartSchema = new Schema<CartDoc>({
     products: {
         type: [{
             product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-            quantity: { type: Number, required: true }
+            quantity: { type: Number, required: true },
+            _id: false // Disable automatic _id generation for subdocuments
         }],
         required: true
     }

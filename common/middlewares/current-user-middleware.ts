@@ -4,6 +4,7 @@ interface UserPayload {
     username: string;
     email: string;
     type: string;
+    _id: string;
 }
 // Another controller can access this information in the future
 declare global {

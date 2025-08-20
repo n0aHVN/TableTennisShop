@@ -7,7 +7,8 @@ export interface IRatingAttrs{
     rate_score: number;
 }
 
-interface RatingDoc extends IRatingAttrs, Document {
+export interface RatingDoc extends IRatingAttrs, Document {
+    _id: Types.ObjectId;
     // Mongoose timestamps
     createdAt: Date;
     updatedAt: Date;

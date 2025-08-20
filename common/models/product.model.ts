@@ -1,5 +1,5 @@
 // src/models/product.model.ts
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 import { ProductTypeEnum } from '../enums/product-type.enum';
 import { ProductStatusEnum } from '../enums/product-status.enum';
 export interface ProductAttrsBase {
@@ -15,6 +15,7 @@ export interface ProductAttrsBase {
 }
 
 export interface ProductDoc extends Document {
+  _id: Types.ObjectId,
   name: string,
   slug: string,
   brand: string,

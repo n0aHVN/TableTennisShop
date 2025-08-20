@@ -6,7 +6,8 @@ export interface IInventory {
     serials?: string[];
 }
 
-interface InventoryDoc extends IInventory, Document {
+export interface InventoryDoc extends IInventory, Document {
+    _id: Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }

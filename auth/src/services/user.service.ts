@@ -3,7 +3,7 @@ import { NotFoundError, UserAttrs, UserModel } from "@tabletennisshop/common";
 import { Password } from "@tabletennisshop/common";
 
 export class UserService {
-    static async findUserByLoginString(loginString: string): Promise<UserAttrs | null> {
+    static async findUserByLoginString(loginString: string) {
         const client = await UserModel.findOne({
             $or: [
                 { email: loginString },
@@ -19,7 +19,7 @@ export class UserService {
         email: string;
         password: string;
     }): Promise<{ clientJwt: string, currentUser: any, message: string }> {
-        const client: UserAttrs | null = await this.findUserByLoginString(email);
+        const client= await this.findUserByLoginString(email);
         // If the client is not found, throw an error
         if (!client) {
             throw new NotFoundError("Email or Password is incorrect!");
@@ -35,7 +35,8 @@ export class UserService {
             {
                 username: client.username,
                 email: client.email,
-                type: client.type
+                type: client.type,
+                _id: client._id.toString() // Ensure the ID is a string
             },
             "secretkey"
         );

@@ -16,7 +16,7 @@ const start = async () => {
         await natsWrapper.connect(
             process.env.NATS_CLUSTER_ID,
             process.env.NATS_CLIENT_ID,
-            process.env.NATS_URL
+            process.env.NATS_URL,
         )
         natsWrapper.client.on('close', () => {
             console.log('NATS connection closed');
@@ -30,7 +30,7 @@ const start = async () => {
         throw new Error("Cannot connect to NATS");
     }
     try{
-        await mongoose.connect("mongodb://mongo-service:27017/");
+        await mongoose.connect("mongodb://mongo-service:27017/app");
     }catch(e){
         console.log(e);
         throw new Error("Cannot Connect to MongoDB");

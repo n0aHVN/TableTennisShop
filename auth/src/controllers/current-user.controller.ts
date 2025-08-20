@@ -14,6 +14,7 @@ const SafeUserSchema = z.object({
 export const currentUserController = [
     async (req: Request, res: Response, next: NextFunction) => {
         const { email } = req.currentUser || {};
+        console.log('Current user:', req.session?.jwt);
         if (!email) {
             throw new NotAuthorizedError("auth.currentUser.notAuthorized");
         }

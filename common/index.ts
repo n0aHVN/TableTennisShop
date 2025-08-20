@@ -33,3 +33,5 @@ export * from './events/OrderEventInterface';
 export * from './events/PublisherAbstract';
 export * from './events/RatingEventInterface';
 export * from './events/UserEventInterface';
+
+export * from './types/base';

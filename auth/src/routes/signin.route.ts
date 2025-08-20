@@ -12,9 +12,4 @@ router.post(
   signinController
 );
 
-router.get("/api/users/all", async (req, res) => {
-  const users = await UserService.getAllUsers();
-  res.send(users);
-});
-
 export { router as signinRouter };
