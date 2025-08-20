@@ -7,7 +7,7 @@ export enum SubjectsEnum{
     ProductDeleted = 'product:deleted',
     OrderCreated = 'order:created',
     OrderUpdated = 'order:updated',
-    OrderDeleted = 'order:deleted',
+    OrderCancelled = 'order:cancelled',
     TokenCreated = 'token:created',
     TokenUpdated = 'token:updated',
     TokenDeleted = 'token:deleted',

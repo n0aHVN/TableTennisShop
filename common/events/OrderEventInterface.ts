@@ -1,5 +1,5 @@
 import { SubjectsEnum } from "../enums/event-subject.enum";
-import { OrderAttrs } from "../models/order.model";
+import { OrderAttrs, OrderDoc } from "../models/order.model";
 
 export interface OrderCreatedEventInterface{
     subject: SubjectsEnum.OrderCreated;
@@ -11,9 +11,7 @@ export interface OrderUpdatedEventInterface{
     data: Partial<OrderAttrs>;
 }
 
-export interface OrderDeletedEventInterface {
-    subject: SubjectsEnum.OrderDeleted;
-    data: {
-        id: string;
-    };
+export interface OrderCancelledEventInterface {
+    subject: SubjectsEnum.OrderCancelled;
+    data: OrderDoc;
 }

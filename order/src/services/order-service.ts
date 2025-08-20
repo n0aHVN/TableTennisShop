@@ -1,5 +1,5 @@
 import { OrderAttrs, OrderDoc, OrderModel } from "@tabletennisshop/common";
-import { OrderCreatedPublisher } from "../events/publishers/OrderCreatedListeners";
+import { OrderCreatedPublisher } from "../events/publishers/OrderCreatedListener";
 import { natsWrapper } from "../NatsWrapper";
 
 export class OrderService{
