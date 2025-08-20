@@ -1,6 +1,8 @@
 import {app} from './app';
 import mongoose from 'mongoose';
 import { natsWrapper } from './NatsWrapper';
+import { OrderCancelledListener } from './events/listeners/OrderCancelledListener';
+import { OrderCreatedListener } from './events/listeners/OrderCreatedListener';
 const start = async () => {
     if (!process.env.NATS_CLUSTER_ID) {
         throw new Error("NATS_CLUSTER_ID must be defined");
@@ -24,6 +26,9 @@ const start = async () => {
         });
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
+
+        new OrderCancelledListener(natsWrapper.client).listen();
+        new OrderCreatedListener(natsWrapper.client).listen();
     }
     catch (err) {
         console.error(err);
