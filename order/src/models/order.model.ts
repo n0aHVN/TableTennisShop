@@ -5,7 +5,6 @@ import { PaymentMethodEnum } from '../enums/payment-method.enum';
 
 export interface IOrderProduct {
   product_id: Types.ObjectId; // FK to Product
-  serial?: string; // Optional serial number for the product
   price: number; // Price of the product at the time of order
   quantity: number;
 }
@@ -39,7 +38,6 @@ const OrderSchema = new Schema<OrderDoc>(
       type:[
       {
         product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },// FK to Product
-        serial: { type: String, required: false }, // Optional serial number for the product
         price: { type: Number, required: true }, // Price of the product at the time of order
         quantity: { type: Number, required: true },
         _id: false // Disable automatic creation of _id for subdocuments

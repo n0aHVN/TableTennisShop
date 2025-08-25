@@ -8,16 +8,6 @@ export * from './middlewares/error-handler';
 export * from './middlewares/validate-request-middleware';
 export * from './middlewares/current-user-middleware';
 
-export * from './models/user.model';
-export * from './models/product.model';
-export * from './models/racket.model';
-export * from './models/rating.model';
-export * from './models/shirt.model';
-export * from './models/sponge.model';
-export * from './models/order.model';
-export * from './models/cart.model';
-export * from './models/inventory.model';
-export * from './models/status-timestamp.schema';
 
 export * from './helper/password';
 
@@ -31,7 +21,5 @@ export * from './events/CartEventInterface';
 export * from './events/ListenerAbstract';
 export * from './events/OrderEventInterface';
 export * from './events/PublisherAbstract';
-export * from './events/RatingEventInterface';
-export * from './events/UserEventInterface';
 
 export * from './types/base';

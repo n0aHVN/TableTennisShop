@@ -15,22 +15,23 @@ declare global {
   }
 }
 
+/*
+    When a user logs in, a JWT is created and stored "id" and "email" in the session.
+    So to verify the user, we need to decode the JWT.
+    This code try to verify and decode jwt to {id: "", email: ""}
+    and save it into req.currentUser.
+    Finally req.currentUser back to client.
+*/
+
 export const CurrentUserMiddleware = (req: Request, res: Response, next: NextFunction)=>{
     if (!req.session?.jwt){
         next();
     }
 
-    /*
-        When a user logs in, a JWT is created and stored "id" and "email" in the session.
-        So to verify the user, we need to decode the JWT.
-        This code try to verify and decode jwt to {id: "", email: ""}
-        and save it into req.currentUser.
-        Finally req.currentUser back to client.
-    */
     try {
         const payload = jwt.verify(
             req.session?.jwt,
-            "secretkey"
+            process.env.JWT_KEY!
         ) as UserPayload;
         req.currentUser = payload;
         
