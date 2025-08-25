@@ -1,0 +1,26 @@
+import express, { Request,Response } from 'express';
+import 'express-async-errors';
+import { json } from 'body-parser';
+import { ErrorHandlerMiddleware } from '@tabletennisshop/common';
+import cookieSession from 'cookie-session';
+import {inventoryRouter} from './routes/route';
+const app = express();
+
+app.set('trust proxy', true);
+app.use(json());
+
+app.use(cookieSession({
+    signed: false,
+    secure: false
+}));
+
+app.get("/api/users/hello",(req: Request, res: Response)=>{
+    res.send("HelloWorld");
+});
+
+app.use(inventoryRouter);
+app.use(ErrorHandlerMiddleware);
+
+
+
+export { app };

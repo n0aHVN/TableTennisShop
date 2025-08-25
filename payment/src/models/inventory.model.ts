@@ -1,8 +1,9 @@
 import { Document, Model, Schema, Types, model } from "mongoose";
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+
 export interface IInventory {
     product_id: Types.ObjectId;
     total_quantity: number;
+    serials?: string[];
 }
 
 export interface InventoryDoc extends IInventory, Document {
@@ -16,15 +17,13 @@ interface InventoryModelType extends Model<InventoryDoc> {
 }
 
 const InventorySchema = new Schema<InventoryDoc>({
-    product_id: { type: Schema.Types.ObjectId, required: true},
+    product_id: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
     total_quantity: { type: Number, required: true, default: 0 },
+    serials: { type: [String], required: false },
 }, {
     timestamps: true,
     collection: 'inventory'
 });
-
-InventorySchema.set('versionKey', 'version');
-InventorySchema.plugin(updateIfCurrentPlugin);
 
 InventorySchema.statics.build = (attrs: IInventory) => {
     return new InventoryModel(attrs);
