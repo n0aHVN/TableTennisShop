@@ -9,7 +9,7 @@ router.post(
   "/api/users/signin",
   signinValidationRules,
   ValidateRequestMiddleware,
-  signinController
+  signinController,
 );
 
 export { router as signinRouter };
