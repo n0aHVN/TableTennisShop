@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import { UserService } from "../services/user.service";
+import { ApiResponse } from "@tabletennisshop/common";
 
 export const signinValidationRules = [
   body("email")
@@ -17,8 +18,15 @@ export const signinController = async (
   next: NextFunction
 ) => {
     const { email, password } = req.body;
-    const { clientJwt, message } = await UserService.authenticateUser({ email, password });
+    const { clientJwt, currentUser } = await UserService.authenticateUser({ email, password });
+    // Asign JWT
     req.session!.jwt = clientJwt;
-    res.status(200).send(message);
+    req.currentUser = currentUser;
+    const response: ApiResponse = {
+        success: true,
+        statusCode: 200,
+        message: "User signed in successfully"
+    };
+    res.status(200).send(response);
 };
 
