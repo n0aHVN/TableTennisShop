@@ -1,5 +1,15 @@
+import { Types } from "mongoose";
 import { SubjectsEnum } from "../enums/event-subject.enum";
-import { ICartAttrs } from "../models/cart.model";
+
+interface ICartAttrs{
+    _id: Types.ObjectId;
+    user_id: Types.ObjectId,
+    products: {
+        product_id: Types.ObjectId,
+        quantity: number
+    }[];
+    version: number;
+}
 
 export interface CartCreatedEventInterface {
     subject: SubjectsEnum.CartCreated;
