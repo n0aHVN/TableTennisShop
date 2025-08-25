@@ -7,6 +7,7 @@ export const signoutController = async (
 ) => {
   try {
     req.session = null;
+    req.currentUser = undefined;
     res.status(200).send({ message: "Successfully signed out" });
   } catch (err) {
     next(err);
