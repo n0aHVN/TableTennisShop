@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
-import { NotFoundError, UserAttrs, UserModel } from "@tabletennisshop/common";
+import { NotFoundError } from "@tabletennisshop/common";
 import { Password } from "@tabletennisshop/common";
+import { UserAttrs, UserDoc, UserModel } from "../models/user.model";
 
 export class UserService {
     static async findUserByLoginString(loginString: string) {
@@ -18,7 +19,7 @@ export class UserService {
     }: {
         email: string;
         password: string;
-    }): Promise<{ clientJwt: string, currentUser: any, message: string }> {
+    }): Promise<{ clientJwt: string, currentUser: any}> {
         const client= await this.findUserByLoginString(email);
         // If the client is not found, throw an error
         if (!client) {
@@ -38,7 +39,7 @@ export class UserService {
                 type: client.type,
                 _id: client._id.toString() // Ensure the ID is a string
             },
-            "secretkey"
+            process.env.JWT_KEY! // Non-null assertion since we check this before starting the app
         );
 
         return {
@@ -46,43 +47,17 @@ export class UserService {
             currentUser: {
                 username: client.username,
                 email: client.email,
+                _id: client._id.toString(),
+                type: client.type,
             },
-            message: "auth.signin.success"
         };
     }
     static async getAllUsers(): Promise<UserAttrs[]> {
         const users = await UserModel.find({});
         return users;
     }
-    static async addUser({
-        email,
-        password,
-        full_name,
-        address,
-        province,
-        district,
-        ward,
-        phone_number
-    }: {
-        email: string;
-        password: string;
-        full_name?: string;
-        address?: string;
-        province?: string;
-        district?: string;
-        ward?: string;
-        phone_number?: string;
-    }) {
-        const client = new UserModel({
-            email,
-            password,
-            full_name,
-            address,
-            province,
-            district,
-            ward,
-            phone_number
-        });
+    static async addUser({user}:{user: UserAttrs}): Promise<UserDoc>{
+        const client = UserModel.build(user);
         await client.save();
         return client;
     }
