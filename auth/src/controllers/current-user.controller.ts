@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CurrentUserMiddleware, NotAuthorizedError } from "@tabletennisshop/common";
+import { ApiResponse, CurrentUserMiddleware, NotAuthorizedError } from "@tabletennisshop/common";
 import { UserService } from "../services/user.service";
 import { z } from "zod";
 
@@ -14,7 +14,6 @@ const SafeUserSchema = z.object({
 export const currentUserController = [
     async (req: Request, res: Response, next: NextFunction) => {
         const { email } = req.currentUser || {};
-        console.log('Current user:', req.session?.jwt);
         if (!email) {
             throw new NotAuthorizedError("auth.currentUser.notAuthorized");
         }
@@ -29,6 +28,14 @@ export const currentUserController = [
                 .join('\n');
             throw new Error(errorString);
         }
-        res.status(200).send(result.data);
+
+        
+        const response: ApiResponse = {
+            success: true,
+            statusCode: 200,
+            data: result.data
+        }
+
+        res.send(response);
     }
 ];
