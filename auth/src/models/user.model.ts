@@ -9,8 +9,6 @@ export interface UserAttrs {
   password: string;
   full_name: string;
   address: string;
-  type: string;
-  status: UserStatusEnum;
 }
 
 

@@ -8,6 +8,4 @@ it("responds with details about the current user", async () => {
         .set("Cookie", cookie)
         .send()
         .expect(200);
-
-    console.log(response.body);
 });

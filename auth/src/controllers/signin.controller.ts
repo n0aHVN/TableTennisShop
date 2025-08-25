@@ -18,10 +18,9 @@ export const signinController = async (
   next: NextFunction
 ) => {
     const { email, password } = req.body;
-    const { clientJwt, currentUser } = await UserService.authenticateUser({ email, password });
+    const { clientJwt } = await UserService.authenticateUser({ email, password });
     // Asign JWT
     req.session!.jwt = clientJwt;
-    req.currentUser = currentUser;
     const response: ApiResponse = {
         success: true,
         statusCode: 200,

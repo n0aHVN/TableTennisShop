@@ -1,5 +1,5 @@
 import express from "express";
-import { signupController, signupValidationRules } from "../controllers/signup.controller";
+import { signupClientController, signupValidationRules } from "../controllers/signup.controller";
 import { ValidateRequestMiddleware } from "@tabletennisshop/common";
 
 const router = express.Router();
@@ -8,7 +8,7 @@ router.post(
   "/api/users/signup",
   signupValidationRules,
   ValidateRequestMiddleware,
-  signupController
+  signupClientController
 );
 
 export { router as signupRouter };

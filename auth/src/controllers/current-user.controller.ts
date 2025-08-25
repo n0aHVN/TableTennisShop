@@ -11,31 +11,27 @@ const SafeUserSchema = z.object({
   createdAt: z.date()
 });
 
-export const currentUserController = [
+export const currentUserController = 
     async (req: Request, res: Response, next: NextFunction) => {
         const { email } = req.currentUser || {};
         if (!email) {
-            throw new NotAuthorizedError("auth.currentUser.notAuthorized");
+            throw new NotAuthorizedError("Email is required");
         }
         const user = await UserService.findUserByLoginString(email);
         if (!user) {
-            throw new NotAuthorizedError("auth.currentUser.notAuthorized");
+            throw new NotAuthorizedError("User not found");
         }
-        const result = SafeUserSchema.safeParse(user);
-        if (!result.success) {
-            const errorString = result.error.issues
-                .map(e => `${e.path.join('.')}: ${e.message}`)
-                .join('\n');
-            throw new Error(errorString);
-        }
-
         
         const response: ApiResponse = {
             success: true,
             statusCode: 200,
-            data: result.data
-        }
+            data: {
+                email: user.email,
+                full_name: user.full_name,
+                address: user.address,
+                createdAt: user.createdAt
+            }
+        };
 
         res.send(response);
-    }
-];
+    };

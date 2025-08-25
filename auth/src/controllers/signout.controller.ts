@@ -1,3 +1,4 @@
+import { ApiResponse } from "@tabletennisshop/common";
 import { Request, Response, NextFunction } from "express";
 
 export const signoutController = async (
@@ -8,7 +9,12 @@ export const signoutController = async (
   try {
     req.session = null;
     req.currentUser = undefined;
-    res.status(200).send({ message: "Successfully signed out" });
+    const response: ApiResponse = {
+      statusCode: 200,
+      message: "Successfully signed out",
+      success: true
+    };
+    res.status(200).send(response);
   } catch (err) {
     next(err);
   }
