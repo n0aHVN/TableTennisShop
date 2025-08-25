@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import { UserService } from "../services/user.service";
+import { ApiResponse } from "@tabletennisshop/common";
 
 
 export const signupValidationRules = [
@@ -20,7 +21,12 @@ export const signupController = async (
 ) => {
   try {
     await UserService.addUser(req.body);
-    res.status(200).send({ message: "User is successfully created" });
+    const response :ApiResponse = {
+      statusCode: 201,
+      message: "User is successfully created",
+      success: true
+    };
+    res.send(response);
   } catch (err) {
     next(err);
   }
