@@ -17,6 +17,9 @@ export * from './enums/order-status.enum';
 export * from './enums/payment-method.enum';
 export * from './enums/user-status.enum';
 export * from './enums/user.enum';
+export * from './enums/payment-status.enum';
+export * from './enums/product-status.enum';
+
 
 export * from './events/CartEventInterface';
 export * from './events/ListenerAbstract';
