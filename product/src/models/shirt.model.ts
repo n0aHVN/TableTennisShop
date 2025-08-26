@@ -1,5 +1,5 @@
 import { Model, Schema } from "mongoose";
-import { ProductTypeEnum } from "../enums/product-type.enum";
+import { ProductTypeEnum } from "@tabletennisshop/common";
 import { ProductAttrsBase, ProductDoc, ProductModel } from "./product.model";
 
 
@@ -20,5 +20,4 @@ shirtSchema.statics.build = (attrs: ShirtAttrs)=>{
   return new ShirtModel(attrs);
 }
 
-export const ShirtModel = ProductModel.discriminator(ProductTypeEnum.SHIRT, new Schema({
-}));
+export const ShirtModel = ProductModel.discriminator<ShirtDoc, ShirtModel>(ProductTypeEnum.SHIRT, shirtSchema);

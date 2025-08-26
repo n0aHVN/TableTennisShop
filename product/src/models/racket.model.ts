@@ -1,6 +1,6 @@
 import { Model, Schema } from "mongoose";
-import { ProductTypeEnum } from "../enums/product-type.enum";
 import { ProductAttrsBase, ProductDoc, ProductModel } from "./product.model";
+import { ProductTypeEnum } from "@tabletennisshop/common";
 
 export interface RacketAttrs extends ProductAttrsBase{
     type: ProductTypeEnum.RACKET;

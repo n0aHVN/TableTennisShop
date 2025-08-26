@@ -1,7 +1,7 @@
 // src/models/product.model.ts
+import { ProductTypeEnum, ProductStatusEnum } from '@tabletennisshop/common';
 import mongoose, { Document, Schema, Types } from 'mongoose';
-import { ProductTypeEnum } from '../enums/product-type.enum';
-import { ProductStatusEnum } from '../enums/product-status.enum';
+
 export interface ProductAttrsBase {
   name: string,
   slug: string,
@@ -73,3 +73,23 @@ const generateUniqueSlug = (name: string, currentId?: number) => {
     .replace(/-+/g, '-');     // collapse multiple hyphens
   return baseSlug;
 }
+
+// Assign buildProduct as a static method after model creation
+(ProductModel as any).buildProduct = function(product: any) {
+  // Import here to avoid circular dependency issues
+  const { RacketModel } = require('./racket.model');
+  const { ShirtModel } = require('./shirt.model');
+  const { SpongeModel } = require('./sponge.model');
+  const { ProductTypeEnum } = require('@tabletennisshop/common');
+
+  switch (product.type) {
+    case ProductTypeEnum.RACKET:
+      return RacketModel.build(product);
+    case ProductTypeEnum.SHIRT:
+      return ShirtModel.build(product);
+    case ProductTypeEnum.SPONGE:
+      return SpongeModel.build(product);
+    default:
+      throw new Error('Invalid product type');
+  }
+};

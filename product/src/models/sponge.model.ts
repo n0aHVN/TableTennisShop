@@ -1,5 +1,5 @@
 import { Model, Schema } from "mongoose";
-import { ProductTypeEnum } from "../enums/product-type.enum";
+import { ProductTypeEnum } from "@tabletennisshop/common";
 import { ProductAttrsBase, ProductDoc, ProductModel } from "./product.model";
 
 export interface SpongeAttrs extends ProductAttrsBase{

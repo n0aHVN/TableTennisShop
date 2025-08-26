@@ -1,4 +1,3 @@
-import {ProductDoc, ProductModel} from '@tabletennisshop/common';
 import { ProductService } from '../services/product.service';
 import { Request, Response } from 'express';
 export class ProductController{
@@ -22,4 +21,5 @@ export class ProductController{
             limit: limit
         });
     }
+
 }
