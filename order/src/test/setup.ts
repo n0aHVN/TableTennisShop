@@ -66,6 +66,7 @@ global.prepareData = async()=>{
             quantity: 2
         }],
         payment_method: PaymentMethodEnum.COD,
+        total_price: 200
 
     }
     const orderDoc = OrderModel.build(order);
