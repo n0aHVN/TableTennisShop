@@ -14,6 +14,7 @@ export interface OrderAttrs {
   products: IOrderProduct[];
   status: OrderStatusEnum;
   payment_method: PaymentMethodEnum;
+  total_price: number;
 }
 
 export interface OrderDoc extends Document {
@@ -23,6 +24,7 @@ export interface OrderDoc extends Document {
   status: OrderStatusEnum;
   payment_method: PaymentMethodEnum;
   version: number;
+  total_price: number;
 }
 
 interface OrderModel extends Model<OrderDoc> {
@@ -43,7 +45,8 @@ const OrderSchema = new Schema<OrderDoc>(
       ]
     },
     status: { type: String, enum: OrderStatusEnum, required: true },
-    payment_method: { type: String, enum: Object.values(PaymentMethodEnum), required: true }
+    payment_method: { type: String, enum: Object.values(PaymentMethodEnum), required: true },
+    total_price: { type: Number, required: true }
   },
   { collection: 'order' }
 );
