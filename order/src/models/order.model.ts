@@ -1,7 +1,6 @@
 import { Document, Model, Schema, model, Types } from 'mongoose';
-import { OrderStatusEnum } from '../enums/order-status.enum';
-import { IStatusTimestamps, StatusTimestampsSchema } from './status-timestamp.schema';
-import { PaymentMethodEnum } from '../enums/payment-method.enum';
+import { OrderStatusEnum } from '@tabletennisshop/common';
+import { PaymentMethodEnum } from '@tabletennisshop/common';
 
 export interface IOrderProduct {
   product_id: Types.ObjectId; // FK to Product
@@ -14,7 +13,6 @@ export interface OrderAttrs {
   user_id: Types.ObjectId; // FK to User
   products: IOrderProduct[];
   status: OrderStatusEnum;
-  statusTimestamps: IStatusTimestamps;
   payment_method: PaymentMethodEnum;
 }
 
@@ -23,8 +21,8 @@ export interface OrderDoc extends Document {
   user_id: Types.ObjectId;// FK to User
   products: IOrderProduct[];
   status: OrderStatusEnum;
-  statusTimestamps: IStatusTimestamps;
   payment_method: PaymentMethodEnum;
+  version: number;
 }
 
 interface OrderModel extends Model<OrderDoc> {
@@ -33,22 +31,21 @@ interface OrderModel extends Model<OrderDoc> {
 
 const OrderSchema = new Schema<OrderDoc>(
   {
-    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },// FK to User
+    user_id: { type: Schema.Types.ObjectId, required: true },// FK to User
     products: {
-      type:[
-      {
-        product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },// FK to Product
-        price: { type: Number, required: true }, // Price of the product at the time of order
-        quantity: { type: Number, required: true },
-        _id: false // Disable automatic creation of _id for subdocuments
-      },
-    ]
+      type: [
+        {
+          product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },// FK to Product
+          price: { type: Number, required: true }, // Price of the product at the time of order
+          quantity: { type: Number, required: true },
+          _id: false // Disable automatic creation of _id for subdocuments
+        },
+      ]
     },
     status: { type: String, enum: OrderStatusEnum, required: true },
-    statusTimestamps: {type: StatusTimestampsSchema, require: true},
     payment_method: { type: String, enum: Object.values(PaymentMethodEnum), required: true }
   },
-  { collection: 'order'}
+  { collection: 'order' }
 );
 
 OrderSchema.statics.build = (attrs: OrderAttrs) => {
