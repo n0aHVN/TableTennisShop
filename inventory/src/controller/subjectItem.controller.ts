@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { body, param } from "express-validator";
-import { subjectQuantity } from "../service/subjectQuantity.service";
 import { ApiResponse } from "@tabletennisshop/common/build/types/base";
-
+import { InventoryService } from "../service/inventory.service";
 
 export const subjectQuantityController =  [
     param("id").isMongoId().withMessage("Invalid product ID"),
@@ -12,7 +11,8 @@ export const subjectQuantityController =  [
         const {quantity} = req.body;
 
         // Add item to inventory
-        const result = await subjectQuantity({product_id, quantity});
+        const result = await InventoryService.subjectQuantity({product_id, quantity});
+
         const response: ApiResponse = {
             statusCode: 200, 
             data: result,
