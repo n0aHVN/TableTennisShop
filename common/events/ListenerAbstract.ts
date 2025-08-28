@@ -26,6 +26,7 @@ export abstract class ListenerAbstract<T extends Event> {
       .setManualAckMode(true) // Handle ACK Mode Manually
       .setAckWait(this.ackWait) // Wait 5 seconds before resending the message
       // Assigns a durable name to the subscription.
+      // Durable name can be shared among replicas 
       // This allows the server to remember the last acknowledged message for this listener,
       // so if it disconnects and reconnects,
       // it will only receive new messages (not ones it already processed).
