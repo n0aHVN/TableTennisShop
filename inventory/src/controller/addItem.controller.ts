@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { body, param } from "express-validator";
-import { addQuantityService } from "../service/addQuantity.service";
 import { ApiResponse } from "@tabletennisshop/common";
+import { InventoryService } from "../service/inventory.service";
 
 export const addQuantityController =  [
     param("id").isMongoId().withMessage("Invalid product ID"),
@@ -11,13 +11,15 @@ export const addQuantityController =  [
         const {quantity} = req.body;
 
         // Add item to inventory
-        const result = await addQuantityService({product_id, quantity});
+        const result = await InventoryService.addQuantity({product_id, quantity});
         
         const response: ApiResponse = {
             statusCode: 200, 
             data: result,
             success: true
         }
+
         res.status(200).json(response);
+
     },
 ]
