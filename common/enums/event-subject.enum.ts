@@ -20,5 +20,8 @@ export enum SubjectsEnum{
     RatingDeleted = 'rating:deleted',
     InventoryCreated = 'inventory:created',
     InventoryUpdated = 'inventory:updated',
-    InventoryDeleted = 'inventory:deleted'
+    InventoryDeleted = 'inventory:deleted',
+    PaymentCreated = 'payment:created',
+    PaymentUpdated = 'payment:updated',
+    PaymentExpired = 'payment:expired',
 }
