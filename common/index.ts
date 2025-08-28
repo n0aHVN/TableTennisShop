@@ -19,11 +19,14 @@ export * from './enums/user-status.enum';
 export * from './enums/user.enum';
 export * from './enums/payment-status.enum';
 export * from './enums/product-status.enum';
+export * from './enums/event-subject.enum';
 
 
-export * from './events/CartEventInterface';
+export * from './events/InventoryEventInterface';
 export * from './events/ListenerAbstract';
 export * from './events/OrderEventInterface';
+export * from './events/PaymentEventInterface';
+export * from './events/ProductEventInterface';
 export * from './events/PublisherAbstract';
 
 export * from './types/base';
