@@ -2,12 +2,12 @@ import request from 'supertest'
 import {app} from '../../app';
 import { natsWrapper } from '../../NatsWrapper';
 it("add quantity inventory", async () => {
-  const id = await global.addInventory();
+  const inventory = await global.addInventory();
   const response = await request(app)
-    .patch(`/api/inventory/${id}/add`)
+    .patch(`/api/inventory/${inventory._id.toHexString()}/add`)
     .set("Cookie", await global.signin())
     .send({
-      id: id,
+      product_id: inventory._id.toHexString(),
       quantity: 10,
     });
 
