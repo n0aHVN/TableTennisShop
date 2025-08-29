@@ -12,3 +12,12 @@ export interface InventoryUpdatedEventInterface{
     subject: SubjectsEnum.InventoryUpdated;
     data: InventoryAttrs;
 }
+export interface InventoryCreatedEventInterface{
+    subject: SubjectsEnum.InventoryCreated;
+    data: InventoryAttrs;
+}
+export interface InventoryDeleteEventInterface{
+    subject: SubjectsEnum.InventoryDeleted;
+    data: InventoryAttrs;
+}
+    
