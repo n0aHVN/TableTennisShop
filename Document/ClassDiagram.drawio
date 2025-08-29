@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" version="28.1.1">
   <diagram name="Trang-1" id="AHCST-kHQ4vF2EGW2saR">
-    <mxGraphModel dx="1733" dy="1665" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1510" dy="1539" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -797,8 +797,8 @@
         <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-60" value="Order" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="270" y="890" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-69" value="&lt;div&gt;Update local inventory&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;If inventory quantity = 0&lt;div&gt;=&amp;gt; Product status is out of stock&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
-          <mxGeometry x="62.5" y="970" width="135" height="140" as="geometry" />
+        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-69" value="&lt;div&gt;Update local inventory&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;If inventory quantity = 0&lt;div&gt;=&amp;gt; Product status is out of stock=&amp;gt;ProductUpdatePublisher&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
+          <mxGeometry x="62.5" y="970" width="177.5" height="160" as="geometry" />
         </mxCell>
         <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-70" value="Update local inventory" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
           <mxGeometry x="270" y="970" width="110" height="50" as="geometry" />
@@ -818,7 +818,7 @@
         <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-77" value="Payment" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="52.5" y="1440" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-79" value="&lt;div&gt;Update local payment&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
+        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-79" value="&lt;div&gt;Update local order&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
           <mxGeometry x="52.5" y="1510" width="117.5" height="140" as="geometry" />
         </mxCell>
         <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-80" value="Order Created" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -827,10 +827,10 @@
         <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-81" value="Payment" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="60" y="1730" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-82" value="&lt;div&gt;Update local payment&amp;nbsp;&lt;/div&gt;&lt;div&gt;Create Payment&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
+        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-82" value="&lt;div&gt;Update local payment&amp;nbsp;&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
           <mxGeometry x="60" y="1800" width="117.5" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-85" value="&lt;div&gt;Subject quantity&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
+        <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-85" value="&lt;div&gt;Subject quantity=&amp;gt;InventoryUpdate&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" parent="1" vertex="1">
           <mxGeometry x="241.25" y="1800" width="117.5" height="140" as="geometry" />
         </mxCell>
         <mxCell id="ZXi-ftJ4v7RkyKIxGZ8t-86" value="Inventory" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -878,11 +878,29 @@
         <mxCell id="kTvlYz_OEZdWQdacuQBt-3" value="&lt;div&gt;Add product&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
           <mxGeometry x="60" y="2050" width="117.5" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="kTvlYz_OEZdWQdacuQBt-4" value="&lt;div&gt;Subject quantity&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
+        <mxCell id="kTvlYz_OEZdWQdacuQBt-4" value="Create Inventory = 0=&amp;gt;InventoryCreated" style="html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
           <mxGeometry x="241.25" y="2050" width="117.5" height="140" as="geometry" />
         </mxCell>
         <mxCell id="kTvlYz_OEZdWQdacuQBt-5" value="Inventory" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="240" y="1980" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kTvlYz_OEZdWQdacuQBt-8" value="Inventory Created" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-190" y="3220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kTvlYz_OEZdWQdacuQBt-9" value="Product" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="3220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kTvlYz_OEZdWQdacuQBt-10" value="Order" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="3220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kTvlYz_OEZdWQdacuQBt-11" value="&lt;div&gt;Add local inventory.quantity = 0&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
+          <mxGeometry x="42.5" y="3300" width="177.5" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="kTvlYz_OEZdWQdacuQBt-12" value="Add local inventory.quantity = 0" style="html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
+          <mxGeometry x="250" y="3300" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kTvlYz_OEZdWQdacuQBt-13" value="Product.status = Outofstock" style="html=1;whiteSpace=wrap;align=left;" vertex="1" parent="1">
+          <mxGeometry x="-170" y="2060" width="117.5" height="140" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
