@@ -7,12 +7,12 @@ export const addQuantityController =  [
     param("id").isMongoId().withMessage("Invalid product ID"),
     body("quantity").isInt({min:1}).withMessage("Invalid quantity"),
     async (req: Request, res: Response)=>{
-        const {id: product_id} = req.params;
-        const {quantity} = req.body;
+        const {id: inventory_id} = req.params;
+        const {quantity, product_id} = req.body;
 
         // Add item to inventory
-        const result = await InventoryService.addQuantity({product_id, quantity});
-        
+        const result = await InventoryService.addQuantity({inventory_id, quantity});
+
         const response: ApiResponse = {
             statusCode: 200, 
             data: result,
