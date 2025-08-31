@@ -8,6 +8,7 @@ export enum SubjectsEnum{
     OrderCreated = 'order:created',
     OrderUpdated = 'order:updated',
     OrderCancelled = 'order:cancelled',
+    OrderExpired = 'order:expired',
     TokenCreated = 'token:created',
     TokenUpdated = 'token:updated',
     TokenDeleted = 'token:deleted',
@@ -24,4 +25,5 @@ export enum SubjectsEnum{
     PaymentCreated = 'payment:created',
     PaymentUpdated = 'payment:updated',
     PaymentExpired = 'payment:expired',
+    PaymentCompleted = 'payment:completed',
 }
