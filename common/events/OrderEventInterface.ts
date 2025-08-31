@@ -14,6 +14,7 @@ interface OrderAttrs {
     status: OrderStatusEnum;
     payment_method: PaymentMethodEnum;
     total_price: number;
+    expiresAt: string;
     version: number;
 }
 
@@ -30,8 +31,12 @@ export interface OrderUpdatedEventInterface {
 
 export interface OrderCancelledEventInterface {
     subject: SubjectsEnum.OrderCancelled;
+    data: OrderAttrs;
+}
+
+export interface OrderExpiredCompleteEventInterface {
+    subject: SubjectsEnum.OrderExpired;
     data: {
         _id: string;
-        version: number;
     };
 }
