@@ -1,0 +1,45 @@
+import { ListenerAbstract, OrderExpiredCompleteEventInterface, OrderStatusEnum, SubjectsEnum } from "@tabletennisshop/common";
+import { queueGroupName } from "../queueGroupName";
+import { Message } from "node-nats-streaming";
+import { OrderModel } from "../../models/order.model";
+import { OrderCancelledPublisher } from "../publishers/OrderCancelledPublisher";
+import { natsWrapper } from "../../NatsWrapper";
+
+export class OrderExpiredCompleteListener extends ListenerAbstract<
+  OrderExpiredCompleteEventInterface
+> {
+  subject: SubjectsEnum.OrderExpired = SubjectsEnum.OrderExpired;
+  queueGroupName = queueGroupName;
+
+  async onMessage(data: OrderExpiredCompleteEventInterface['data'], msg: Message) {
+    const { _id:orderId } = data;
+    const order = await OrderModel.findById(orderId);
+    if (!order) {
+      throw new Error("Order not found");
+    }
+    if (order.status === OrderStatusEnum.FINISHED) {
+      // Handle the event
+      msg.ack();
+      return;
+    }
+    
+    order.set({ status: OrderStatusEnum.CANCELLED });
+    await order.save();
+    await new OrderCancelledPublisher(natsWrapper.client).publish({
+      _id: order._id.toHexString(),
+      user_id: order.user_id.toHexString(),
+      status: order.status,
+      version: order.version,
+      expiresAt: order.expiresAt.toISOString(),
+      payment_method: order.payment_method,
+      products: order.products.map(p => ({
+        product_id: p.product_id.toHexString(),
+        quantity: p.quantity,
+        price: p.price
+      })),
+      total_price: order.total_price
+    });
+
+    msg.ack();
+  }
+}

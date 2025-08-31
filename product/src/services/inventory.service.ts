@@ -1,4 +1,8 @@
-import { InventoryModel } from "@tabletennisshop/common";
+import { Types } from "mongoose";
+import { InventoryModel } from "../models/inventory.model";
+import { ProductModel } from "../models/product.model";
+import { NotFoundError, ProductStatusEnum } from "@tabletennisshop/common";
+import { ProductService } from "./product.service";
 
 export class InventoryService {
     static async buyInventory({product_id, quantity}:{product_id: string, quantity: number}) {
@@ -17,9 +21,9 @@ export class InventoryService {
         return product;
     }
 
-    static async createInventory({product_id, quantity}:{product_id: string, quantity: number}) {
+    static async createInventory({_id, product_id, quantity, version}:{_id: string, product_id: string, quantity: number, version: number}) {
         console.log("Creating product in inventory:", { product_id, quantity });
-        const product = new InventoryModel({ product_id, total_quantity: quantity });
+        const product = InventoryModel.build({ _id, product_id, total_quantity: quantity, version });
         await product.save();
         return product;
     }
@@ -29,11 +33,30 @@ export class InventoryService {
         let product = await InventoryModel.findOne({ product_id: product_id });
 
         if(!product) {
-           product = await this.createInventory({product_id, quantity});
+           throw new NotFoundError("Product not found");
         }
         
         product.total_quantity += quantity;
         await product.save();
         return product;
+    }
+    static async updateInventory({ _id, product_id, quantity, version }: { _id: string, product_id: string; quantity: number; version: number }) {
+        const inventory = await InventoryModel.findOne({ _id, version: version - 1 });
+
+        if (!inventory) {
+            throw new Error("Product not found");
+        }
+
+        inventory.product_id = new Types.ObjectId(product_id);
+        inventory.total_quantity = quantity;
+        await inventory.save();
+        if (quantity == 0) {
+            await ProductService.updateProduct({
+                _id: product_id,
+                status: ProductStatusEnum.OUT_OF_STOCK,
+            });
+        }
+
+        return inventory;
     }
 }

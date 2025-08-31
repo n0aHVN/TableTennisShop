@@ -1,0 +1,27 @@
+import { body, param } from "express-validator";
+import { ProductService } from "../services/product.service";
+import { Request, Response } from "express";
+import { ApiResponse } from "@tabletennisshop/common";
+import { ProductDoc } from "../models/product.model";
+
+export const putProductValidation = [
+    param("id").isMongoId().withMessage("Invalid product ID"),
+    body("version").isNumeric().withMessage("Version must be a number"),
+];
+
+export const putProductController = async (req: Request, res: Response<ApiResponse<ProductDoc>>) => {
+    const { id } = req.params;
+    const body = req.body;
+
+    // Call the service to update the product
+    const updatedProduct = await ProductService.updateProduct({
+        _id: id,
+        ...body
+    });
+
+    res.status(200).send({
+        statusCode: 200,
+        data: updatedProduct,
+        success: true
+    });
+}

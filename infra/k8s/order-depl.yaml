@@ -30,4 +30,5 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
-
+            - name: MONGO_URL
+              value: mongodb://order-mongo-service:27017/app

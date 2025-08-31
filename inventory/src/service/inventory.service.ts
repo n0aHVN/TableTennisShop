@@ -10,7 +10,13 @@ type UpdateInventoryParams = Omit<Partial<InventoryDoc>, "_id" | "version"> & {
 }
 
 export class InventoryService {
-
+    static async getInventoryByProductId(product_id: string) {
+        const inventory = await InventoryModel.findOne({ product_id});
+        if (!inventory) {
+            throw new NotFoundError("Inventory not found");
+        }
+        return inventory;
+    }
     static async getInventoryIdByProductId(product_id: string) {
         const inventory = await InventoryModel.findOne({ product_id });
         if (!inventory) {
@@ -57,10 +63,14 @@ export class InventoryService {
         return product;
     }
 
-    static async addInventory({ product_id, quantity }: { product_id: string; quantity: number }) {
+    static async createInventory({ product_id, total_quantity }: { product_id: string; total_quantity: number }) {
+        const existingInventory = await InventoryModel.findOne({ product_id });
+        if (existingInventory) {
+            throw new BadRequestError("Inventory for this product already exists");
+        }
         const inventory = await InventoryModel.build({
             product_id,
-            total_quantity: quantity
+            total_quantity: total_quantity
         });
         await inventory.save();
 

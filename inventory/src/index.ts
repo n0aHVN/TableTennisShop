@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import { app } from './app';
 import { natsWrapper } from "./NatsWrapper";
+import { OrderCancelledListener } from "./events/listeners/OrderCancelledListener";
+import { OrderCreatedListener } from "./events/listeners/OrderCreatedListener";
+import { ProductCreatedListener } from "./events/listeners/ProductCreatedListener";
 const start = async () => {
     if (!process.env.MONGO_URL) {
         throw new Error("MONGO_URL must be defined");
@@ -47,8 +50,9 @@ const start = async () => {
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
 
-        // new OrderCreatedListener(natsWrapper.client).listen();
-        // new OrderCancelledListener(natsWrapper.client).listen();
+        new OrderCancelledListener(natsWrapper.client).listen();
+        new OrderCreatedListener(natsWrapper.client).listen();
+        new ProductCreatedListener(natsWrapper.client).listen();
     }
     catch (e) {
         console.log(e);

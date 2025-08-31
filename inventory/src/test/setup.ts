@@ -1,14 +1,18 @@
 import {app} from '../app';
 import { MongoMemoryServer } from 'mongodb-memory-server'; // Import in-memory MongoDB server for testing
 import mongoose, { Types } from 'mongoose'; // Import Mongoose for MongoDB object modeling
-import request from 'supertest'; // Import Supertest for HTTP assertions
 import jwt from 'jsonwebtoken';
-import { addInventoryService } from '../service/addInventory.service';
+import { InventoryService } from '../service/inventory.service';
+import { InventoryDoc, InventoryModel } from '../models/inventory.model';
 declare global {
   // Add to NodeJS.Global interface
   var signin: () => Promise<string[]>;
-  var addInventory: () => Promise<Types.ObjectId>;
+  var addInventory: () => Promise<InventoryDoc>;
 }
+
+jest.setTimeout(10000); // Set Jest timeout to 10 seconds
+jest.mock('../NatsWrapper'); // Mock NATS wrapper for event publishing
+
 
 let mongo: any; // Declare a variable to hold the MongoMemoryServer instance
 
@@ -52,6 +56,7 @@ global.signin = async (id?: string) => {
 };
 
 global.addInventory = async()=>{
-  const inventory = await addInventoryService({product_id: new Types.ObjectId(), quantity: 100});
-  return inventory._id;
+  const inventory = InventoryModel.build({product_id: new Types.ObjectId().toHexString(), total_quantity: 100});
+  await inventory.save();
+  return inventory;
 }

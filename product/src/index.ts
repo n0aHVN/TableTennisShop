@@ -1,8 +1,8 @@
 import {app} from './app';
 import mongoose from 'mongoose';
 import { natsWrapper } from './NatsWrapper';
-import { OrderCancelledListener } from './events/listeners/OrderCancelledListener';
-import { OrderCreatedListener } from './events/listeners/OrderCreatedListener';
+import { InventoryCreatedListener } from './events/listeners/InventoryCreatedListener';
+import { InventoryUpdatedListener } from './events/listeners/InventoryUpdatedListener';
 const start = async () => {
     if (!process.env.NATS_CLUSTER_ID) {
         throw new Error("NATS_CLUSTER_ID must be defined");
@@ -12,6 +12,9 @@ const start = async () => {
     }
     if (!process.env.NATS_URL) {
         throw new Error("NATS_URL must be defined");
+    }
+    if (!process.env.MONGO_URL) {
+        throw new Error("MONGO_URL must be defined");
     }
 
     try{
@@ -26,16 +29,16 @@ const start = async () => {
         });
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
-
-        new OrderCancelledListener(natsWrapper.client).listen();
-        new OrderCreatedListener(natsWrapper.client).listen();
+        new InventoryCreatedListener(natsWrapper.client).listen();
+        new InventoryUpdatedListener(natsWrapper.client).listen();
     }
     catch (err) {
         console.error(err);
         throw new Error("Cannot connect to NATS");
     }
     try{
-        await mongoose.connect("mongodb://mongo-service:27017/app");
+        await mongoose.connect(process.env.MONGO_URL);
+        console.log("Connected to MongoDB");
     }catch(e){
         console.log(e);
         throw new Error("Cannot Connect to MongoDB");

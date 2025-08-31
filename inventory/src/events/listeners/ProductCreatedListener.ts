@@ -12,9 +12,9 @@ export class ProductCreatedListener extends ListenerAbstract<ProductCreatedEvent
     queueGroupName: string = queueGroupName;
 
     async onMessage(data: ProductCreatedEventInterface['data'], msg: any) {
-        await InventoryService.addInventory({
+        await InventoryService.createInventory({
             product_id: data._id,
-            quantity: 0
+            total_quantity: 0
         });
         msg.ack();
     }

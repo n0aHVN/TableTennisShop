@@ -1,0 +1,69 @@
+import { Request, Response } from "express";
+import { OrderService } from "../services/order-service";
+import { ApiResponse, OrderStatusEnum, PaymentMethodEnum } from "@tabletennisshop/common";
+import { OrderDoc } from "../models/order.model";
+import { body, param } from "express-validator";
+
+export class OrderController {
+    static async getOrders(req: Request, res: Response) {
+        const userId = req.currentUser?._id as string;
+        const orders = await OrderService.getOrdersByUserId(userId);
+        const response: ApiResponse<OrderDoc[]> = {
+            success: true,
+            statusCode: 200,
+            data: orders
+        };
+        res.status(200).send(response);
+    }
+
+    static async getOrderById(req: Request, res: Response<ApiResponse<OrderDoc>>) {
+        const orderId = req.params.id;
+        const userId = req.currentUser?._id!;
+        const order = await OrderService.getOrderById({ userId, order_id: orderId });
+        res.status(200).send({
+            success: true,
+            statusCode: 200,
+            data: order
+        });
+    }
+
+    static updateOrderValidator = [
+        param("id").notEmpty().withMessage("Order ID is required"),
+    ]
+
+    static async updateOrder(req: Request, res: Response<ApiResponse<OrderDoc>>) {
+        const orderId = req.params.id;
+        const userId = req.currentUser?._id as string;
+
+        const updatedOrder = await OrderService.updateOrderByUser({
+            _id: orderId,
+            user_id: userId,
+            ...req.body
+        });
+
+        res.status(200).send({
+            success: true,
+            statusCode: 200,
+            data: updatedOrder
+        });
+    }
+
+    static createOrderValidator = [
+        body("products").isArray().withMessage("Products must be an array"),
+        body("payment_method").notEmpty().withMessage("Payment method is required")
+            .isIn(Object.values(PaymentMethodEnum)).withMessage("Invalid payment method"),
+        body("total_price").isNumeric().withMessage("Total price must be a number"),
+    ];
+
+    static async createOrder(req: Request, res: Response<ApiResponse<OrderDoc>>) {
+        const userId = req.currentUser?._id as string;
+        const { products, payment_method, total_price } = req.body;
+        const order = await OrderService.createOrder({ user_id: userId, products, payment_method, total_price, status: OrderStatusEnum.PENDING });
+        res.status(201).send({
+            success: true,
+            statusCode: 201,
+            data: order
+        });
+    }
+
+}

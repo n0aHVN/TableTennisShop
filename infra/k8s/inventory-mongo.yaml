@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-mongo-service
+spec:
+  selector:
+    app: inventory-mongo
+  ports:
+    - name: mongo
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-mongo
+  template:
+    metadata:
+      labels:
+        app: inventory-mongo
+    spec:
+      containers:
+        - name: inventory-mongo
+          image: mongo:8.0.10-rc0
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: inventory-mongo-persistent-storage
+              mountPath: /data/db
+      volumes:
+        - name: inventory-mongo-persistent-storage
+          emptyDir: {}

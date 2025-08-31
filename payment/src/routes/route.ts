@@ -1,6 +1,8 @@
 import express from 'express'
+import { PaymentController } from '../controllers/payment.controller';
+import { CheckAuthorizedMiddleware, CurrentUserMiddleware, ValidateRequestMiddleware } from '@tabletennisshop/common';
 const router = express.Router();
 
-router.get("/api/")
+router.post("/api/payments", CheckAuthorizedMiddleware, CurrentUserMiddleware, PaymentController.createPaymentValidator, ValidateRequestMiddleware, PaymentController.createPayment)
 
-export {router};
+export {router as paymentRouter};

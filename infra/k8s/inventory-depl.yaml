@@ -1,0 +1,36 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory
+  template:
+    metadata:
+      labels:
+        app: inventory
+    spec:
+      containers:
+        - name: inventory
+          image: nguyennoah/inventory-ttshop
+          env:
+            - name: NATS_CLUSTER_ID
+              value: 'ticketing'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-svc:4222'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: MONGO_URL
+              value: mongodb://inventory-mongo-service:27017/app
+              
+

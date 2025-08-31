@@ -8,6 +8,7 @@ export interface RacketAttrs extends ProductAttrsBase{
 
 export interface RacketDoc extends ProductDoc {
   type: ProductTypeEnum.RACKET;
+  
 }
 
 

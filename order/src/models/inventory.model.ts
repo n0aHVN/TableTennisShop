@@ -1,12 +1,16 @@
 import { Document, Model, Schema, Types, model } from "mongoose";
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 export interface InventoryAttrs {
-    product_id: Types.ObjectId;
+    _id: string;
+    product_id: string;
     total_quantity: number;
+    version: number;
 }
 
-export interface InventoryDoc extends InventoryAttrs, Document {
+export interface InventoryDoc extends Document {
     _id: Types.ObjectId;
+    product_id: Types.ObjectId;
+    total_quantity: number;
     createdAt: Date;
     updatedAt: Date;
     version: number;

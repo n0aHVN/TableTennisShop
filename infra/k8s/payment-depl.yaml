@@ -1,0 +1,35 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+        - name: payment
+          image: nguyennoah/payment-ttshop
+          env:
+            - name: NATS_CLUSTER_ID
+              value: 'ticketing'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-svc:4222'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: MONGO_URL
+              value: mongodb://payment-mongo-service:27017/app
+

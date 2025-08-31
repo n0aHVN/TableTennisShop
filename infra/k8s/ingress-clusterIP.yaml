@@ -34,10 +34,17 @@ spec:
                 name: order-service
                 port:
                   number: 3000
-          - path: /api/cart
+          - path: /api/inventory
             pathType: Prefix
             backend:
               service:
-                name: cart-service
+                name: inventory-service
+                port:
+                  number: 3000
+          - path: /api/payments
+            pathType: Prefix
+            backend:
+              service:
+                name: payment-service
                 port:
                   number: 3000

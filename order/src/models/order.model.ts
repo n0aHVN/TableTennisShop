@@ -1,30 +1,35 @@
 import { Document, Model, Schema, model, Types } from 'mongoose';
 import { OrderStatusEnum } from '@tabletennisshop/common';
 import { PaymentMethodEnum } from '@tabletennisshop/common';
-
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 export interface IOrderProduct {
-  product_id: Types.ObjectId; // FK to Product
+  product_id: string; // FK to Product
   price: number; // Price of the product at the time of order
   quantity: number;
 }
 
-
 export interface OrderAttrs {
-  user_id: Types.ObjectId; // FK to User
+  user_id: string; // FK to User
   products: IOrderProduct[];
   status: OrderStatusEnum;
   payment_method: PaymentMethodEnum;
   total_price: number;
+  expiresAt: Date; // Expiration date of the order
 }
 
 export interface OrderDoc extends Document {
   _id: Types.ObjectId;
   user_id: Types.ObjectId;// FK to User
-  products: IOrderProduct[];
+  products: {
+    product_id: Types.ObjectId;
+    price: number;
+    quantity: number;
+  }[];
   status: OrderStatusEnum;
   payment_method: PaymentMethodEnum;
   version: number;
   total_price: number;
+  expiresAt: Date; // Expiration date of the order
 }
 
 interface OrderModel extends Model<OrderDoc> {
@@ -46,10 +51,13 @@ const OrderSchema = new Schema<OrderDoc>(
     },
     status: { type: String, enum: OrderStatusEnum, required: true },
     payment_method: { type: String, enum: Object.values(PaymentMethodEnum), required: true },
-    total_price: { type: Number, required: true }
+    total_price: { type: Number, required: true },
+    expiresAt: { type: Date, required: true }
   },
   { collection: 'order' }
 );
+OrderSchema.set('versionKey', 'version');
+OrderSchema.plugin(updateIfCurrentPlugin);
 
 OrderSchema.statics.build = (attrs: OrderAttrs) => {
   return new OrderModel(attrs);

@@ -9,7 +9,8 @@ declare global{
     function signin(): Promise<string>;
     function prepareData(): Promise<{ inventoryDoc: InventoryDoc; productDoc: ProductDoc }>;
 }
-
+jest.setTimeout(10000);
+jest.mock('../NatsWrapper');
 let mongo:any;
 let userId: Types.ObjectId = new Types.ObjectId();
 beforeAll(
@@ -49,10 +50,12 @@ global.signin = async ()=>{
 
 global.prepareData = async()=>{
     console.log("User ID:", userId);
-    const product_id = new mongoose.Types.ObjectId();
+    const product_id = new mongoose.Types.ObjectId().toHexString();
     const inventory:InventoryAttrs = {
+        _id: new mongoose.Types.ObjectId().toHexString(),
         product_id: product_id,
-        total_quantity: 100
+        total_quantity: 100,
+        version: 0
     }
     const inventoryDoc = InventoryModel.build(inventory);
     await inventoryDoc.save();
@@ -66,7 +69,7 @@ global.prepareData = async()=>{
         type: ProductTypeEnum.SHIRT, // or ProductTypeEnum.RACKET, etc.
         attributes: [],
         price: 199000,
-        status: ProductStatusEnum.ENABLE
+        status: ProductStatusEnum.OUT_OF_STOCK
     }
     const productDoc = (ProductModel as any).buildProduct(product);
     productDoc._id = product_id; // Manually set the _id to match inventory's product_id

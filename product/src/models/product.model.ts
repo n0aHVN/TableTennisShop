@@ -1,7 +1,7 @@
 // src/models/product.model.ts
 import { ProductTypeEnum, ProductStatusEnum } from '@tabletennisshop/common';
 import mongoose, { Document, Schema, Types } from 'mongoose';
-
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 export interface ProductAttrsBase {
   name: string,
   slug: string,
@@ -28,6 +28,7 @@ export interface ProductDoc extends Document {
   // Mongoose Timestamps
   createdAt: Date,
   updatedAt: Date,
+  version: number,
 }
 
 //We don't need "interface ProductModel extends Model<>" for this
@@ -51,9 +52,13 @@ const ProductSchema = new Schema<ProductDoc>({
   type: { type: String, enum: Object.values(ProductTypeEnum), required: true }, // Discriminator key
   sport: { type: String, required: true },
   attributes: { type: [Schema.Types.Mixed], required: false },
-  status: { type: String, enum: Object.values(ProductStatusEnum), default: ProductStatusEnum.ENABLE },
+  status: { type: String, enum: Object.values(ProductStatusEnum), default: ProductStatusEnum.OUT_OF_STOCK },
   price: { type: Number, required: true },
 }, baseOptions);
+
+ProductSchema.set('versionKey', 'version');
+ProductSchema.plugin(updateIfCurrentPlugin);
+
 
 ProductSchema.pre<ProductDoc>("save", async function (next) {
   if (this.isModified('name') || !this.slug) {

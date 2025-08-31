@@ -11,7 +11,7 @@ it("Get orders base on User Cookie", async ()=>{
 
 it("Get 1 order base on User Cookie and order id", async ()=>{
     const {orderDoc} = await global.prepareData();
-    const response = await request(app).get(`/api/orders/${orderDoc._id}`)
+    const response = await request(app).get(`/api/orders/${orderDoc._id.toHexString()}`)
     .set('Cookie', await global.signin());
     expect(response.status).toBe(200);
 });

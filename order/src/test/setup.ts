@@ -11,7 +11,11 @@ declare global{
 }
 
 let mongo:any;
-let userId: Types.ObjectId = new Types.ObjectId();
+let userId: string = new Types.ObjectId().toHexString();
+
+jest.setTimeout(10000);
+jest.mock('../NatsWrapper');
+
 beforeAll(
     async () => {
         process.env.JWT_KEY = "secretkey";
@@ -39,7 +43,7 @@ afterAll(
 
 global.signin = async ()=>{
     const email = 'test@test.com';
-    const payload = { _id: userId.toHexString(), email };
+    const payload = { _id: userId, email };
     const token = jwt.sign(payload, process.env.JWT_KEY!);
     const sessionJson = JSON.stringify({ jwt: token });
 
@@ -48,11 +52,12 @@ global.signin = async ()=>{
 }
 
 global.prepareData = async()=>{
-    console.log("User ID:", userId);
-    const product_id = new mongoose.Types.ObjectId();
+    const product_id = new mongoose.Types.ObjectId().toHexString();
     const inventory:InventoryAttrs = {
+        _id: new mongoose.Types.ObjectId().toHexString(),
         product_id: product_id,
-        total_quantity: 100
+        total_quantity: 100,
+        version: 0
     }
     const inventoryDoc = InventoryModel.build(inventory);
     await inventoryDoc.save();
@@ -66,8 +71,8 @@ global.prepareData = async()=>{
             quantity: 2
         }],
         payment_method: PaymentMethodEnum.COD,
-        total_price: 200
-
+        total_price: 200,
+        expiresAt: new Date(Date.now() + 1000 * 60) // 1 minute from now
     }
     const orderDoc = OrderModel.build(order);
     await orderDoc.save();

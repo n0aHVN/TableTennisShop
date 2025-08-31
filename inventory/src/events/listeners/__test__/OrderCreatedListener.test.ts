@@ -20,7 +20,8 @@ const setup = async () => {
             price: 100,
             product_id: inventoryDoc.product_id.toHexString(),
             quantity: 3
-        }]
+        }],
+        expiresAt: new Date(Date.now() + 1000 * 60).toISOString()
     };
 
     // @ts-ignore
