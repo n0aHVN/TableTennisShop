@@ -21,5 +21,5 @@ export interface ProductCreatedEventInterface{
 
 export interface ProductDeletedEventInterface{
     subject: SubjectsEnum.ProductDeleted;
-    data: {_id: string};
+    data: ProductAttrs;
 }
