@@ -1,13 +1,13 @@
 {
   "name": "@tabletennisshop/common",
   "version": "1.0.99",
-  "description": "",
+  "description": "Shared utilities and types for Table Tennis Shop",
   "main": "./build/index.js",
   "types": "build/index.d.ts",
+  "private": true,
   "scripts": {
     "clean": "del-cli ./build/*",
-    "build": "npm run clean && tsc",
-    "pub": "npm version patch && npm run build && npm publish"
+    "build": "npm run clean && tsc"
   },
   "files": [
     "build/**/*"
@@ -17,7 +17,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@tabletennisshop/common": "^1.0.1",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-session": "^2.0.49",
     "@types/express": "^5.0.2",

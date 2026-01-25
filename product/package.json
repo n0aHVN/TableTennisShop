@@ -1,6 +1,9 @@
 {
+  "name": "@tabletennisshop/product",
+  "version": "1.0.0",
+  "private": true,
   "dependencies": {
-    "@tabletennisshop/common": "^1.0.99",
+    "@tabletennisshop/common": "*",
     "@types/express": "^5.0.0",
     "@types/mongoose-sequence": "^3.0.11",
     "axios": "^1.9.0",
@@ -17,7 +20,8 @@
     "typescript": "^5.8.2"
   },
   "scripts": {
-    "start": "ts-node-dev src/index.ts"
+    "start": "ts-node-dev src/index.ts",
+    "test": "npx jest"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

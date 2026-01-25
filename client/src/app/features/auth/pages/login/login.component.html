@@ -1,0 +1,70 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Table Tennis Shop</h1>
+      <p>Sign In to Your Account</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-error">
+        {{ error }}
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          class="form-input"
+          formControlName="email"
+          placeholder="Enter your email"
+          [class.is-invalid]="submitted && f['email'].invalid"
+        />
+        <div *ngIf="submitted && f['email'].invalid" class="error-message">
+          {{ getErrorMessage('email') }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input
+          id="password"
+          type="password"
+          class="form-input"
+          formControlName="password"
+          placeholder="Enter your password"
+          [class.is-invalid]="submitted && f['password'].invalid"
+        />
+        <div *ngIf="submitted && f['password'].invalid" class="error-message">
+          {{ getErrorMessage('password') }}
+        </div>
+      </div>
+
+      <!-- Remember Me & Forgot Password -->
+      <div class="form-footer">
+        <label class="checkbox">
+          <input type="checkbox" />
+          <span>Remember me</span>
+        </label>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <!-- Sign Up Link -->
+    <div class="sign-up-link">
+      <p>Don't have an account? <a routerLink="/auth/register">Sign up here</a></p>
+    </div>
+  </div>
+</div>

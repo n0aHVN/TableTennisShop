@@ -1,6 +1,9 @@
 {
+  "name": "@tabletennisshop/inventory",
+  "version": "1.0.0",
+  "private": true,
   "dependencies": {
-    "@tabletennisshop/common": "^1.0.99",
+    "@tabletennisshop/common": "*",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-session": "^2.0.49",
     "@types/express": "^5.0.0",

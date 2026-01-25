@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="29.3.4">
+  <diagram name="Database Structure" id="database-structure">
+    <mxGraphModel dx="3495" dy="973" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="auth-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontColor=#000000;" value="AUTH SERVICE DATABASE" vertex="1">
+          <mxGeometry height="240" width="280" x="-990" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="users-table" parent="auth-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Users Collection" vertex="1">
+          <mxGeometry height="200" width="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="users-fields" parent="users-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;email: String (unique, required)&#xa;password: String (required, hashed)&#xa;username: String&#xa;role: String (enum: admin, customer)&#xa;isActive: Boolean&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+          <mxGeometry height="170" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="product-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontColor=#000000;" value="PRODUCT SERVICE DATABASE" vertex="1">
+          <mxGeometry height="320" width="280" x="350" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="products-table" parent="product-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Products Collection" vertex="1">
+          <mxGeometry height="280" width="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="products-fields" parent="products-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;name: String (required)&#xa;description: String&#xa;price: Number (required)&#xa;category: String&#xa;brand: String&#xa;images: Array&lt;String&gt;&#xa;specifications: Object&#xa;isActive: Boolean&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+          <mxGeometry height="250" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="inventory-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontColor=#000000;" value="INVENTORY SERVICE DATABASE" vertex="1">
+          <mxGeometry height="200" width="280" x="350" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="inventory-table" parent="inventory-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" value="Inventory Collection" vertex="1">
+          <mxGeometry height="160" width="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="inventory-fields" parent="inventory-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;product_id: ObjectId (FK, required)&#xa;total_quantity: Number (required, default: 0)&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+          <mxGeometry height="130" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="order-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontColor=#000000;" value="ORDER SERVICE DATABASE" vertex="1">
+          <mxGeometry height="420" width="560" x="-380" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="orders-table" parent="order-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;" value="Orders Collection" vertex="1">
+          <mxGeometry height="380" width="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="orders-fields" parent="orders-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;user_id: ObjectId (FK, required)&#xa;status: String (enum: pending, paid, &#xa;   cancelled, expired)&#xa;total_amount: Number (required)&#xa;expiresAt: Date&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+          <mxGeometry height="350" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="order-items-table" parent="order-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;" value="OrderItems Collection" vertex="1">
+          <mxGeometry height="380" width="280" x="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="order-items-fields" parent="order-items-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;order_id: ObjectId (FK, required)&#xa;product_id: ObjectId (FK, required)&#xa;quantity: Number (required)&#xa;price: Number (required)&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+          <mxGeometry height="350" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rel3" edge="1" parent="order-service" source="order-items-fields" style="endArrow=classic;html=1;exitX=0.493;exitY=1.004;entryX=0.5;entryY=1;strokeColor=#b85450;strokeWidth=2;dashed=1;exitDx=0;exitDy=0;exitPerimeter=0;" target="orders-table" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="418" y="530" />
+              <mxPoint x="140" y="530" />
+            </Array>
+            <mxPoint x="580" y="60" as="sourcePoint" />
+            <mxPoint x="630" y="10" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel3-label" connectable="0" parent="rel3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#b85450;" value="order_id" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="2" as="geometry">
+            <mxPoint x="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="payment-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontColor=#000000;" value="PAYMENT SERVICE DATABASE" vertex="1">
+          <mxGeometry height="240" width="280" x="-880" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="payments-table" parent="payment-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Payments Collection" vertex="1">
+          <mxGeometry height="200" width="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="payments-fields" parent="payments-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;order_id: ObjectId (FK, required)&#xa;user_id: ObjectId (FK, required)&#xa;amount: Number (required)&#xa;status: String (enum: pending, &#xa;   completed, failed)&#xa;payment_method: String&#xa;transaction_id: String&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+          <mxGeometry height="170" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="expiration-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f5f5f5;strokeColor=#666666;fontSize=14;fontColor=#000000;" value="EXPIRATION SERVICE" vertex="1">
+          <mxGeometry height="120" width="280" x="890" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="expiration-note" parent="expiration-service" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" value="Note: Expiration service typically&#xa;uses in-memory job queue (Bull/Redis)&#xa;and doesn&#39;t maintain its own database.&#xa;It listens to OrderCreated events&#xa;and publishes OrderExpired events." vertex="1">
+          <mxGeometry height="80" width="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rel1" edge="1" parent="1" source="inventory-service" style="endArrow=classic;html=1;exitX=0.5;exitY=0;entryX=0.488;entryY=1.018;strokeColor=#d79b00;strokeWidth=2;dashed=1;entryDx=0;entryDy=0;entryPerimeter=0;exitDx=0;exitDy=0;" target="products-fields" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="700" y="400" as="sourcePoint" />
+            <mxPoint x="750" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel1-label" connectable="0" parent="rel1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#d79b00;" value="product_id references" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="2" as="geometry">
+            <mxPoint x="10" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel2" edge="1" parent="1" source="orders-fields" style="endArrow=classic;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#6c8ebf;strokeWidth=2;dashed=1;" target="users-fields" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="-430" y="490" />
+            </Array>
+            <mxPoint x="200" y="500" as="sourcePoint" />
+            <mxPoint x="250" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel2-label" connectable="0" parent="rel2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#6c8ebf;" value="user_id" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="2" as="geometry">
+            <mxPoint x="5" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel4" edge="1" parent="1" source="order-items-fields" style="endArrow=classic;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#d79b00;strokeWidth=2;dashed=1;" target="products-fields" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="835" />
+              <mxPoint x="260" y="370" />
+            </Array>
+            <mxPoint x="400" y="700" as="sourcePoint" />
+            <mxPoint x="450" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel4-label" connectable="0" parent="rel4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#d79b00;" value="product_id" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="2" as="geometry">
+            <mxPoint x="5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel5" edge="1" parent="1" source="payments-fields" style="endArrow=classic;html=1;exitX=1;exitY=0.5;strokeColor=#b85450;strokeWidth=2;dashed=1;exitDx=0;exitDy=0;" target="orders-fields" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="400" y="600" as="sourcePoint" />
+            <mxPoint x="-420" y="825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel5-label" connectable="0" parent="rel5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#b85450;" value="order_id" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="2" as="geometry">
+            <mxPoint y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" value="LEGEND" vertex="1">
+          <mxGeometry height="150" width="200" x="1020" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-content" parent="legend" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" value="Solid border = Collection/Table&#xa;&#xa;Dashed arrow = Foreign Key Reference&#xa;&#xa;Each service has its own database&#xa;(Database per Service pattern)&#xa;&#xa;version = Optimistic Concurrency Control" vertex="1">
+          <mxGeometry height="120" width="200" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="notes" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" value="NOTES" vertex="1">
+          <mxGeometry height="180" width="280" x="1020" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="notes-content" parent="notes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" value="• All collections use MongoDB ObjectId as PK&#xa;• version field used for optimistic locking&#xa;  (mongoose-update-if-current plugin)&#xa;• Timestamps (createdAt, updatedAt) auto-managed&#xa;• Services communicate via NATS events&#xa;• Each service owns its data&#xa;• No direct database access between services&#xa;• Data consistency via eventual consistency" vertex="1">
+          <mxGeometry height="150" width="280" y="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

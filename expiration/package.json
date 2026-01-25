@@ -1,8 +1,9 @@
 {
-  "name": "expiration",
+  "name": "@tabletennisshop/expiration",
   "version": "1.0.0",
-  "description": "",
+  "description": "Expiration service for Table Tennis Shop",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "ts-node-dev src/index.ts",
     "test": "jest --watchAll --no-cache"
@@ -18,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tabletennisshop/common": "^1.0.99",
+    "@tabletennisshop/common": "*",
     "@types/bull": "^4.10.4",
     "bull": "^4.16.5",
     "node-nats-streaming": "^0.3.2",
