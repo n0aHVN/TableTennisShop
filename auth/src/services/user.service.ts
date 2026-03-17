@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { NotFoundError, UserEnum, UserStatusEnum } from "@tabletennisshop/common";
+import { NotFoundError, RoleEnum, UserStatusEnum } from "@tabletennisshop/common";
 import { Password } from "@tabletennisshop/common";
 import { UserAttrs, UserDoc, UserModel } from "../models/user.model";
 
@@ -50,7 +50,7 @@ export class UserService {
         const users = await UserModel.find({});
         return users;
     }
-    static async addUser({user, type, status}:{user: UserAttrs, type: UserEnum, status: UserStatusEnum}): Promise<UserDoc>{
+    static async addUser({user, type, status}:{user: UserAttrs, type: RoleEnum, status: UserStatusEnum}): Promise<UserDoc>{
         const client = UserModel.build(user);
         client.type = type;
         client.status = status;

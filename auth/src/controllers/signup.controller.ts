@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import { UserService } from "../services/user.service";
-import { ApiResponse, UserEnum, UserStatusEnum } from "@tabletennisshop/common";
+import { ApiResponse, RoleEnum, UserStatusEnum } from "@tabletennisshop/common";
 
 
 export const signupValidationRules = [
@@ -29,7 +29,7 @@ export const signupClientController = async (
   try {
     await UserService.addUser({
       user: req.body,
-      type: UserEnum.CLIENT,
+      type: RoleEnum.CUSTOMER,
       status: UserStatusEnum.ENABLE
     });
     const response :ApiResponse = {

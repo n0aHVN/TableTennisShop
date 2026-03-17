@@ -1,5 +1,5 @@
 import { Schema, Model, Document, model, Types} from 'mongoose';
-import { Password, UserEnum, UserStatusEnum } from '@tabletennisshop/common';
+import { Password, RoleEnum, UserStatusEnum } from '@tabletennisshop/common';
 
 
 // 1. Define an interface for your User fields
@@ -9,22 +9,24 @@ export interface UserAttrs {
   password: string;
   full_name: string;
   address: string;
+  role: string; // 'owner', 'customer', 'employee'
 }
 
 
 //UserDoc defines the shape of Users inside the MongoDB
-export interface UserDoc extends Document{
-    _id: Types.ObjectId; // Mongoose ObjectId
-    username: string;
-    email: string;
-    password: string;
-    full_name: string;
-    address: string;
-    type: string;
-    status: UserStatusEnum;
-    // Mongoose Timestamps
-    createdAt: Date;
-    updatedAt: Date;
+export interface UserDoc extends Document {
+  _id: Types.ObjectId; // Mongoose ObjectId
+  username: string;
+  email: string;
+  password: string;
+  full_name: string;
+  address: string;
+  role: string; // 'owner', 'customer', 'employee'
+  type: string;
+  status: UserStatusEnum;
+  // Mongoose Timestamps
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 
@@ -40,7 +42,8 @@ const UserSchema = new Schema<UserDoc>({
   password: { type: String, required: true, minlength: 4 },
   full_name: { type: String, required: true },
   address: { type: String, required: true },
-  type: { type: String, enum: Object.values(UserEnum), required: true },
+  role: { type: String, enum: ['owner', 'customer', 'employee'], required: true },
+  type: { type: String, enum: Object.values(RoleEnum), required: true },
   status: { type: String, enum: Object.values(UserStatusEnum), required: true }
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields automatically
