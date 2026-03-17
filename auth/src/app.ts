@@ -26,7 +26,7 @@ app.use(signoutRouter);
 app.use(signupRouter);
 app.use(currentUserRouter);
 
-app.use(ErrorHandlerMiddleware);
+app.use(ErrorHandlerMiddleware as express.ErrorRequestHandler);
 
 
 
