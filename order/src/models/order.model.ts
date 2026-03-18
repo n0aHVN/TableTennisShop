@@ -59,6 +59,13 @@ const OrderSchema = new Schema<OrderDoc>(
 OrderSchema.set('versionKey', 'version');
 OrderSchema.plugin(updateIfCurrentPlugin);
 
+// Add indexes for analytics and query optimization
+OrderSchema.index({ createdAt: 1 }); // For date-range queries
+OrderSchema.index({ status: 1 }); // For status filtering
+OrderSchema.index({ user_id: 1 }); // For customer-specific queries
+OrderSchema.index({ payment_method: 1 }); // For payment method breakdown
+OrderSchema.index({ createdAt: 1, status: 1 }); // Compound index for common queries
+
 OrderSchema.statics.build = (attrs: OrderAttrs) => {
   return new OrderModel(attrs);
 };

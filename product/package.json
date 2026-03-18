@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@tabletennisshop/common": "file:../common",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.2",
     "@types/mongoose-sequence": "^3.0.11",
     "axios": "^1.9.0",
     "dotenv": "^17.2.0",

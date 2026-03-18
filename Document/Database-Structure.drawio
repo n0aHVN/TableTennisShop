@@ -10,7 +10,7 @@
         <mxCell id="users-table" parent="auth-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Users Collection" vertex="1">
           <mxGeometry height="200" width="280" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="users-fields" parent="users-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;email: String (unique, required)&#xa;password: String (required, hashed)&#xa;username: String&#xa;role: String (enum: admin, customer)&#xa;isActive: Boolean&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+        <mxCell id="users-fields" parent="users-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;email: String (unique, required)&#xa;password: String (required, hashed)&#xa;username: String&#xa;role: String (enum: owner, customer, employee)&#xa;status: String (enum: enable, disable)&#xa;isActive: Boolean&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
           <mxGeometry height="170" width="280" y="30" as="geometry" />
         </mxCell>
         <mxCell id="product-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontColor=#000000;" value="PRODUCT SERVICE DATABASE" vertex="1">
@@ -19,7 +19,7 @@
         <mxCell id="products-table" parent="product-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Products Collection" vertex="1">
           <mxGeometry height="280" width="280" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="products-fields" parent="products-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;name: String (required)&#xa;description: String&#xa;price: Number (required)&#xa;category: String&#xa;brand: String&#xa;images: Array&lt;String&gt;&#xa;specifications: Object&#xa;isActive: Boolean&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+        <mxCell id="products-fields" parent="products-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;name: String (required)&#xa;description: String&#xa;price: Number (required)&#xa;category: String&#xa;brand: String&#xa;type: String (enum: racket, shirt, sponge)&#xa;status: String (enum: enable, disable, out_of_stock)&#xa;images: Array&lt;String&gt;&#xa;specifications: Object&#xa;isActive: Boolean&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
           <mxGeometry height="250" width="280" y="30" as="geometry" />
         </mxCell>
         <mxCell id="inventory-service" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontColor=#000000;" value="INVENTORY SERVICE DATABASE" vertex="1">
@@ -37,7 +37,7 @@
         <mxCell id="orders-table" parent="order-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;" value="Orders Collection" vertex="1">
           <mxGeometry height="380" width="280" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="orders-fields" parent="orders-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;user_id: ObjectId (FK, required)&#xa;status: String (enum: pending, paid, &#xa;   cancelled, expired)&#xa;total_amount: Number (required)&#xa;expiresAt: Date&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
+        <mxCell id="orders-fields" parent="orders-table" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="_id: ObjectId (PK)&#xa;user_id: ObjectId (FK, required)&#xa;status: String (enum: pending, finished, &#xa;   cancelled, expired)&#xa;total_amount: Number (required)&#xa;expiresAt: Date&#xa;createdAt: Date&#xa;updatedAt: Date&#xa;version: Number" vertex="1">
           <mxGeometry height="350" width="280" y="30" as="geometry" />
         </mxCell>
         <mxCell id="order-items-table" parent="order-service" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;" value="OrderItems Collection" vertex="1">
