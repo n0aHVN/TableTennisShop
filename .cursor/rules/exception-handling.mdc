@@ -1,0 +1,57 @@
+---
+description: Error handling conventions — always throw CustomError subclasses
+globs: **/*.ts
+alwaysApply: false
+---
+
+# Exception Handling
+
+Never throw raw `Error` objects or plain strings. Always throw an instance of a class that extends `CustomError` from `common/errors/custom-error.ts`.
+
+## Existing error types
+
+| Class | Status | Use when |
+|---|---|---|
+| `BadRequestError` | 400 | The request is semantically invalid |
+| `NotAuthorizedError` | 401 | The user is not authenticated or lacks permission |
+| `NotFoundError` | 404 | A requested resource does not exist |
+| `RequestValidateError` | 400 | Express-validator returns validation failures |
+
+## When to create a new error type
+
+If none of the existing types fit, create a new class in `common/errors/` following this template:
+
+```typescript
+import { CustomError } from './custom-error';
+
+export class SomeNewError extends CustomError {
+  statusCode = 4XX; // appropriate HTTP status code
+
+  constructor(public message: string) {
+    super(message);
+    Object.setPrototypeOf(this, SomeNewError.prototype);
+  }
+
+  serializeErrors() {
+    return [{ message: this.message }];
+  }
+}
+```
+
+Key requirements for every new error class:
+- Extend `CustomError`
+- Set `statusCode` to the correct HTTP status
+- Call `Object.setPrototypeOf(this, YourClass.prototype)` in the constructor
+- Implement `serializeErrors()`
+
+## Examples
+
+```typescript
+// BAD
+throw new Error('Item not found');
+throw 'something went wrong';
+
+// GOOD
+throw new NotFoundError('Item not found');
+throw new BadRequestError('Invalid quantity');
+```

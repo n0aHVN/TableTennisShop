@@ -1,0 +1,21 @@
+{
+  "header": {
+    "brand": "TableTennis",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "headline": "Elevate Your Game",
+    "subtitle": "Premium table tennis equipment for players who demand the best. From professional paddles to competition-grade tables.",
+    "cta": "Shop Now"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}

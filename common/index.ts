@@ -20,8 +20,10 @@ export * from './enums/user-status.enum';
 export * from './enums/role.enum';
 export * from './enums/product-status.enum';
 export * from './enums/event-subject.enum';
+export * from './enums/import-item-status.enum';
 
 
+export * from './events/ImportEventInterface';
 export * from './events/InventoryEventInterface';
 export * from './events/ListenerAbstract';
 export * from './events/OrderEventInterface';

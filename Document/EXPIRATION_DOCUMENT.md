@@ -1,51 +1,25 @@
 # Expiration Service Documentation
 
-## 1. Service Overview
+This document describes the architecture, event flow, and deployment of the Expiration background worker in TableTennisShop.
 
-The `expiration` service is a background worker responsible for order timeout handling.
+---
 
-- It connects to NATS Streaming and listens for `OrderCreated` events.
-- For each created order, it computes delay duration using the order `expiresAt` timestamp.
-- It schedules a delayed job in Bull queue (`order:expiration`) backed by Redis.
-- When the delayed job is processed, it publishes `OrderExpired` to notify other services.
+## 1. Overview
 
-Current behavior is event-driven only; there is no HTTP server bootstrap in `src/index.ts`.
+The Expiration service is a background worker that handles order timeout logic. It has no HTTP endpoints -- it operates entirely through NATS events and a Bull/Redis job queue.
 
-## 2. Runtime Dependencies
+| Aspect | Detail |
+|--------|--------|
+| **Stack** | Node.js, TypeScript |
+| **Queue** | Bull (backed by Redis) |
+| **Messaging** | NATS Streaming |
+| **Shared package** | `@tabletennisshop/common` |
+| **Source location** | `expiration/src` |
+| **Default port** | `3005` (declared in K8s manifests but no HTTP server runs) |
 
-From source and deployment manifests, the service depends on:
+---
 
-- NATS Streaming
-- Redis (Bull queue backend)
-- Shared common package: `@tabletennisshop/common`
-
-### Required Environment Variables
-
-- `NATS_CLUSTER_ID`
-- `NATS_CLIENT_ID`
-- `NATS_URL`
-- `REDIS_HOST`
-
-Also present in deployment (not used directly in current source):
-
-- `JWT_KEY`
-
-## 3. Event Flow
-
-1. `OrderCreatedListener` receives `SubjectsEnum.OrderCreated`.
-2. It calculates:
-   - `delay = new Date(expiresAt).getTime() - new Date().getTime()`
-3. It pushes a delayed Bull job to queue `order:expiration` with `{ orderId }`.
-4. Queue processor publishes `SubjectsEnum.OrderExpired` with payload `{ _id: orderId }`.
-5. Listener acknowledges message (`msg.ack()`).
-
-Queue group name: `expiration-service`.
-
-## 4. Run Instructions
-
-### Local Development
-
-From repository root:
+## 2. Run Locally
 
 ```bash
 cd expiration
@@ -53,25 +27,125 @@ npm install
 npm run start
 ```
 
-Default start script uses `ts-node-dev src/index.ts`.
+Start script uses `ts-node-dev src/index.ts`.
 
-### Tests
+### Required Environment Variables
 
-```bash
-cd expiration
-npm test
+| Variable | Description |
+|----------|-------------|
+| `NATS_CLUSTER_ID` | NATS Streaming cluster ID |
+| `NATS_CLIENT_ID` | Unique NATS client identifier |
+| `NATS_URL` | NATS Streaming server URL |
+| `REDIS_HOST` | Redis host for Bull queue |
+
+> `JWT_KEY` is present in deployment manifests but not used by the service code.
+
+---
+
+## 3. Event Flow
+
+The expiration service implements a delayed-job pattern:
+
+```
+OrderCreated event
+  │
+  ▼
+OrderCreatedListener
+  │  calculates: delay = expiresAt - now
+  ▼
+Bull Queue ("order:expiration")
+  │  schedules delayed job with { orderId }
+  │  waits for delay period
+  ▼
+Queue Processor
+  │  fires when delay elapses
+  ▼
+ExpirationCompletePublisher
+  │  publishes OrderExpired event with { _id: orderId }
+  ▼
+Order Service (OrderExpiredCompleteListener)
+     cancels the order if not already FINISHED
 ```
 
-### Kubernetes Deployment
+### Detailed Steps
 
-Relevant manifests:
+1. `OrderCreatedListener` receives `SubjectsEnum.OrderCreated`.
+2. It calculates the delay: `delay = new Date(expiresAt).getTime() - new Date().getTime()`.
+3. It pushes a delayed Bull job to the `order:expiration` queue with payload `{ orderId }`.
+4. When the delay elapses, the queue processor publishes `SubjectsEnum.OrderExpired` with `{ _id: orderId }`.
+5. The listener acknowledges the NATS message (`msg.ack()`).
 
-- `infra/k8s/expiration-depl.yaml`
-- `infra/k8s/expiration-clusterIP.yaml`
-- `infra/k8s/expiration-redis-deployment.yaml`
-- `infra/k8s/expiration-redis-clusterIP.yaml`
+**Queue group name:** `expiration-service`
 
-Example apply command:
+---
+
+## 4. Event Handling
+
+### Listeners
+
+| Listener | Subject | Behavior |
+|----------|---------|----------|
+| `OrderCreatedListener` | `order:created` | Schedules a delayed expiration job |
+
+### Publishers
+
+| Publisher | Subject | Payload |
+|-----------|---------|---------|
+| `ExpirationCompletePublisher` | `order:expired` | `{ _id: orderId }` |
+
+---
+
+## 5. HTTP Endpoints
+
+**None.** This service has no application-level HTTP endpoints. The Kubernetes service manifest exposes port 3000, but the runtime code does not start an HTTP listener.
+
+---
+
+## 6. Project Structure
+
+```
+expiration/src/
+├── index.ts                # Startup, env checks, NATS connect
+├── NatsWrapper.ts          # NATS Streaming client singleton
+├── queues/
+│   └── expiration-queue.ts # Bull queue definition + processor
+├── events/
+│   ├── listeneres/         # (note: misspelled folder name)
+│   │   ├── OrderCreatedListener.ts
+│   │   └── queueGroupName.ts
+│   └── publishers/
+│       └── OrderExpiredCompletePublisher.ts
+└── __mocks__/              # Test mocks
+```
+
+> **Known naming issues:**
+> - Folder name `listeneres` is misspelled (should be `listeners`). Imports reference this as-is.
+> - File `OrderExpiredCompletePublisher.ts` contains class `ExpirationCompletePublisher`. This works because imports use the class name.
+
+---
+
+## 7. Deployment
+
+### Kubernetes Manifests
+
+| Manifest | Purpose |
+|----------|---------|
+| `infra/k8s/expiration-depl.yaml` | Deployment (`nguyennoah/expiration-ttshop`) |
+| `infra/k8s/expiration-clusterIP.yaml` | ClusterIP service (port 3000) |
+| `infra/k8s/expiration-redis-deployment.yaml` | Redis (`redis:6.0.3-alpine`) |
+| `infra/k8s/expiration-redis-clusterIP.yaml` | Redis ClusterIP service (port 6379) |
+
+### Environment Variables (K8s)
+
+| Variable | Value / Source |
+|----------|---------------|
+| `NATS_CLUSTER_ID` | `ticketing` |
+| `NATS_CLIENT_ID` | Pod metadata name |
+| `NATS_URL` | `http://nats-svc:4222` |
+| `REDIS_HOST` | `expiration-redis-svc` |
+| `JWT_KEY` | From Kubernetes secret `jwt-secret` (unused) |
+
+### Manual Deployment
 
 ```bash
 kubectl apply -f infra/k8s/expiration-redis-deployment.yaml
@@ -80,64 +154,21 @@ kubectl apply -f infra/k8s/expiration-depl.yaml
 kubectl apply -f infra/k8s/expiration-clusterIP.yaml
 ```
 
-## 5. Endpoints
+---
 
-### HTTP Endpoints
+## 8. Testing
 
-No application HTTP endpoints are currently implemented in this service code.
-
-### Kubernetes Service Endpoint
-
-A Kubernetes Service is declared as:
-
-- Service name: `expiration-service`
-- Port: `3000`
-- Target port: `3000`
-
-Note: this port mapping exists in infrastructure manifests, but current runtime code in `expiration/src/index.ts` does not start an HTTP listener.
-
-### Messaging Endpoints
-
-- Subscribes: `OrderCreated`
-- Publishes: `OrderExpired`
-- Queue: `order:expiration` (Bull + Redis)
-
-## 6. Project Structure (expiration)
-
-```text
-expiration/
-  package.json
-  tsconfig.json
-  src/
-    index.ts
-    NatsWrapper.ts
-    queues/
-      expiration-queue.ts
-    events/
-      listeneres/
-        OrderCreatedListener.ts
-        queueGroupName.ts
-      publishers/
-        OrderExpiredCompletePublisher.ts
-    __mocks__/
+```bash
+cd expiration
+npm test
 ```
 
-## 7. Infra Summary (expiration-related)
+---
 
-- `expiration-depl.yaml`
-  - Deploys container `nguyennoah/expiration-ttshop`
-  - Sets NATS and Redis host environment variables
-- `expiration-clusterIP.yaml`
-  - Exposes service `expiration-service` on TCP 3000
-- `expiration-redis-deployment.yaml`
-  - Deploys Redis `redis:6.0.3-alpine`
-- `expiration-redis-clusterIP.yaml`
-  - Exposes Redis service `expiration-redis-svc` on TCP 6379
+## 9. Risks and Recommendations
 
-## 8. Notes
-
-- Folder name `listeneres` is used in code and imports as-is.
-- Class/file naming has a mismatch:
-  - File: `OrderExpiredCompletePublisher.ts`
-  - Class: `ExpirationCompletePublisher`
-  This currently works because the import references the class name.
+- Single replica with no autoscaling.
+- Redis uses no persistence -- queued jobs are lost on Redis restart.
+- The `JWT_KEY` environment variable is injected but never used.
+- Folder name `listeneres` is misspelled -- consider renaming for consistency.
+- File/class naming mismatch (`OrderExpiredCompletePublisher.ts` vs `ExpirationCompletePublisher` class).

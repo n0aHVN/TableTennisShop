@@ -10,6 +10,7 @@ interface OrderAttrs {
         product_id: string;
         price: number;
         quantity: number;
+        item_codes: string[];
     }[];
     status: OrderStatusEnum;
     payment_method: PaymentMethodEnum;

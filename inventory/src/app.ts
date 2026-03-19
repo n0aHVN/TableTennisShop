@@ -1,4 +1,4 @@
-import express, { Request,Response } from 'express';
+import express, { Request, Response } from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import { ErrorHandlerMiddleware } from '@tabletennisshop/common';
@@ -19,7 +19,7 @@ app.get("/api/users/hello",(req: Request, res: Response)=>{
 });
 
 app.use(inventoryRouter);
-app.use(ErrorHandlerMiddleware);
+app.use(ErrorHandlerMiddleware as express.ErrorRequestHandler);
 
 
 

@@ -33,7 +33,8 @@ const setup = async () => {
         products: order.products.map(product => ({
             product_id: product.product_id.toHexString(),
             quantity: product.quantity,
-            price: product.price
+            price: product.price,
+            item_codes: []
         })),
         status: OrderStatusEnum.CANCELLED,
         total_price: order.total_price,

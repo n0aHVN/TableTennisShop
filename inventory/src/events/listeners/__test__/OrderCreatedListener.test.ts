@@ -19,7 +19,8 @@ const setup = async () => {
         products:[{
             price: 100,
             product_id: inventoryDoc.product_id.toHexString(),
-            quantity: 3
+            quantity: 3,
+            item_codes: []
         }],
         expiresAt: new Date(Date.now() + 1000 * 60).toISOString()
     };

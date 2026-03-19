@@ -3,9 +3,10 @@ import { OrderStatusEnum } from '@tabletennisshop/common';
 import { PaymentMethodEnum } from '@tabletennisshop/common';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 export interface IOrderProduct {
-  product_id: string; // FK to Product
-  price: number; // Price of the product at the time of order
+  product_id: string;
+  price: number;
   quantity: number;
+  item_codes?: string[];
 }
 
 export interface OrderAttrs {
@@ -24,6 +25,7 @@ export interface OrderDoc extends Document {
     product_id: Types.ObjectId;
     price: number;
     quantity: number;
+    item_codes: string[];
   }[];
   status: OrderStatusEnum;
   payment_method: PaymentMethodEnum;
@@ -42,10 +44,11 @@ const OrderSchema = new Schema<OrderDoc>(
     products: {
       type: [
         {
-          product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },// FK to Product
-          price: { type: Number, required: true }, // Price of the product at the time of order
+          product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
+          price: { type: Number, required: true },
           quantity: { type: Number, required: true },
-          _id: false // Disable automatic creation of _id for subdocuments
+          item_codes: { type: [String], default: [] },
+          _id: false
         },
       ]
     },

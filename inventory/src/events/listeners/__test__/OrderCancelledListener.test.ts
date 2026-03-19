@@ -16,7 +16,8 @@ const setup = async () => {
         products: [{
             product_id: inventoryDoc.product_id.toHexString(),
             price: 100,
-            quantity: 10
+            quantity: 10,
+            item_codes: []
         }],
         payment_method: PaymentMethodEnum.BANKING,
         total_price: 1000,

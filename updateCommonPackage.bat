@@ -14,3 +14,5 @@ start cmd /c "cd payment && npm install"
 start cmd /c "cd product && npm install"
 
 start cmd /c "cd expiration && npm install"
+
+start cmd /c "cd client && npm install"

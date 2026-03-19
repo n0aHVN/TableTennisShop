@@ -26,4 +26,7 @@ export enum SubjectsEnum{
     PaymentUpdated = 'payment:updated',
     PaymentExpired = 'payment:expired',
     PaymentCompleted = 'payment:completed',
+    ImportCreated = 'import:created',
+    ImportItemCreated = 'import-item:created',
+    ImportItemUpdated = 'import-item:updated',
 }

@@ -41,7 +41,8 @@ export class OrderService {
             products: orderDoc.products.map(p => ({
                 product_id: p.product_id.toHexString(),
                 quantity: p.quantity,
-                price: p.price
+                price: p.price,
+                item_codes: p.item_codes || []
             })),
             expiresAt: orderDoc.expiresAt.toISOString()
         });
@@ -88,7 +89,8 @@ export class OrderService {
             order.products = data.products.map(p => ({
                 product_id: new mongoose.Types.ObjectId(p.product_id),
                 quantity: p.quantity,
-                price: p.price
+                price: p.price,
+                item_codes: p.item_codes || []
             }));
         }
         if (data.expiresAt !== undefined) order.expiresAt = new Date(data.expiresAt);
@@ -105,7 +107,8 @@ export class OrderService {
             products: order.products.map(p => ({
                 product_id: p.product_id.toHexString(),
                 quantity: p.quantity,
-                price: p.price
+                price: p.price,
+                item_codes: p.item_codes || []
             })),
             expiresAt: order.expiresAt.toISOString()
         });
@@ -133,7 +136,8 @@ export class OrderService {
             products: order.products.map(p => ({
                 product_id: p.product_id.toHexString(),
                 quantity: p.quantity,
-                price: p.price
+                price: p.price,
+                item_codes: p.item_codes || []
             })),
             status: order.status,
             version: order.version,

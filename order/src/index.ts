@@ -7,6 +7,8 @@ import { PaymentCreatedListener } from './events/listeners/PaymentCreatedListene
 import { ProductCreatedListener } from './events/listeners/ProductCreatedListener';
 import { ProductUpdatedListener } from './events/listeners/ProductUpdatedListener';
 import { OrderExpiredCompleteListener } from './events/listeners/OrderExpiredCompleteListener';
+import { ImportItemCreatedListener } from './events/listeners/ImportItemCreatedListener';
+import { ImportItemUpdatedListener } from './events/listeners/ImportItemUpdatedListener';
 const start = async () => {
     if (!process.env.NATS_CLUSTER_ID) {
         throw new Error("NATS_CLUSTER_ID must be defined");
@@ -41,6 +43,8 @@ const start = async () => {
         new PaymentCreatedListener(natsWrapper.client).listen();
         new ProductCreatedListener(natsWrapper.client).listen();
         new ProductUpdatedListener(natsWrapper.client).listen();
+        new ImportItemCreatedListener(natsWrapper.client).listen();
+        new ImportItemUpdatedListener(natsWrapper.client).listen();
     }
     catch (err) {
         console.error(err);

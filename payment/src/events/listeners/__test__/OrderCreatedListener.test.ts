@@ -18,7 +18,8 @@ const setup = async () => {
         products:[{
             price: 100,
             product_id: new Types.ObjectId().toHexString(),
-            quantity: 1
+            quantity: 1,
+            item_codes: []
         }]
     };
 

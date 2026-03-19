@@ -1,144 +1,189 @@
 # Infrastructure Documentation
 
-This document summarizes infrastructure setup for the TableTennisShop microservices, including Kubernetes manifests, secret setup, and deployment scripts.
+This document describes the Kubernetes infrastructure, secret management, ingress routing, and deployment orchestration for TableTennisShop.
 
-## 1. Infrastructure Layout
+---
 
-- Kubernetes manifests: `infra/k8s/`
-- Secret setup script: `infra/secret.bat`
-- Local TLS cert/key files: `infra/keys/localhost.pem`, `infra/keys/localhost-key.pem`
-- Build/deploy orchestration: `skaffold.yaml`
-- Shared package update helper: `updateCommonPackage.bat`
+## 1. Overview
 
-## 2. Kubernetes Resources Overview
+| Aspect | Detail |
+|--------|--------|
+| **Orchestration** | Kubernetes (Docker Desktop or minikube) |
+| **Dev tooling** | Skaffold (`skaffold/v4beta9`) |
+| **Manifests** | `infra/k8s/` |
+| **TLS certs** | `infra/keys/localhost.pem`, `infra/keys/localhost-key.pem` |
+| **Secret setup** | `infra/secret.bat` |
+| **Common package updater** | `updateCommonPackage.bat` |
 
-### Core platform services
+---
 
-- `infra/k8s/nats-depl.yaml`
-  - Deploys NATS Streaming (`nats-streaming:0.17.0`)
-  - Ports: `4222` (client), `8222` (monitoring)
-  - Cluster ID: `ticketing`
-- `infra/k8s/nats-clusterIP.yaml`
-  - Exposes NATS as ClusterIP service `nats-svc`
+## 2. Kubernetes Resources
 
-### Business microservices
+### 2.1 Core Platform Services
 
-Each service has:
-- one deployment file: `*-depl.yaml`
-- one ClusterIP service file: `*-clusterIP.yaml`
+#### NATS Streaming
 
-Services:
-- Auth: `auth-depl.yaml`, `auth-clusterIP.yaml`
-- Product: `product-depl.yaml`, `product-clusterIP.yaml`
-- Order: `order-depl.yaml`, `order-clusterIP.yaml`
-- Payment: `payment-depl.yaml`, `payment-clusterIP.yaml`
-- Inventory: `inventory-depl.yaml`, `inventory-clusterIP.yaml`
-- Expiration: `expiration-depl.yaml`, `expiration-clusterIP.yaml`
+| Manifest | Detail |
+|----------|--------|
+| `infra/k8s/nats-depl.yaml` | Deployment: `nats-streaming:0.17.0` |
+| `infra/k8s/nats-clusterIP.yaml` | ClusterIP service: `nats-svc` |
 
-Common runtime settings across services:
+| Port | Purpose |
+|------|---------|
+| `4222` | Client connections |
+| `8222` | Monitoring |
+
+Cluster ID: `ticketing`
+
+---
+
+### 2.2 Business Microservices
+
+Each service has a deployment and a ClusterIP service manifest:
+
+| Service | Deployment | ClusterIP | Image |
+|---------|-----------|-----------|-------|
+| Auth | `auth-depl.yaml` | `auth-clusterIP.yaml` | `nguyennoah/auth-ttshop` |
+| Product | `product-depl.yaml` | `product-clusterIP.yaml` | `nguyennoah/product-ttshop` |
+| Order | `order-depl.yaml` | `order-clusterIP.yaml` | `nguyennoah/order-ttshop` |
+| Payment | `payment-depl.yaml` | `payment-clusterIP.yaml` | `nguyennoah/payment-ttshop` |
+| Inventory | `inventory-depl.yaml` | `inventory-clusterIP.yaml` | `nguyennoah/inventory-ttshop` |
+| Expiration | `expiration-depl.yaml` | `expiration-clusterIP.yaml` | `nguyennoah/expiration-ttshop` |
+
+**Common runtime settings across all services:**
 - Container port: `3000`
-- `JWT_KEY` loaded from Kubernetes secret `jwt-secret` key `JWT_KEY`
-- NATS-based services use:
-  - `NATS_CLUSTER_ID=ticketing`
-  - `NATS_URL=http://nats-svc:4222`
-  - `NATS_CLIENT_ID` from pod metadata name
+- `JWT_KEY` loaded from Kubernetes secret `jwt-secret`
 
-Service-specific dependencies:
-- Auth: MongoDB (`auth-mongo-service`)
-- Product: MongoDB (`product-mongo-service`) + NATS
-- Order: MongoDB (`order-mongo-service`) + NATS
-- Payment: MongoDB (`payment-mongo-service`) + NATS
-- Inventory: MongoDB (`inventory-mongo-service`) + NATS
-- Expiration: Redis (`expiration-redis-svc`) + NATS
+**NATS-connected services** (all except Auth) also receive:
+- `NATS_CLUSTER_ID=ticketing`
+- `NATS_URL=http://nats-svc:4222`
+- `NATS_CLIENT_ID` from pod metadata name
 
-### Data stores
+**Service-specific dependencies:**
 
-MongoDB manifests (one per domain service):
-- `auth-mongo.yaml`
-- `product-mongo.yaml`
-- `order-mongo.yaml`
-- `payment-mongo.yaml`
-- `inventory-mongo.yaml`
+| Service | Database | Other |
+|---------|----------|-------|
+| Auth | `auth-mongo-service` | -- |
+| Product | `product-mongo-service` | NATS |
+| Order | `order-mongo-service` | NATS |
+| Payment | `payment-mongo-service` | NATS |
+| Inventory | `inventory-mongo-service` | NATS |
+| Expiration | -- | NATS, Redis (`expiration-redis-svc`) |
 
-Redis manifests for expiration service:
-- `expiration-redis-deployment.yaml`
-- `expiration-redis-clusterIP.yaml`
+---
 
-Note:
-- Current MongoDB deployments use `emptyDir`, so data is not persistent after pod restart.
+### 2.3 Data Stores
 
-### Ingress routing
+#### MongoDB Instances
 
-- File: `infra/k8s/ingress-clusterIP.yaml`
-- Ingress class: `nginx`
-- Host: `localhost`
-- Path routing:
-  - `/api/users` -> `auth-service:3000`
-  - `/api/products` -> `product-service:3000`
-  - `/api/orders` -> `order-service:3000`
-  - `/api/inventory` -> `inventory-service:3000`
-  - `/api/payments` -> `payment-service:3000`
-- TLS block exists but is commented out.
+One MongoDB deployment per domain service:
 
-## 3. Secret Setup
+| Manifest | Service Name |
+|----------|-------------|
+| `auth-mongo.yaml` | `auth-mongo-service` |
+| `product-mongo.yaml` | `product-mongo-service` |
+| `order-mongo.yaml` | `order-mongo-service` |
+| `payment-mongo.yaml` | `payment-mongo-service` |
+| `inventory-mongo.yaml` | `inventory-mongo-service` |
 
-File: `infra/secret.bat`
+> All MongoDB deployments use `emptyDir` volumes. Data is **not persistent** across pod restarts.
+
+#### Redis
+
+| Manifest | Purpose |
+|----------|---------|
+| `expiration-redis-deployment.yaml` | Redis `redis:6.0.3-alpine` |
+| `expiration-redis-clusterIP.yaml` | ClusterIP service: `expiration-redis-svc` (port 6379) |
+
+---
+
+### 2.4 Ingress Routing
+
+**Manifest:** `infra/k8s/ingress-clusterIP.yaml`
+
+| Setting | Value |
+|---------|-------|
+| Ingress class | `nginx` |
+| Host | `localhost` |
+| TLS | Block exists but is commented out |
+
+**Path routing:**
+
+| Path Prefix | Backend Service | Port |
+|-------------|----------------|------|
+| `/api/users` | `auth-service` | 3000 |
+| `/api/products` | `product-service` | 3000 |
+| `/api/orders` | `order-service` | 3000 |
+| `/api/inventory` | `inventory-service` | 3000 |
+| `/api/payments` | `payment-service` | 3000 |
+
+---
+
+## 3. Secret Management
+
+**Script:** `infra/secret.bat`
 
 ```bat
 kubectl create secret generic jwt-secret --from-literal=JWT_KEY=secretKey
 ```
 
-Required secret contract:
-- Secret name: `jwt-secret`
-- Key: `JWT_KEY`
-- Used by: auth, product, order, payment, inventory, expiration services
+| Setting | Value |
+|---------|-------|
+| Secret name | `jwt-secret` |
+| Key | `JWT_KEY` |
+| Used by | All services (auth, product, order, payment, inventory, expiration) |
 
-Recommendation:
-- Replace plain-text inline secret creation with a secure secret flow (for example external secret manager or sealed secret strategy).
+> **Recommendation:** Replace plain-text inline secret creation with a secure secret management solution (e.g., external secret manager or sealed secrets).
+
+---
 
 ## 4. Deployment Flow (Skaffold)
 
-File: `skaffold.yaml`
+**File:** `skaffold.yaml` (API version: `skaffold/v4beta9`)
 
-- Uses `skaffold/v4beta9`
-- Builds Docker images for:
-  - `nguyennoah/auth-ttshop`
-  - `nguyennoah/product-ttshop`
-  - `nguyennoah/payment-ttshop`
-  - `nguyennoah/order-ttshop`
-  - `nguyennoah/inventory-ttshop`
-  - `nguyennoah/expiration-ttshop`
-- Applies manifests from `infra/k8s/`, including explicit NATS files and wildcard include
+### Docker Images Built
 
-Typical local flow:
-1. Create JWT secret via `infra/secret.bat`
-2. Ensure ingress controller is available in local cluster
-3. Run Skaffold (`skaffold dev` or `skaffold run`)
+| Image | Source |
+|-------|--------|
+| `nguyennoah/auth-ttshop` | `auth/` |
+| `nguyennoah/product-ttshop` | `product/` |
+| `nguyennoah/payment-ttshop` | `payment/` |
+| `nguyennoah/order-ttshop` | `order/` |
+| `nguyennoah/inventory-ttshop` | `inventory/` |
+| `nguyennoah/expiration-ttshop` | `expiration/` |
+
+### Typical Local Development Flow
+
+1. Create JWT secret: `infra/secret.bat`
+2. Ensure ingress controller is available in the local cluster
+3. Run Skaffold: `skaffold dev`
 4. Access APIs through ingress host (`localhost`)
 
-## 5. Infra Utility Script
+Skaffold applies all manifests from `infra/k8s/`, including NATS files and a wildcard include.
 
-File: `updateCommonPackage.bat`
+---
 
-Purpose:
-- Clears npm cache
-- Updates `@tabletennisshop/common` package in all backend services
+## 5. Utility Scripts
 
-This script is not a Kubernetes deployment script, but supports infra consistency by aligning shared package versions before image rebuild/redeploy.
+### `updateCommonPackage.bat`
 
-## 6. Current Gaps and Risks
+Clears npm cache and updates `@tabletennisshop/common` in all backend services. Run this before image rebuilds to ensure shared package consistency.
 
-- TLS is disabled in ingress (commented).
-- JWT secret value is hardcoded in setup script.
-- MongoDB uses non-persistent `emptyDir` volumes.
-- Most workloads run as single replica.
-- No resource requests/limits defined in manifests.
-- Ingress host is hardcoded to `localhost` (local-focused).
+### `infra/secret.bat`
 
-## 7. Quick Validation Checklist
+Creates the `jwt-secret` Kubernetes secret. Run once per cluster setup.
 
-- `infra/secret.bat` exists and creates `jwt-secret`.
-- `infra/k8s/` contains deployments and services for all listed microservices.
-- `infra/k8s/ingress-clusterIP.yaml` routes all API prefixes to corresponding services.
-- `skaffold.yaml` includes all microservice image artifacts.
-- `Document/INFRA_DOCUMENT.md` is present and up to date.
+---
+
+## 6. Gaps and Risks
+
+| Risk | Impact |
+|------|--------|
+| TLS disabled in ingress (commented out) | Traffic is unencrypted |
+| JWT secret value is hardcoded in `secret.bat` | Security vulnerability |
+| MongoDB uses non-persistent `emptyDir` volumes | Data loss on pod restart |
+| All workloads run as single replica | No high availability |
+| No resource requests/limits in manifests | Risk of resource contention |
+| Ingress host hardcoded to `localhost` | Local development only |
+| No health check / readiness probes | K8s cannot detect unhealthy pods |
+| No horizontal pod autoscaler (HPA) | Cannot scale under load |

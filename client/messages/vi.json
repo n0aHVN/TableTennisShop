@@ -1,0 +1,21 @@
+{
+  "header": {
+    "brand": "TableTennis",
+    "shop": "Cửa Hàng",
+    "about": "Giới Thiệu",
+    "contact": "Liên Hệ"
+  },
+  "hero": {
+    "headline": "Nâng Tầm Trận Đấu",
+    "subtitle": "Thiết bị bóng bàn cao cấp dành cho những tay vợt đẳng cấp. Từ vợt chuyên nghiệp đến bàn thi đấu chuẩn quốc tế.",
+    "cta": "Mua Ngay"
+  },
+  "theme": {
+    "light": "Sáng",
+    "dark": "Tối"
+  },
+  "language": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}
