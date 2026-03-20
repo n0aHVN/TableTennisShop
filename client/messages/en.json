@@ -17,5 +17,17 @@
   "language": {
     "en": "English",
     "vi": "Tiếng Việt"
+  },
+  "footer": {
+    "aboutTitle": "About Us",
+    "aboutText": "We are a premium table tennis equipment retailer, bringing the finest blades, rubbers, and accessories to passionate players across Vietnam and beyond.",
+    "linksTitle": "Quick Links",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact",
+    "connectTitle": "Connect With Us",
+    "visitTitle": "Visit Our Store",
+    "address": "123 Sports Street, District 1, Ho Chi Minh City, Vietnam",
+    "copyright": "© {year} TableTennis. All rights reserved."
   }
 }

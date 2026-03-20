@@ -17,5 +17,17 @@
   "language": {
     "en": "English",
     "vi": "Tiếng Việt"
+  },
+  "footer": {
+    "aboutTitle": "Về Chúng Tôi",
+    "aboutText": "Chúng tôi là nhà bán lẻ thiết bị bóng bàn cao cấp, mang đến những cốt vợt, mặt vợt và phụ kiện tốt nhất cho những tay vợt đam mê trên khắp Việt Nam.",
+    "linksTitle": "Liên Kết Nhanh",
+    "shop": "Cửa Hàng",
+    "about": "Giới Thiệu",
+    "contact": "Liên Hệ",
+    "connectTitle": "Kết Nối Với Chúng Tôi",
+    "visitTitle": "Ghé Thăm Cửa Hàng",
+    "address": "123 Đường Thể Thao, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+    "copyright": "© {year} TableTennis. Bảo lưu mọi quyền."
   }
 }

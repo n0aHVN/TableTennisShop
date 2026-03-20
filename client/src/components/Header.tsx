@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "../stores/themeStore";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useCallback, useEffect, useState } from "react";
 
@@ -69,31 +69,31 @@ export function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-zinc-950/80 backdrop-blur-xl border-b border-white/5"
+          ? "bg-white/80 border-b border-zinc-200 dark:bg-zinc-950/80 dark:border-white/5 backdrop-blur-xl"
           : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <a href="/" className="text-xl font-bold tracking-tight text-white">
+        <a href="/" className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
           {t("brand")}
         </a>
 
         <div className="hidden items-center gap-8 sm:flex">
           <a
             href="#shop"
-            className="text-sm font-medium text-zinc-300 transition-colors hover:text-white"
+            className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
           >
             {t("shop")}
           </a>
           <a
             href="#about"
-            className="text-sm font-medium text-zinc-300 transition-colors hover:text-white"
+            className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
           >
             {t("about")}
           </a>
           <a
             href="#contact"
-            className="text-sm font-medium text-zinc-300 transition-colors hover:text-white"
+            className="text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
           >
             {t("contact")}
           </a>
@@ -104,7 +104,7 @@ export function Header() {
 
           <button
             onClick={toggleTheme}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-zinc-300 transition-all hover:bg-white/10 hover:text-white dark:border-white/20 dark:text-zinc-300"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-300 text-zinc-600 transition-all hover:bg-zinc-100 hover:text-zinc-900 dark:border-white/20 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           >
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
