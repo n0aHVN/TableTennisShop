@@ -1,8 +1,14 @@
 FROM node:alpine
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
 
-CMD [ "npm", "start" ]
+COPY common ./common
+WORKDIR /app/common
+RUN npm install && npm run build
+
+WORKDIR /app/auth
+COPY auth/package*.json ./
+RUN npm install
+COPY auth .
+
+CMD ["npm", "start"]

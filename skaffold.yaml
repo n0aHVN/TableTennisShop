@@ -6,36 +6,36 @@ build:
   local:
     push: false
   artifacts:
-  # Auth
+  # Auth (context: repo root so file:../common resolves in the image)
     - image: nguyennoah/auth-ttshop
-      context: auth
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: auth/Dockerfile
   # Product
     - image: nguyennoah/product-ttshop
-      context: product
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: product/Dockerfile
   #Payment
     - image: nguyennoah/payment-ttshop
-      context: payment
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: payment/Dockerfile
   #Order
     - image: nguyennoah/order-ttshop
-      context: order
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: order/Dockerfile
   #Inventory
     - image: nguyennoah/inventory-ttshop
-      context: inventory
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: inventory/Dockerfile
   #Expiration
     - image: nguyennoah/expiration-ttshop
-      context: expiration
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: expiration/Dockerfile
   #Client
     - image: nguyennoah/client-ttshop
       context: client
