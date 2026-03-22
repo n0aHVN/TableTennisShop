@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import { natsWrapper } from './NatsWrapper';
 import { InventoryCreatedListener } from './events/listeners/InventoryCreatedListener';
 import { InventoryUpdatedListener } from './events/listeners/InventoryUpdatedListener';
+import { ensureBucket } from './utils/minio';
+
 const start = async () => {
     if (!process.env.NATS_CLUSTER_ID) {
         throw new Error("NATS_CLUSTER_ID must be defined");
@@ -42,6 +44,13 @@ const start = async () => {
     }catch(e){
         console.log(e);
         throw new Error("Cannot Connect to MongoDB");
+    }
+
+    try {
+        await ensureBucket();
+        console.log("MinIO bucket ready");
+    } catch (e) {
+        console.warn("MinIO not available, image uploads will fail:", e);
     }
 }
 

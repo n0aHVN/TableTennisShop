@@ -15,3 +15,4 @@ spec:
       containers:
         - name: client
           image: nguyennoah/client-ttshop
+          imagePullPolicy: IfNotPresent

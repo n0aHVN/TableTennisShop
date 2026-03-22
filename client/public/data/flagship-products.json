@@ -1,0 +1,64 @@
+{
+  "sectionTitle": {
+    "en": "Flagship Collection",
+    "vi": "Bộ Sưu Tập Đỉnh Cao"
+  },
+  "sectionSubtitle": {
+    "en": "Curated picks for the season — handpicked by our experts.",
+    "vi": "Những lựa chọn tinh hoa cho mùa giải — được chọn lọc bởi chuyên gia."
+  },
+  "products": [
+    {
+      "id": "flagship-racket-2026",
+      "category": { "en": "Racket", "vi": "Vợt" },
+      "name": { "en": "Butterfly Viscaria ALC", "vi": "Butterfly Viscaria ALC" },
+      "description": {
+        "en": "The blade of champions. Arylate-Carbon layers deliver explosive speed with exceptional feel and control.",
+        "vi": "Cốt vợt của nhà vô địch. Lớp Arylate-Carbon mang lại tốc độ bùng nổ cùng cảm giác và kiểm soát vượt trội."
+      },
+      "price": "$189.99",
+      "image": "/images/flagship/racket.jpg",
+      "badge": { "en": "Best Seller", "vi": "Bán Chạy" },
+      "link": "/products/viscaria-alc"
+    },
+    {
+      "id": "flagship-rubber-2026",
+      "category": { "en": "Rubber", "vi": "Mặt Vợt" },
+      "name": { "en": "Dignics 09C", "vi": "Dignics 09C" },
+      "description": {
+        "en": "Spring Sponge X technology with a tacky topsheet. Maximum spin and devastating power on every stroke.",
+        "vi": "Công nghệ Spring Sponge X với mặt dính. Xoáy cực đại và sức mạnh áp đảo trên mọi cú đánh."
+      },
+      "price": "$79.99",
+      "image": "/images/flagship/rubber.jpg",
+      "badge": { "en": "Pro Choice", "vi": "Lựa Chọn Pro" },
+      "link": "/products/dignics-09c"
+    },
+    {
+      "id": "flagship-shoes-2026",
+      "category": { "en": "Shoes", "vi": "Giày" },
+      "name": { "en": "Mizuno Wave Drive NEO 3", "vi": "Mizuno Wave Drive NEO 3" },
+      "description": {
+        "en": "Ultra-lightweight court shoes with Wave technology. Lightning-fast footwork starts from the ground up.",
+        "vi": "Giày sân siêu nhẹ với công nghệ Wave. Bước chân nhanh như chớp bắt đầu từ đôi giày."
+      },
+      "price": "$129.99",
+      "image": "/images/flagship/shoes.jpg",
+      "badge": { "en": "New Arrival", "vi": "Hàng Mới" },
+      "link": "/products/wave-drive-neo3"
+    },
+    {
+      "id": "flagship-apparel-2026",
+      "category": { "en": "Apparel", "vi": "Trang Phục" },
+      "name": { "en": "2026 Pro Jersey Collection", "vi": "Bộ Sưu Tập Áo Pro 2026" },
+      "description": {
+        "en": "Competition-approved jerseys with moisture-wicking fabric. Look sharp, play sharper.",
+        "vi": "Áo thi đấu chuẩn quốc tế với chất liệu thấm hút mồ hôi. Đẹp trên sân, mạnh trong trận."
+      },
+      "price": "$49.99",
+      "image": "/images/flagship/apparel.jpg",
+      "badge": { "en": "Limited Edition", "vi": "Phiên Bản Giới Hạn" },
+      "link": "/products/pro-jersey-2026"
+    }
+  ]
+}

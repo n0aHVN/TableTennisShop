@@ -3,6 +3,8 @@ kind: Config
 metadata:
   name: TableTennisShop
 build:
+  local:
+    push: false
   artifacts:
   # Auth
     - image: nguyennoah/auth-ttshop
@@ -43,4 +45,17 @@ manifests:
   rawYaml:
     - infra/k8s/nats-depl.yaml
     - infra/k8s/nats-clusterIP.yaml
-    - infra/k8s/*
+    - infra/k8s/*.yaml
+deploy:
+  kubectl:
+    hooks:
+      before:
+        - host:
+            command: ["docker", "pull", "mongo:8.0.10-rc0"]
+        - host:
+            command: ["docker", "pull", "redis:6.0.3-alpine"]
+        - host:
+            command: ["docker", "pull", "docker.io/library/nats-streaming:0.17.0"]
+        - host:
+            command: ["docker", "pull", "minio/minio"]
+  statusCheckDeadlineSeconds: 600

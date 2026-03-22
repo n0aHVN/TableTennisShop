@@ -15,3 +15,4 @@ spec:
       containers:
         - name: expiration-redis
           image: redis:6.0.3-alpine
+          imagePullPolicy: IfNotPresent

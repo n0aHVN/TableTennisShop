@@ -1,64 +1,20 @@
-{
-  "sectionTitle": {
-    "en": "Flagship Collection",
-    "vi": "Bộ Sưu Tập Đỉnh Cao"
+[
+  {
+    "id": "racket-2026",
+    "category": "racket",
+    "image": "/images/flagship/racket-2026.jpg",
+    "href": "/products/racket-2026"
   },
-  "sectionSubtitle": {
-    "en": "Curated picks for the season — handpicked by our experts.",
-    "vi": "Những lựa chọn tinh hoa cho mùa giải — được chọn lọc bởi chuyên gia."
+  {
+    "id": "sponge-pro",
+    "category": "sponge",
+    "image": "/images/flagship/sponge-pro.jpg",
+    "href": "/products/sponge-pro"
   },
-  "products": [
-    {
-      "id": "flagship-fzd-racket",
-      "category": { "en": "Racket", "vi": "Vợt" },
-      "name": { "en": "FZD Carbon Pro", "vi": "FZD Carbon Pro" },
-      "description": {
-        "en": "Precision-engineered carbon blade built for aggressive attackers. Exceptional balance of speed and spin with a stiff, responsive feel on every loop.",
-        "vi": "Cốt vợt carbon được chế tác chính xác dành cho lối chơi tấn công mạnh mẽ. Cân bằng hoàn hảo giữa tốc độ và xoáy với cảm giác cứng cáp, phản hồi tức thì trên mọi cú giật."
-      },
-      "price": "$169.99",
-      "image": "/landing/FZD Racketjpg.jpg",
-      "badge": { "en": "Best Seller", "vi": "Bán Chạy" },
-      "link": "/products/fzd-carbon-pro"
-    },
-    {
-      "id": "flagship-donic-zjk",
-      "category": { "en": "Racket", "vi": "Vợt" },
-      "name": { "en": "Donic ZJK Carbon", "vi": "Donic ZJK Carbon" },
-      "description": {
-        "en": "Zhang Jike's signature blade — explosive power meets tournament-level control. ZL Carbon fiber provides a unique combination of hardness and elasticity for devastating attacks.",
-        "vi": "Cốt vợt đặc biệt của Zhang Jike — sức mạnh bùng nổ kết hợp khả năng kiểm soát đẳng cấp giải đấu. Sợi ZL Carbon mang đến sự kết hợp độc đáo giữa độ cứng và đàn hồi cho những cú tấn công chí mạng."
-      },
-      "price": "$199.99",
-      "image": "/landing/Donic ZJK.jpg",
-      "badge": { "en": "Pro Choice", "vi": "Lựa Chọn Pro" },
-      "link": "/products/donic-zjk-carbon"
-    },
-    {
-      "id": "flagship-donic-zjk1",
-      "category": { "en": "Racket", "vi": "Vợt" },
-      "name": { "en": "Donic ZJK Carbon", "vi": "Donic ZJK Carbon" },
-      "description": {
-        "en": "Zhang Jike's signature blade — explosive power meets tournament-level control. ZL Carbon fiber provides a unique combination of hardness and elasticity for devastating attacks.",
-        "vi": "Cốt vợt đặc biệt của Zhang Jike — sức mạnh bùng nổ kết hợp khả năng kiểm soát đẳng cấp giải đấu. Sợi ZL Carbon mang đến sự kết hợp độc đáo giữa độ cứng và đàn hồi cho những cú tấn công chí mạng."
-      },
-      "price": "$199.99",
-      "image": "/landing/Donic ZJK.jpg",
-      "badge": { "en": "Pro Choice", "vi": "Lựa Chọn Pro" },
-      "link": "/products/donic-zjk-carbon"
-    },
-    {
-      "id": "flagship-donic-zjk2",
-      "category": { "en": "Racket", "vi": "Vợt" },
-      "name": { "en": "Donic ZJK Carbon", "vi": "Donic ZJK Carbon" },
-      "description": {
-        "en": "Zhang Jike's signature blade — explosive power meets tournament-level control. ZL Carbon fiber provides a unique combination of hardness and elasticity for devastating attacks.",
-        "vi": "Cốt vợt đặc biệt của Zhang Jike — sức mạnh bùng nổ kết hợp khả năng kiểm soát đẳng cấp giải đấu. Sợi ZL Carbon mang đến sự kết hợp độc đáo giữa độ cứng và đàn hồi cho những cú tấn công chí mạng."
-      },
-      "price": "$199.99",
-      "image": "/landing/Donic ZJK.jpg",
-      "badge": { "en": "Pro Choice", "vi": "Lựa Chọn Pro" },
-      "link": "/products/donic-zjk-carbon"
-    }
-  ]
-}
+  {
+    "id": "apparel-collection",
+    "category": "clothing",
+    "image": "/images/flagship/apparel-2026.jpg",
+    "href": "/products/apparel-collection"
+  }
+]

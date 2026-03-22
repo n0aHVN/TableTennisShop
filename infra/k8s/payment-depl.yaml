@@ -16,6 +16,7 @@ spec:
       containers:
         - name: payment
           image: nguyennoah/payment-ttshop
+          imagePullPolicy: IfNotPresent
           env:
             - name: NATS_CLUSTER_ID
               value: 'ticketing'

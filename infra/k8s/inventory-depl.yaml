@@ -16,6 +16,7 @@ spec:
       containers:
         - name: inventory
           image: nguyennoah/inventory-ttshop
+          imagePullPolicy: IfNotPresent
           env:
             - name: NATS_CLUSTER_ID
               value: 'ticketing'

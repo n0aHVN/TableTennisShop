@@ -16,6 +16,7 @@ spec:
       containers:
         - name: product
           image: nguyennoah/product-ttshop
+          imagePullPolicy: IfNotPresent
           env:
             - name: NATS_CLUSTER_ID
               value: 'ticketing'
@@ -32,3 +33,19 @@ spec:
                   key: JWT_KEY
             - name: MONGO_URL
               value: mongodb://product-mongo-service:27017/app
+            - name: MINIO_ENDPOINT
+              value: minio-srv
+            - name: MINIO_PORT
+              value: '9000'
+            - name: MINIO_BUCKET
+              value: product-images
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: MINIO_ROOT_USER
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: MINIO_ROOT_PASSWORD

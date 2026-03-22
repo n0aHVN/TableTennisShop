@@ -2,16 +2,22 @@
 import { ProductTypeEnum, ProductStatusEnum } from '@tabletennisshop/common';
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+export interface ProductImage {
+  key: string;
+  url: string;
+}
+
 export interface ProductAttrsBase {
   name: string,
   slug: string,
   brand: string,
   description: string,
   sport: string,
-  type: ProductTypeEnum, // This is the discriminator key, will be overridden in child schemas
+  type: ProductTypeEnum,
   attributes?: any,
   price: number,
   status: ProductStatusEnum,
+  images?: ProductImage[],
 }
 
 export interface ProductDoc extends Document {
@@ -20,12 +26,12 @@ export interface ProductDoc extends Document {
   slug: string,
   brand: string,
   description: string,
-  type: ProductTypeEnum, // This is the discriminator key, will be overridden in child schemas
+  type: ProductTypeEnum,
   sport: string,
   attributes?: any,
   status: ProductStatusEnum,
   price: number,
-  // Mongoose Timestamps
+  images: ProductImage[],
   createdAt: Date,
   updatedAt: Date,
   version: number,
@@ -54,6 +60,10 @@ const ProductSchema = new Schema<ProductDoc>({
   attributes: { type: [Schema.Types.Mixed], required: false },
   status: { type: String, enum: Object.values(ProductStatusEnum), default: ProductStatusEnum.OUT_OF_STOCK },
   price: { type: Number, required: true },
+  images: {
+    type: [{ key: { type: String, required: true }, url: { type: String, required: true } }],
+    default: [],
+  },
 }, baseOptions);
 
 ProductSchema.set('versionKey', 'version');

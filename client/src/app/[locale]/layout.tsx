@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 import "../globals.css";
 
@@ -48,7 +49,7 @@ export default async function LocaleLayout({
       </head>
       <body className="min-h-screen bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-50">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <SmoothScroll>{children}</SmoothScroll>
         </NextIntlClientProvider>
       </body>
     </html>

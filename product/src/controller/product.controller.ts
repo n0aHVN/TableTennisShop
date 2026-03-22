@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 export class ProductController{
     static async getProductBySlug(req: Request, res: Response){
         const {slug} = req.params;
-        const product = await ProductService.getProductBaseOnSlug({slug});
+        const product = await ProductService.getProductBaseOnSlug({slug: slug as string});
         res.status(200).send({
             product
         });

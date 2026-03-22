@@ -16,6 +16,7 @@ spec:
       containers:
         - name: auth
           image: nguyennoah/auth-ttshop
+          imagePullPolicy: IfNotPresent
           env:
           # Get from K8s Secrets
             - name: JWT_KEY
