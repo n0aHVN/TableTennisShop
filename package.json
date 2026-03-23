@@ -1,0 +1,13 @@
+{
+  "name": "tabletennisshop",
+  "private": true,
+  "workspaces": [
+    "common",
+    "auth",
+    "order",
+    "payment",
+    "product",
+    "inventory",
+    "expiration"
+  ]
+}
