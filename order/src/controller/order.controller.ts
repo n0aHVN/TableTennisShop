@@ -17,7 +17,7 @@ export class OrderController {
     }
 
     static async getOrderById(req: Request, res: Response<ApiResponse<OrderDoc>>) {
-        const orderId = req.params.id;
+        const orderId = req.params.id as string;
         const userId = req.currentUser?._id!;
         const order = await OrderService.getOrderById({ userId, order_id: orderId });
         res.status(200).send({

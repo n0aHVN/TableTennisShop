@@ -95,11 +95,22 @@ This will:
 
 ### 4. Port Forwarding (In New Terminal)
 
-```bash
-# Database access
-kubectl port-forward svc/mongo-service 27018:27017
+Each service has its own MongoDB ClusterIP (example: auth):
 
-# HTTPS ingress (if needed)
+```bash
+kubectl port-forward svc/auth-mongo-service 27018:27017
+```
+
+MinIO console (after deploying manifests):
+
+```bash
+kubectl port-forward svc/minio-srv 9001:9001
+# Open http://localhost:9001
+```
+
+HTTPS ingress (if needed):
+
+```bash
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8443:443
 ```
 
@@ -187,14 +198,14 @@ skaffold dev  # Shows aggregated logs
 
 ### Access Database
 ```bash
-# Open Mongo shell
-kubectl exec -it deployment/mongo-depl -- mongosh
+# Example: order service MongoDB (adjust deployment name if replicas differ)
+kubectl exec -it deployment/order-mongo-deployment -- mongosh
 
 # List collections
 > show collections
 
-# Query orders
-> db.order.find().pretty()
+# Query orders (in order DB / collection names depend on your app)
+> db.orders.find().pretty()
 ```
 
 ### Rebuild Services
@@ -240,11 +251,14 @@ kubectl logs deployment/nats-depl
 
 ### 3. MongoDB Connection Issues
 ```bash
-# Port forward database
-kubectl port-forward svc/mongo-service 27018:27017
+# Port-forward the MongoDB service you need (per service)
+kubectl port-forward svc/auth-mongo-service 27018:27017
+# or: product-mongo-service, order-mongo-service, etc.
 
 # Test connection
 mongosh --host localhost:27018
+
+# If pods stay Pending, check PVCs: kubectl get pvc
 ```
 
 ### 4. Image Pull Failures
@@ -310,7 +324,7 @@ kubectl apply -f infra/k8s/
 - **Authentication**: JWT tokens stored in secure HTTP-only cookies
 - **Analytics**: Integrated into order service with MongoDB aggregation pipelines
 - **Frontend**: Angular with responsive design
-- **Infrastructure**: Kubernetes with Skaffold for local development
+- **Infrastructure**: Kubernetes with Skaffold for local development; MongoDB, MinIO, and Redis use PersistentVolumeClaims (`ReadWriteOnce`) so data survives pod restarts (not the git repo tree)
 
 ---
 
@@ -319,15 +333,18 @@ kubectl apply -f infra/k8s/
 Create `.env` files in each service for local configuration:
 
 ```env
-# auth/.env
-MONGO_URI=mongodb://mongo-service:27017/db
+# auth/.env (local / in-cluster hostnames differ)
+MONGO_URL=mongodb://auth-mongo-service:27017/app
 JWT_KEY=your-secret-key
-NATS_URL=nats://nats-service:4222
 
 # order/.env
-MONGO_URI=mongodb://mongo-service:27017/db
-NATS_URL=nats://nats-service:4222
+MONGO_URL=mongodb://order-mongo-service:27017/app
+JWT_KEY=your-secret-key
+NATS_URL=http://nats-svc:4222
+NATS_CLUSTER_ID=ticketing
 ```
+
+In Kubernetes, each deployment sets `MONGO_URL` to its matching `*-mongo-service` (see `infra/k8s/*-depl.yaml`).
 
 ---
 

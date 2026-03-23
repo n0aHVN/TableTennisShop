@@ -207,7 +207,7 @@ Test files are located in `src/routes/__test__/`.
 ## 9. Risks and Recommendations
 
 - Single replica with no autoscaling.
-- MongoDB uses `emptyDir` (data lost on pod restart).
+- MongoDB uses a **PersistentVolumeClaim** (`ReadWriteOnce`); data survives pod restarts unless the PVC or namespace is deleted.
 - No resource requests/limits defined.
 - No actual payment gateway integration (e.g., Stripe) -- payment is recorded directly.
 - The `status` field in the request body is validated but not persisted on the Payment model.

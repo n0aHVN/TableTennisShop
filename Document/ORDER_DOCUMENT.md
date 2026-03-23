@@ -603,7 +603,7 @@ Test files are located in `src/routes/__test__/`.
 ## 11. Risks and Recommendations
 
 - Single replica with no autoscaling.
-- MongoDB uses `emptyDir` (data lost on pod restart).
+- MongoDB uses a **PersistentVolumeClaim** (`ReadWriteOnce`); data survives pod restarts unless the PVC or namespace is deleted.
 - No resource requests/limits defined.
 - Order expiration window is very short (60 seconds) -- likely needs tuning for production.
 - JWT secret is hardcoded in the setup script.

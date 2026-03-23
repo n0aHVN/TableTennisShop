@@ -168,7 +168,7 @@ npm test
 ## 9. Risks and Recommendations
 
 - Single replica with no autoscaling.
-- Redis uses no persistence -- queued jobs are lost on Redis restart.
+- Redis uses a **PersistentVolumeClaim** with AOF (`--appendonly yes`); queue data survives pod restarts unless the PVC or namespace is deleted.
 - The `JWT_KEY` environment variable is injected but never used.
 - Folder name `listeneres` is misspelled -- consider renaming for consistency.
 - File/class naming mismatch (`OrderExpiredCompletePublisher.ts` vs `ExpirationCompletePublisher` class).

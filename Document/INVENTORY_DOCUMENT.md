@@ -522,7 +522,7 @@ Test files are located in `src/routes/__test__/`.
 ## 10. Risks and Recommendations
 
 - Single replica with no autoscaling.
-- MongoDB uses `emptyDir` (data lost on pod restart).
+- MongoDB uses a **PersistentVolumeClaim** (`ReadWriteOnce`); data survives pod restarts unless the PVC or namespace is deleted.
 - No resource requests/limits defined.
 - **Add, Subtract, and Update endpoints lack `ValidateRequestMiddleware`** -- validation rules are defined but never enforced. Invalid requests may pass through without proper error responses.
 - No authentication middleware on GET, PATCH, and PUT endpoints -- any caller can modify inventory.

@@ -78,21 +78,31 @@ Each service has a deployment and a ClusterIP service manifest:
 
 One MongoDB deployment per domain service:
 
-| Manifest | Service Name |
-|----------|-------------|
-| `auth-mongo.yaml` | `auth-mongo-service` |
-| `product-mongo.yaml` | `product-mongo-service` |
-| `order-mongo.yaml` | `order-mongo-service` |
-| `payment-mongo.yaml` | `payment-mongo-service` |
-| `inventory-mongo.yaml` | `inventory-mongo-service` |
+| Manifest | Service name | PVC (claim) | Size |
+|----------|--------------|---------------|------|
+| `auth-mongo.yaml` | `auth-mongo-service` | `auth-mongo-pvc` | 2Gi |
+| `product-mongo.yaml` | `product-mongo-service` | `product-mongo-pvc` | 2Gi |
+| `order-mongo.yaml` | `order-mongo-service` | `order-mongo-pvc` | 2Gi |
+| `payment-mongo.yaml` | `payment-mongo-service` | `payment-mongo-pvc` | 2Gi |
+| `inventory-mongo.yaml` | `inventory-mongo-service` | `inventory-mongo-pvc` | 2Gi |
 
-> All MongoDB deployments use `emptyDir` volumes. Data is **not persistent** across pod restarts.
+Each manifest defines a **PersistentVolumeClaim** with **`ReadWriteOnce`**: the volume is read/write on a **single node** at a time (correct for one MongoDB pod). The cluster’s **default StorageClass** provisions the backing volume (e.g. Docker Desktop). Data **survives pod restarts** and image rollouts. Deleting the **namespace** or **PVC** removes that data unless you have backups.
+
+#### MinIO (object storage)
+
+| Manifest | Purpose |
+|----------|---------|
+| `minio-depl.yaml` | MinIO server; PVC `minio-pvc` (10Gi) on `/data`; console on port **9001** |
+| `minio-clusterIP.yaml` | ClusterIP `minio-srv`: API **9000**, console **9001** |
+| `01-minio-secret.yaml` | `minio-secret`: `MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD` |
+
+The product service uses `MINIO_*` env vars (endpoint `minio-srv`, credentials from the same secret keys). Buckets/policies may be created at runtime (e.g. `ensureBucket` in the product service).
 
 #### Redis
 
 | Manifest | Purpose |
 |----------|---------|
-| `expiration-redis-deployment.yaml` | Redis `redis:6.0.3-alpine` |
+| `expiration-redis-deployment.yaml` | Redis `redis:6.0.3-alpine`, PVC `expiration-redis-pvc` (1Gi), AOF persistence (`--appendonly yes`), data under `/data` |
 | `expiration-redis-clusterIP.yaml` | ClusterIP service: `expiration-redis-svc` (port 6379) |
 
 ---
@@ -121,19 +131,19 @@ One MongoDB deployment per domain service:
 
 ## 3. Secret Management
 
-**Script:** `infra/secret.bat`
+**Option A — script:** `infra/secret.bat` (idempotent `kubectl apply`)
 
-```bat
-kubectl create secret generic jwt-secret --from-literal=JWT_KEY=secretKey
-```
+- Creates **`jwt-secret`** with `JWT_KEY`
+- Creates **`minio-secret`** with `MINIO_ROOT_USER` and `MINIO_ROOT_PASSWORD`
 
-| Setting | Value |
-|---------|-------|
-| Secret name | `jwt-secret` |
-| Key | `JWT_KEY` |
-| Used by | All services (auth, product, order, payment, inventory, expiration) |
+**Option B — manifests:** `infra/k8s/00-jwt-secret.yaml`, `infra/k8s/01-minio-secret.yaml` (dev-oriented `stringData`; do not commit real production credentials).
 
-> **Recommendation:** Replace plain-text inline secret creation with a secure secret management solution (e.g., external secret manager or sealed secrets).
+| Secret | Keys | Used by |
+|--------|------|---------|
+| `jwt-secret` | `JWT_KEY` | All backend services |
+| `minio-secret` | `MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD` | MinIO deployment; product service maps these to `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` |
+
+> **Recommendation:** Replace plain-text dev secrets with a secure secret manager or sealed secrets for non-local environments.
 
 ---
 
@@ -143,18 +153,21 @@ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=secretKey
 
 ### Docker Images Built
 
-| Image | Source |
-|-------|--------|
-| `nguyennoah/auth-ttshop` | `auth/` |
-| `nguyennoah/product-ttshop` | `product/` |
-| `nguyennoah/payment-ttshop` | `payment/` |
-| `nguyennoah/order-ttshop` | `order/` |
-| `nguyennoah/inventory-ttshop` | `inventory/` |
-| `nguyennoah/expiration-ttshop` | `expiration/` |
+Build **context is the repository root** (`context: .`) for all backend images so `file:../common` resolves inside the image. Each service uses its own Dockerfile path.
+
+| Image | Dockerfile |
+|-------|------------|
+| `nguyennoah/auth-ttshop` | `auth/Dockerfile` |
+| `nguyennoah/product-ttshop` | `product/Dockerfile` |
+| `nguyennoah/payment-ttshop` | `payment/Dockerfile` |
+| `nguyennoah/order-ttshop` | `order/Dockerfile` |
+| `nguyennoah/inventory-ttshop` | `inventory/Dockerfile` |
+| `nguyennoah/expiration-ttshop` | `expiration/Dockerfile` |
+| `nguyennoah/client-ttshop` | `client/` + `Dockerfile` (context `client` only) |
 
 ### Typical Local Development Flow
 
-1. Create JWT secret: `infra/secret.bat`
+1. Create secrets: `infra/secret.bat` (or `kubectl apply` the JWT + MinIO YAML files)
 2. Ensure ingress controller is available in the local cluster
 3. Run Skaffold: `skaffold dev`
 4. Access APIs through ingress host (`localhost`)
@@ -180,8 +193,8 @@ Creates the `jwt-secret` Kubernetes secret. Run once per cluster setup.
 | Risk | Impact |
 |------|--------|
 | TLS disabled in ingress (commented out) | Traffic is unencrypted |
-| JWT secret value is hardcoded in `secret.bat` | Security vulnerability |
-| MongoDB uses non-persistent `emptyDir` volumes | Data loss on pod restart |
+| JWT / MinIO secret values are dev defaults in script/YAML | Security vulnerability if reused outside local dev |
+| PVC data tied to cluster/namespace | Deleting namespace or PVCs removes Mongo, MinIO, and Redis data |
 | All workloads run as single replica | No high availability |
 | No resource requests/limits in manifests | Risk of resource contention |
 | Ingress host hardcoded to `localhost` | Local development only |

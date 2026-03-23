@@ -358,7 +358,7 @@ Test files are located in `src/routes/__test__/`.
 ## 10. Risks and Recommendations
 
 - Single replica with no autoscaling.
-- MongoDB uses `emptyDir` (data lost on pod restart).
+- MongoDB uses a **PersistentVolumeClaim** (`ReadWriteOnce`); data survives pod restarts unless the PVC or namespace is deleted. Product images use MinIO (`minio-srv`); see `Document/INFRA_DOCUMENT.md`.
 - No resource requests/limits defined.
 - Slug uniqueness is enforced but there is no auto-slug generation from the product name.
 - `description` is optional in validation but may be expected by the frontend.

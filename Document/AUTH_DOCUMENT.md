@@ -304,6 +304,7 @@ Test files are located in `src/routes/__test__/`.
 
 ## 9. Notes
 
+- MongoDB for auth uses a **PersistentVolumeClaim** (`ReadWriteOnce`, default StorageClass). Data survives pod restarts; removing the PVC or namespace deletes the data.
 - The auth service does **not** connect to NATS; it has no event publishers or listeners.
 - Only `customer` role signup is exposed. There is no admin or employee registration endpoint.
 - Cookie-session is configured with `secure: false` for local development. For production, set `secure: true` with proper TLS/ingress.
