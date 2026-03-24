@@ -46,6 +46,11 @@ build:
       context: .
       docker:
         dockerfile: expiration/Dockerfile
+  # Config (landing / CMS-style settings)
+    - image: nguyennoah/config-ttshop
+      context: .
+      docker:
+        dockerfile: config/Dockerfile
   #Client
     - image: nguyennoah/client-ttshop
       context: client

@@ -1,24 +1,24 @@
 import express from "express";
 import { ProductController } from "../controller/product.controller";
-import { addProductImages, removeProductImage, upload } from "../controller/productImage.controller";
 import {
   addIntroductionVideos,
+  addProductImages,
   removeIntroductionVideo,
+  removeProductImage,
+  upload,
   uploadVideoMulter,
-} from "../controller/productVideo.controller";
+} from "../controller/productMedia.controller";
 import {
   addFlagshipEntry,
   addFlagshipValidation,
   getFlagshipProducts,
   removeFlagshipEntry,
 } from "../controller/flagship.controller";
-import { getLandingHeroVideo } from "../controller/landingHeroVideo.controller";
 import { ValidateRequestMiddleware } from "@tabletennisshop/common";
 
 const productRouter = express.Router();
 
-/** Register before `/api/products/:slug` so `flagship` is not captured as a slug. */
-productRouter.get("/api/products/landing/hero-video", getLandingHeroVideo);
+/** Register before `/api/products/:slug` so fixed segments are not captured as slugs. */
 productRouter.get("/api/products/flagship", getFlagshipProducts);
 productRouter.post(
   "/api/products/flagship",
@@ -46,7 +46,7 @@ productRouter.put(
   ProductController.putProduct
 );
 
-productRouter.post("/api/products/:id/images", upload.array('images', 5), addProductImages);
+productRouter.post("/api/products/:id/images", upload.array("images", 5), addProductImages);
 
 productRouter.delete("/api/products/:id/images/:key", removeProductImage);
 

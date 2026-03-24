@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
-const HERO_VIDEO_PATH = "/api/products/landing/hero-video";
+const HERO_VIDEO_PATH = "/api/media/landing/hero-video";
 
 function heroVideoSrc(): string {
   const full = process.env.NEXT_PUBLIC_HERO_VIDEO_URL;

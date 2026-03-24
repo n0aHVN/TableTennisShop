@@ -1,0 +1,22 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config
+  template:
+    metadata:
+      labels:
+        app: config
+    spec:
+      containers:
+        - name: config
+          image: nguyennoah/config-ttshop
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGO_URL
+              value: mongodb://config-mongo-service:27017/config

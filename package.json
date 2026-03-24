@@ -9,6 +9,7 @@
     "product",
     "inventory",
     "expiration",
+    "config",
     "client"
   ]
 }
