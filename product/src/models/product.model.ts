@@ -2,7 +2,14 @@
 import { ProductTypeEnum, ProductStatusEnum } from '@tabletennisshop/common';
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+/** MinIO object reference (bucket key + public URL). */
 export interface ProductImage {
+  key: string;
+  url: string;
+}
+
+/** Introduction / marketing video stored in MinIO (same shape as images). */
+export interface IntroductionVideo {
   key: string;
   url: string;
 }
@@ -17,7 +24,12 @@ export interface ProductAttrsBase {
   attributes?: any,
   price: number,
   status: ProductStatusEnum,
+  /** Optional logical prefix for this product's objects in the MinIO bucket (e.g. `products/abc123/`). */
+  minioPrefix?: string,
+  /** Gallery photos in MinIO (multiple). */
   images?: ProductImage[],
+  /** Introduction / promo videos in MinIO (multiple). */
+  introductionVideos?: IntroductionVideo[],
 }
 
 export interface ProductDoc extends Document {
@@ -31,7 +43,9 @@ export interface ProductDoc extends Document {
   attributes?: any,
   status: ProductStatusEnum,
   price: number,
+  minioPrefix?: string,
   images: ProductImage[],
+  introductionVideos: IntroductionVideo[],
   createdAt: Date,
   updatedAt: Date,
   version: number,
@@ -60,7 +74,12 @@ const ProductSchema = new Schema<ProductDoc>({
   attributes: { type: [Schema.Types.Mixed], required: false },
   status: { type: String, enum: Object.values(ProductStatusEnum), default: ProductStatusEnum.OUT_OF_STOCK },
   price: { type: Number, required: true },
+  minioPrefix: { type: String, required: false },
   images: {
+    type: [{ key: { type: String, required: true }, url: { type: String, required: true } }],
+    default: [],
+  },
+  introductionVideos: {
     type: [{ key: { type: String, required: true }, url: { type: String, required: true } }],
     default: [],
   },

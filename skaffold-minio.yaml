@@ -1,0 +1,47 @@
+apiVersion: skaffold/v4beta9
+kind: Config
+metadata:
+  name: TableTennisShop-minio
+portForward:
+  - resourceType: service
+    resourceName: minio-srv
+    port: 9000
+    localPort: 9000
+  - resourceType: service
+    resourceName: minio-srv
+    port: 9001
+    localPort: 9001
+  - resourceType: service
+    resourceName: product-service
+    port: 3000
+    localPort: 3000
+build:
+  local:
+    push: false
+  artifacts:
+    - image: nguyennoah/product-ttshop
+      context: .
+      docker:
+        dockerfile: product/Dockerfile
+manifests:
+  rawYaml:
+    - infra/k8s/00-jwt-secret.yaml
+    - infra/k8s/01-minio-secret.yaml
+    - infra/k8s/minio-depl.yaml
+    - infra/k8s/minio-clusterIP.yaml
+    - infra/k8s/nats-depl.yaml
+    - infra/k8s/nats-clusterIP.yaml
+    - infra/k8s/product-mongo.yaml
+    - infra/k8s/product-depl.yaml
+    - infra/k8s/product-clusterIP.yaml
+deploy:
+  kubectl:
+    hooks:
+      before:
+        - host:
+            command: ["docker", "pull", "minio/minio"]
+        - host:
+            command: ["docker", "pull", "mongo:8.0.10-rc0"]
+        - host:
+            command: ["docker", "pull", "docker.io/library/nats-streaming:0.17.0"]
+  statusCheckDeadlineSeconds: 600

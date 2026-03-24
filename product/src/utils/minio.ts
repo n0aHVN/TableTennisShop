@@ -1,13 +1,13 @@
-import * as Minio from 'minio';
-import crypto from 'crypto';
+import { Client } from "minio";
+import crypto from "crypto";
 
-const ENDPOINT = process.env.MINIO_ENDPOINT || 'localhost';
-const PORT = parseInt(process.env.MINIO_PORT || '9000', 10);
-const BUCKET = process.env.MINIO_BUCKET || 'product-images';
-const ACCESS_KEY = process.env.MINIO_ACCESS_KEY || 'minioadmin';
-const SECRET_KEY = process.env.MINIO_SECRET_KEY || 'minioadmin';
+const ENDPOINT = process.env.MINIO_ENDPOINT || "localhost";
+const PORT = parseInt(process.env.MINIO_PORT || "9000", 10);
+const BUCKET = process.env.MINIO_BUCKET || "product-images";
+const ACCESS_KEY = process.env.MINIO_ACCESS_KEY || "minioadmin";
+const SECRET_KEY = process.env.MINIO_SECRET_KEY || "minioadmin";
 
-export const minioClient = new Minio.Client({
+export const minioClient = new Client({
   endPoint: ENDPOINT,
   port: PORT,
   useSSL: false,
@@ -61,4 +61,24 @@ export async function uploadImage(
 
 export async function deleteImage(key: string): Promise<void> {
   await minioClient.removeObject(BUCKET, key);
+}
+
+export async function uploadIntroductionVideo(
+  buffer: Buffer,
+  originalName: string,
+  mimeType: string
+): Promise<{ key: string; url: string }> {
+  const key = `intro-videos/${generateKeyForMedia(originalName)}`;
+  await minioClient.putObject(BUCKET, key, buffer, buffer.length, {
+    "Content-Type": mimeType,
+  });
+  return { key, url: buildPublicUrl(key) };
+}
+
+function generateKeyForMedia(originalName: string): string {
+  const ext = originalName.includes(".")
+    ? originalName.substring(originalName.lastIndexOf("."))
+    : "";
+  const hash = crypto.randomUUID();
+  return `${Date.now()}-${hash}${ext}`;
 }

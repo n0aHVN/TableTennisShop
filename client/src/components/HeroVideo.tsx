@@ -3,6 +3,15 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
+const HERO_VIDEO_PATH = "/api/products/landing/hero-video";
+
+function heroVideoSrc(): string {
+  const full = process.env.NEXT_PUBLIC_HERO_VIDEO_URL;
+  if (full) return full;
+  const origin = process.env.NEXT_PUBLIC_PRODUCT_API_ORIGIN?.replace(/\/$/, "") ?? "";
+  return origin ? `${origin}${HERO_VIDEO_PATH}` : HERO_VIDEO_PATH;
+}
+
 export function HeroVideo() {
   const t = useTranslations("hero");
 
@@ -15,7 +24,7 @@ export function HeroVideo() {
         playsInline
         className="absolute inset-0 h-full w-full object-cover"
       >
-        <source src="/videos/hero.mp4" type="video/mp4" />
+        <source src={heroVideoSrc()} type="video/mp4" />
       </video>
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />

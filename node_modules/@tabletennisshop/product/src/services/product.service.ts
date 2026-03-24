@@ -50,7 +50,12 @@ export class ProductService{
         if (data.sport !== undefined) productDoc.sport = data.sport;
         if (data.attributes !== undefined) productDoc.attributes = data.attributes;
         if (data.slug !== undefined) productDoc.slug = data.slug;
-        
+        if (data.minioPrefix !== undefined) productDoc.minioPrefix = data.minioPrefix;
+        if (data.images !== undefined) productDoc.images = data.images as ProductDoc["images"];
+        if (data.introductionVideos !== undefined) {
+            productDoc.introductionVideos = data.introductionVideos as ProductDoc["introductionVideos"];
+        }
+
         // If type-specific logic is needed, you can add it here
         // For example, if you want to ensure the type matches:
         if (data.type && productDoc.type !== data.type) {

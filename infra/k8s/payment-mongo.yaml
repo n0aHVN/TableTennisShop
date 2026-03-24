@@ -27,6 +27,8 @@ kind: Deployment
 metadata:
   name: payment-mongo-deployment
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:

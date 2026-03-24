@@ -27,6 +27,8 @@ kind: Deployment
 metadata:
   name: auth-mongo-deployment
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
