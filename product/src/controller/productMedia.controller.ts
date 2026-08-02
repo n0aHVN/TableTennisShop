@@ -1,22 +1,36 @@
 import { Request, Response } from "express";
 import multer from "multer";
+import mongoose from "mongoose";
+import imageSize from "image-size";
 import { ProductModel } from "../models/product.model";
-import { uploadImage, deleteImage, uploadIntroductionVideo, minioClient, MINIO_BUCKET } from "../utils/minio";
+import { ImageModel } from "../models/image.model";
+import {
+  buildGalleryObjectKey,
+  deleteImage,
+  uploadImageAtKey,
+  uploadIntroductionVideo,
+  minioClient,
+} from "../utils/minio";
+import { attachGalleryUrls } from "../utils/product-gallery";
 import {
   ApiResponse,
   NotFoundError,
   BadRequestError,
   routeParam,
+  getMinioMedia,
+  parseMediaPathSegments,
 } from "@tabletennisshop/common";
 
-const HERO_KEY = process.env.MINIO_HERO_VIDEO_KEY || "landing/hero.mp4";
 const DEFAULT_VIDEO_TYPE = "video/mp4";
+const MEDIA_PATH_PREFIX = "/api/media";
 
-const MAX_IMAGES = 5;
+/** Max gallery images per product (must match multer `.array(..., n)` in productRouter). */
+export const MAX_PRODUCT_IMAGES = 5;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-const MAX_VIDEOS = 5;
+/** Max introduction videos per product (must match multer `.array(..., n)` in productRouter). */
+export const MAX_PRODUCT_VIDEOS = 5;
 const MAX_VIDEO_SIZE = 80 * 1024 * 1024;
 const VIDEO_TYPES = ["video/mp4", "video/webm", "video/quicktime"];
 
@@ -52,126 +66,58 @@ export const uploadVideoMulter = multer({
   },
 });
 
-type RangeParse =
-  | { kind: "none" }
-  | { kind: "partial"; start: number; end: number }
-  | { kind: "unsatisfiable" };
-
-function parseRangeHeader(rangeHeader: string | undefined, size: number): RangeParse {
-  if (!rangeHeader || !rangeHeader.startsWith("bytes=")) {
-    return { kind: "none" };
-  }
-  const token = rangeHeader.slice("bytes=".length).trim();
-  const dash = token.indexOf("-");
-  if (dash < 0) return { kind: "unsatisfiable" };
-  const left = token.slice(0, dash);
-  const right = token.slice(dash + 1);
-
-  if (left === "" && right !== "") {
-    const suffix = parseInt(right, 10);
-    if (Number.isNaN(suffix) || suffix <= 0) return { kind: "unsatisfiable" };
-    const start = Math.max(0, size - suffix);
-    return { kind: "partial", start, end: size - 1 };
-  }
-
-  const start = left === "" ? 0 : parseInt(left, 10);
-  const end = right === "" ? size - 1 : parseInt(right, 10);
-  if (Number.isNaN(start) || start < 0) return { kind: "unsatisfiable" };
-  if (Number.isNaN(end)) return { kind: "unsatisfiable" };
-  if (start >= size) return { kind: "unsatisfiable" };
-  const endClamped = Math.min(end, size - 1);
-  if (start > endClamped) return { kind: "unsatisfiable" };
-  return { kind: "partial", start, end: endClamped };
+function normalizeRangeHeader(req: Request): string | undefined {
+  const h = req.headers["range"] as string | string[] | undefined;
+  if (typeof h === "string") return h;
+  if (Array.isArray(h) && h.length > 0 && typeof h[0] === "string") return h[0];
+  return undefined;
 }
 
-function isNoSuchKeyError(err: unknown): boolean {
-  if (err && typeof err === "object" && "code" in err) {
-    const code = (err as { code?: string }).code;
-    return code === "NoSuchKey" || code === "NotFound";
+async function sendMinioObject(req: Request, res: Response, bucket: string, key: string): Promise<void> {
+  const result = await getMinioMedia(minioClient, bucket, key, {
+    rangeHeader: normalizeRangeHeader(req),
+    defaultVideoContentType: DEFAULT_VIDEO_TYPE,
+  });
+  res.status(result.statusCode);
+  for (const [name, value] of Object.entries(result.headers)) {
+    res.setHeader(name, value);
   }
-  return false;
-}
-
-function assertSafeObjectKey(key: string): void {
-  if (!key || key.length > 1024) {
-    throw new BadRequestError("Invalid key");
-  }
-  if (key.startsWith("/") || key.includes("..")) {
-    throw new BadRequestError("Invalid key");
-  }
-}
-
-async function streamObject(bucket: string, key: string, req: Request, res: Response): Promise<void> {
-  let stat;
-  try {
-    stat = await minioClient.statObject(bucket, key);
-  } catch (err: unknown) {
-    if (isNoSuchKeyError(err)) {
-      throw new NotFoundError("Object not found");
-    }
-    throw new NotFoundError("Object not found");
-  }
-
-  const size = stat.size;
-  const contentType =
-    stat.metaData?.["content-type"] ||
-    stat.metaData?.["Content-Type"] ||
-    (key.endsWith(".mp4") ? DEFAULT_VIDEO_TYPE : "application/octet-stream");
-
-  const rangeHeader = req.headers.range;
-  const parsed = parseRangeHeader(typeof rangeHeader === "string" ? rangeHeader : undefined, size);
-
-  if (parsed.kind === "unsatisfiable") {
-    res.status(416);
-    res.setHeader("Content-Range", `bytes */${size}`);
-    res.end();
-    return;
-  }
-
-  res.setHeader("Accept-Ranges", "bytes");
-  res.setHeader("Content-Type", contentType);
-
-  if (parsed.kind === "partial") {
-    const { start, end } = parsed;
-    const chunkLength = end - start + 1;
-    res.status(206);
-    res.setHeader("Content-Range", `bytes ${start}-${end}/${size}`);
-    res.setHeader("Content-Length", String(chunkLength));
-    const stream = await minioClient.getPartialObject(bucket, key, start, chunkLength);
-    stream.on("error", () => {
+  if (result.stream) {
+    result.stream.on("error", () => {
       if (!res.writableEnded) res.destroy();
     });
-    stream.pipe(res);
-    return;
+    result.stream.pipe(res);
+  } else {
+    res.end();
   }
-
-  res.status(200);
-  res.setHeader("Content-Length", String(size));
-  const stream = await minioClient.getObject(bucket, key);
-  stream.on("error", () => {
-    if (!res.writableEnded) res.destroy();
-  });
-  stream.pipe(res);
 }
 
 /**
- * GET ?path=landing/hero.mp4 (or legacy ?key=) — object path in the bucket = MinIO object key.
- * Same bytes as a public GetObject; unsafe paths (`..`, leading `/`) are rejected.
+ * GET `/api/media/{bucket}` with no object key — reject before other routers treat it as a product slug.
  */
-export async function getProductMedia(req: Request, res: Response): Promise<void> {
-  const raw = req.query.path ?? req.query.key;
-  if (typeof raw !== "string" || !raw.trim()) {
-    throw new BadRequestError("Query parameter `path` (or `key`) is required");
-  }
-  const objectKey = raw.trim();
-  assertSafeObjectKey(objectKey);
-
-  await streamObject(MINIO_BUCKET, objectKey, req, res);
+export async function rejectMediaPathMissingKey(_req: Request, _res: Response): Promise<void> {
+  throw new BadRequestError("Media path must include bucket and object key");
 }
 
-export async function getLandingHeroVideo(req: Request, res: Response): Promise<void> {
-  assertSafeObjectKey(HERO_KEY);
-  await streamObject(MINIO_BUCKET, HERO_KEY, req, res);
+/**
+ * GET `/api/media/{bucket}/{key...}` — path-style proxy to MinIO (same bytes as GetObject).
+ */
+export async function getMinioMediaByPath(req: Request, res: Response): Promise<void> {
+  const { bucket, key } = parseMediaPathSegments(req.path, MEDIA_PATH_PREFIX);
+  await sendMinioObject(req, res, bucket, key);
+}
+
+function readImageDimensions(buffer: Buffer): { width: number; height: number } {
+  let dim;
+  try {
+    dim = imageSize(buffer);
+  } catch {
+    throw new BadRequestError("Could not read image dimensions");
+  }
+  if (!dim.width || !dim.height) {
+    throw new BadRequestError("Could not read image dimensions");
+  }
+  return { width: dim.width, height: dim.height };
 }
 
 export async function addProductImages(req: Request, res: Response<ApiResponse>) {
@@ -187,49 +133,84 @@ export async function addProductImages(req: Request, res: Response<ApiResponse>)
     throw new NotFoundError("Product not found");
   }
 
-  if (product.images.length + files.length > MAX_IMAGES) {
+  if (product.images.length + files.length > MAX_PRODUCT_IMAGES) {
     throw new BadRequestError(
-      `A product can have at most ${MAX_IMAGES} images. Current: ${product.images.length}, uploading: ${files.length}`
+      `A product can have at most ${MAX_PRODUCT_IMAGES} images. Current: ${product.images.length}, uploading: ${files.length}`
     );
   }
 
-  const uploaded = await Promise.all(
-    files.map((file) => uploadImage(file.buffer, file.originalname, file.mimetype))
-  );
+  const productId = product._id.toHexString();
+  let maxOrder =
+    product.images.length === 0
+      ? -1
+      : Math.max(...product.images.map((e) => e.order));
+  const hadNoImages = product.images.length === 0;
 
-  product.images.push(...uploaded);
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]!;
+    const { width, height } = readImageDimensions(file.buffer);
+    const key = buildGalleryObjectKey(productId, file.originalname);
+    await uploadImageAtKey(file.buffer, key, file.mimetype);
+    const imgDoc = await ImageModel.create({
+      key,
+      width,
+      height,
+      size: file.buffer.byteLength,
+      mimeType: file.mimetype,
+    });
+    maxOrder += 1;
+    product.images.push({
+      imageId: imgDoc._id,
+      order: maxOrder,
+      isPrimary: hadNoImages && i === 0,
+    });
+  }
+
   await product.save();
 
+  const refreshed = await ProductModel.findById(id).populate("images.imageId");
   res.status(200).json({
     success: true,
     statusCode: 200,
-    data: product,
+    data: attachGalleryUrls(refreshed!) as unknown as ApiResponse["data"],
   });
 }
 
 export async function removeProductImage(req: Request, res: Response<ApiResponse>) {
   const id = routeParam(req, "id");
-  const key = routeParam(req, "key");
+  const imageIdParam = routeParam(req, "imageId");
+
+  if (!mongoose.Types.ObjectId.isValid(imageIdParam)) {
+    throw new BadRequestError("Invalid image ID");
+  }
+  const imageObjectId = new mongoose.Types.ObjectId(imageIdParam);
 
   const product = await ProductModel.findById(id);
   if (!product) {
     throw new NotFoundError("Product not found");
   }
 
-  const imageIndex = product.images.findIndex((img) => img.key === key);
+  const imageIndex = product.images.findIndex((e) => e.imageId.equals(imageObjectId));
   if (imageIndex === -1) {
     throw new NotFoundError("Image not found");
   }
 
-  await deleteImage(key);
+  const imageDoc = await ImageModel.findById(imageObjectId);
+  if (!imageDoc) {
+    throw new NotFoundError("Image not found");
+  }
+
+  await deleteImage(imageDoc.key);
+  await ImageModel.deleteOne({ _id: imageObjectId });
 
   product.images.splice(imageIndex, 1);
   await product.save();
 
+  const refreshed = await ProductModel.findById(id).populate("images.imageId");
   res.status(200).json({
     success: true,
     statusCode: 200,
-    data: product,
+    data: attachGalleryUrls(refreshed!) as unknown as ApiResponse["data"],
   });
 }
 
@@ -247,9 +228,9 @@ export async function addIntroductionVideos(req: Request, res: Response<ApiRespo
   }
 
   const existing = product.introductionVideos ?? [];
-  if (existing.length + files.length > MAX_VIDEOS) {
+  if (existing.length + files.length > MAX_PRODUCT_VIDEOS) {
     throw new BadRequestError(
-      `A product can have at most ${MAX_VIDEOS} introduction videos. Current: ${existing.length}, uploading: ${files.length}`
+      `A product can have at most ${MAX_PRODUCT_VIDEOS} introduction videos. Current: ${existing.length}, uploading: ${files.length}`
     );
   }
 

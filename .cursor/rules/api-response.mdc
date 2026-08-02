@@ -1,0 +1,42 @@
+---
+description: Frontend–backend JSON responses use ApiResponse<T> from common
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# API response shape (`ApiResponse`)
+
+Endpoints consumed by the client should return JSON that matches **`ApiResponse<T>`** from `@tabletennisshop/common` ([common/types/base.ts](common/types/base.ts)).
+
+## Shape
+
+- **`success`** — boolean  
+- **`statusCode`** — HTTP status mirrored in the body (e.g. 200, 201, 400)  
+- **`data`** — optional payload (`T`)  
+- **`message`** — optional human-readable message  
+- **`meta`** — optional pagination (`total`, `page`, `pageSize`, `totalPages`, `hasNextPage`, `hasPreviousPage`)  
+- **`error`** — optional `{ code, message, field? }` for failures  
+
+## Backend (Express)
+
+- Import: `import { ApiResponse } from "@tabletennisshop/common"`.
+- Type handlers: `res: Response<ApiResponse>` or `Response<ApiResponse<YourDto>>`.
+- Return JSON with at least `success` and `statusCode`; put the payload in **`data`** when applicable.
+
+```typescript
+const response: ApiResponse<ProductDoc> = {
+  success: true,
+  statusCode: 200,
+  data: productDoc,
+};
+res.status(200).json(response);
+```
+
+## Frontend
+
+- Type HTTP responses with the **same** `ApiResponse<T>` (import from `@tabletennisshop/common` if the client depends on that package, or mirror the type locally so it stays in sync).
+- Prefer reading **`data`** for success payloads and **`error`** / **`message`** for failures instead of ad-hoc top-level fields.
+
+## Legacy handlers
+
+Some routes still return older shapes (e.g. `{ product }` or `{ data, page, limit }` without `success` / `statusCode`). **New or updated** routes should adopt `ApiResponse`; refactor legacy endpoints when you touch them.

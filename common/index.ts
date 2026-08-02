@@ -13,6 +13,7 @@ export * from './middlewares/current-user-middleware';
 
 export * from './helper/password';
 export * from './helper/route-param';
+export * from './helper/minio-media';
 
 export * from './enums/product-type.enum';
 export * from './enums/order-status.enum';

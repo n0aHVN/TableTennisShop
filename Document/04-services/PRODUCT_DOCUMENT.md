@@ -1,4 +1,7 @@
-# Product Service Documentation
+﻿# Product Service Documentation
+
+> **Taxonomy:** `Document/04-services/` · Index: [../README.md](../README.md)
+
 
 This document describes the architecture, APIs, events, and deployment of the Product microservice in TableTennisShop.
 
@@ -84,7 +87,7 @@ Base prefix: `/api/products`
       "description": "Professional blade",
       "type": "racket",
       "sport": "table-tennis",
-      "attributes": [],
+      "attributes": {},
       "status": "enable",
       "price": 159.99,
       "version": 0,
@@ -122,7 +125,7 @@ Base prefix: `/api/products`
     "description": "Professional blade",
     "type": "racket",
     "sport": "table-tennis",
-    "attributes": [],
+    "attributes": {},
     "status": "enable",
     "price": 159.99,
     "version": 0
@@ -139,7 +142,7 @@ Base prefix: `/api/products`
 | **Method** | `POST` |
 | **Path** | `/api/products` |
 | **Auth** | Cookie session (JWT) |
-| **Middleware** | `addProductValidation` → `ValidateRequestMiddleware` |
+| **Middleware** | `addProductValidation` â†’ `ValidateRequestMiddleware` |
 
 **Validation Rules:**
 
@@ -150,8 +153,9 @@ Base prefix: `/api/products`
 | `brand` | Required, string |
 | `description` | Optional, string |
 | `type` | Required, string, must be one of `ProductTypeEnum` (`racket`, `shirt`, `sponge`) |
-| `attributes` | Required, must be an array |
+| `attributes` | Required, must be a JSON object (not an array) |
 | `price` | Required, numeric |
+| `status` | Optional; if present, must be `enable`, `disable`, or `out_of_stock` |
 
 **Request body:**
 
@@ -162,10 +166,10 @@ Base prefix: `/api/products`
   "brand": "Butterfly",
   "description": "Professional blade with arylate carbon",
   "type": "racket",
-  "attributes": [
-    { "key": "weight", "value": "86g" },
-    { "key": "layers", "value": "7" }
-  ],
+  "attributes": {
+    "weight": "86g",
+    "layers": "7"
+  },
   "price": 159.99
 }
 ```
@@ -213,7 +217,7 @@ Base prefix: `/api/products`
 | **Method** | `PUT` |
 | **Path** | `/api/products/:id` |
 | **Auth** | Cookie session (JWT) |
-| **Middleware** | `putProductValidation` → `ValidateRequestMiddleware` |
+| **Middleware** | `putProductValidation` â†’ `ValidateRequestMiddleware` |
 
 **Validation Rules:**
 
@@ -221,6 +225,7 @@ Base prefix: `/api/products`
 |-------|-------|
 | `id` (param) | Required, valid MongoDB ObjectId |
 | `version` | Required, numeric (optimistic concurrency) |
+| `status` | Optional; if present, must be `enable`, `disable`, or `out_of_stock` |
 
 **Request body:**
 
@@ -268,7 +273,7 @@ The `version` field is required for optimistic concurrency control. Any other pr
 | `description` | String | Optional |
 | `type` | String | Enum: `ProductTypeEnum` (`racket`, `shirt`, `sponge`). Discriminator key |
 | `sport` | String | Optional |
-| `attributes` | Array | Optional, flexible key-value pairs |
+| `attributes` | Object (JSON) | Optional in DB; default `{}`. Arbitrary key-value specs |
 | `status` | String | Enum: `ProductStatusEnum` (`enable`, `disable`, `out_of_stock`). Default: `out_of_stock` |
 | `price` | Number | Required |
 | `version` | Number | Optimistic concurrency control |
@@ -307,17 +312,17 @@ The `version` field is required for optimistic concurrency control. Any other pr
 
 ```
 product/src/
-├── app.ts              # Express app setup
-├── index.ts            # Startup, env checks, MongoDB + NATS connect
-├── NatsWrapper.ts      # NATS Streaming client singleton
-├── routes/             # Route definitions
-├── controller/         # Endpoint handlers + validation rules
-├── services/           # Business logic (ProductService)
-├── models/             # Mongoose schemas
-├── utils/              # Pagination utility
-└── events/
-    ├── listeners/      # NATS event listeners
-    └── publishers/     # NATS event publishers
+â”œâ”€â”€ app.ts              # Express app setup
+â”œâ”€â”€ index.ts            # Startup, env checks, MongoDB + NATS connect
+â”œâ”€â”€ NatsWrapper.ts      # NATS Streaming client singleton
+â”œâ”€â”€ routes/             # Route definitions
+â”œâ”€â”€ controller/         # Endpoint handlers + validation rules
+â”œâ”€â”€ services/           # Business logic (ProductService)
+â”œâ”€â”€ models/             # Mongoose schemas
+â”œâ”€â”€ utils/              # Pagination utility
+â””â”€â”€ events/
+    â”œâ”€â”€ listeners/      # NATS event listeners
+    â””â”€â”€ publishers/     # NATS event publishers
 ```
 
 ---
@@ -358,7 +363,7 @@ Test files are located in `src/routes/__test__/`.
 ## 10. Risks and Recommendations
 
 - Single replica with no autoscaling.
-- MongoDB uses a **PersistentVolumeClaim** (`ReadWriteOnce`); data survives pod restarts unless the PVC or namespace is deleted. Product images use MinIO (`minio-srv`); see `Document/INFRA_DOCUMENT.md`.
+- MongoDB uses a **PersistentVolumeClaim** (`ReadWriteOnce`); data survives pod restarts unless the PVC or namespace is deleted. Product images use MinIO (`minio-srv`); see `Document/02-architecture/INFRA_DOCUMENT.md`.
 - No resource requests/limits defined.
 - Slug uniqueness is enforced but there is no auto-slug generation from the product name.
 - `description` is optional in validation but may be expected by the frontend.

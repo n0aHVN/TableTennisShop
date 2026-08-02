@@ -1,6 +1,10 @@
 # Payment Service Documentation
 
+> **Taxonomy:** `Document/04-services/` · Security controls: [../03-security/SECURITY_BASELINE.md](../03-security/SECURITY_BASELINE.md) · Index: [../README.md](../README.md)
+
 This document describes the architecture, APIs, events, and deployment of the Payment microservice in TableTennisShop.
+
+**Control reminder:** do not store raw PAN/CVV; payment gaps (PSP, refund, reconciliation) are tracked in the Security Baseline.
 
 ---
 

@@ -1,5 +1,6 @@
 import { Client } from "minio";
 import crypto from "crypto";
+import { encodeMediaKeyPathSegments } from "@tabletennisshop/common";
 
 const ENDPOINT = process.env.MINIO_ENDPOINT || "localhost";
 const PORT = parseInt(process.env.MINIO_PORT || "9000", 10);
@@ -46,25 +47,29 @@ function generateKey(originalName: string): string {
   return `${Date.now()}-${hash}${ext}`;
 }
 
-/** Encode each path segment so keys like `landing/hero.mp4` become valid path-style URLs. */
-function encodeObjectKeyForUrlPath(key: string): string {
-  return key
-    .split("/")
-    .filter(Boolean)
-    .map((seg) => encodeURIComponent(seg))
-    .join("/");
+/** Gallery object key: `products/<productId>/<yyyy>/<MM>/<uuid>.<ext>` */
+export function buildGalleryObjectKey(productId: string, originalName: string): string {
+  const ext = originalName.includes(".")
+    ? originalName.substring(originalName.lastIndexOf("."))
+    : "";
+  const now = new Date();
+  const yyyy = String(now.getFullYear());
+  const MM = String(now.getMonth() + 1).padStart(2, "0");
+  const id = crypto.randomUUID();
+  return `products/${productId}/${yyyy}/${MM}/${id}${ext}`;
 }
 
 /**
  * Browser-facing URL for an object. Prefer `MINIO_PUBLIC_BASE_URL` for direct GET against MinIO.
- * Otherwise proxy URL uses `?path=` (object key inside the bucket, e.g. landing/hero.mp4).
+ * Otherwise proxy URL is `/api/media/{bucket}/{key...}` (path segments encoded per segment).
  */
-function buildStoredMediaUrl(key: string): string {
+export function buildPublicMediaUrl(key: string): string {
   const base = process.env.MINIO_PUBLIC_BASE_URL?.replace(/\/$/, "");
   if (base) {
-    return `${base}/${MINIO_BUCKET}/${encodeObjectKeyForUrlPath(key)}`;
+    return `${base}/${MINIO_BUCKET}/${encodeMediaKeyPathSegments(key)}`;
   }
-  return `${MEDIA_API_PATH}?path=${encodeURIComponent(key)}`;
+  const apiBase = MEDIA_API_PATH.replace(/\/$/, "");
+  return `${apiBase}/${MINIO_BUCKET}/${encodeMediaKeyPathSegments(key)}`;
 }
 
 export async function uploadImage(
@@ -78,7 +83,19 @@ export async function uploadImage(
     "Content-Type": mimeType,
   });
 
-  return { key, url: buildStoredMediaUrl(key) };
+  return { key, url: buildPublicMediaUrl(key) };
+}
+
+/** Upload bytes to an explicit object key (gallery layout). */
+export async function uploadImageAtKey(
+  buffer: Buffer,
+  key: string,
+  mimeType: string
+): Promise<{ key: string; url: string }> {
+  await minioClient.putObject(MINIO_BUCKET, key, buffer, buffer.length, {
+    "Content-Type": mimeType,
+  });
+  return { key, url: buildPublicMediaUrl(key) };
 }
 
 export async function deleteImage(key: string): Promise<void> {
@@ -94,7 +111,7 @@ export async function uploadIntroductionVideo(
   await minioClient.putObject(MINIO_BUCKET, key, buffer, buffer.length, {
     "Content-Type": mimeType,
   });
-  return { key, url: buildStoredMediaUrl(key) };
+  return { key, url: buildPublicMediaUrl(key) };
 }
 
 function generateKeyForMedia(originalName: string): string {

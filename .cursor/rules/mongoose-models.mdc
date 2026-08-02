@@ -1,0 +1,34 @@
+---
+description: Mongoose model patterns — Schema typing, discriminators, build helpers
+globs: "**/models/**/*.ts"
+alwaysApply: false
+---
+
+# Mongoose models (this repo)
+
+## File shape
+
+1. **`XAttrs`** — Attributes accepted when creating/updating (input shape). For discriminators, set `type` to the literal enum member (e.g. `ProductTypeEnum.RACKET`).
+2. **`XDoc`** — Document type: extends `Document` or a shared base doc interface; mirrors persisted fields.
+3. **`XModel` (optional)** — `extends Model<XDoc>` only when you add **statics** (e.g. `build`).
+4. **`Schema<XDoc>`** — Pass the document interface as the generic. Use `enum: Object.values(SomeEnum)` for string enums from `@tabletennisshop/common`.
+5. **Export** — `mongoose.model<XDoc>(...)` or `ParentModel.discriminator<XDoc, XModel>(...)`.
+
+## Base model + discriminators (product domain)
+
+- **Base schema options** use `discriminatorKey`, explicit `collection` name, and `timestamps: true` when you need `createdAt` / `updatedAt` ([product.model.ts](product/src/models/product.model.ts)).
+- **Optimistic concurrency:** set `versionKey: 'version'` and use `updateIfCurrentPlugin` on the base schema when the service relies on `version` for updates.
+- **Child types** with no extra fields: empty `new Schema<ChildDoc>({})`, then `ProductModel.discriminator<ChildDoc, ChildModel>(ProductTypeEnum.X, schema)`.
+- **`statics.build`:** assign on the child schema so `RacketModel.build(attrs)` returns a typed document ([racket.model.ts](product/src/models/racket.model.ts)).
+
+## Factory across types (avoid circular imports)
+
+- Central **switch** factories (e.g. `buildProduct`) that reference every discriminator should use **lazy `require('./child.model')`** inside the function so model files do not import each other at top level ([product.model.ts](product/src/models/product.model.ts)).
+
+## Hooks
+
+- In `pre` / `post` hooks that use `this` as the document, use a **regular `function`**, not an arrow function.
+
+## Errors
+
+- For user-facing validation failures from model helpers, throw **`CustomError` subclasses** (see [exception-handling.mdc](.cursor/rules/exception-handling.mdc)), not raw `Error`, when the failure should map to an HTTP response.

@@ -1,17 +1,11 @@
 import { SubjectsEnum } from "../enums/event-subject.enum";
 import { ProductStatusEnum } from "../enums/product-status.enum";
 
-interface ProductImageAttrs {
-  key: string;
-  url: string;
-}
-
 interface ProductAttrs{
-  _id: string,
-  status: ProductStatusEnum,
-  price: number,
-  version: number,
-  images?: ProductImageAttrs[],
+    _id: string,
+    status: ProductStatusEnum,
+    price: number,
+    version: number,
 }
 
 export interface ProductUpdatedEventInterface{

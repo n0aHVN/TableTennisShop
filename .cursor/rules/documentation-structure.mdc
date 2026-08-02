@@ -1,0 +1,37 @@
+---
+description: Banking-lite documentation taxonomy for Document/ — keep docs structured and up to date
+globs: Document/**/*
+alwaysApply: false
+---
+
+# Documentation structure (banking-lite)
+
+All project documentation lives under `Document/` using this taxonomy. Do not dump new long-form docs at the `Document/` root except `README.md`.
+
+## Taxonomy
+
+| Folder | Purpose | Audience |
+|--------|---------|----------|
+| `01-business/` | BRD, FRD, NFR — why/what, acceptance criteria | PM, BA, stakeholders |
+| `02-architecture/` | System C4-ish overview, events, infra, ADRs | Architects, seniors |
+| `03-security/` | Security baseline, access matrix, payment controls | Security, leads |
+| `04-services/` | Per-microservice tech handbooks (API, model, events, deploy) | Developers |
+| `05-operations/` | Runbooks, test strategy, incident notes | DevOps, on-call |
+| `06-data/` | Data dictionary, PII/retention | Data, compliance |
+| `assets/` | Diagrams (drawio, images) | All |
+
+## Rules when editing
+
+1. **Update `Document/README.md` index** when adding/removing/renaming a doc.
+2. **Service handbooks** stay in `04-services/` with a stable template: Overview → Run → Domain flows → API → Data model → Events → Structure → Deploy → Testing → Risks.
+3. **ADRs** go in `02-architecture/adr/ADR-NNN-short-title.md` (accepted/superseded status in header).
+4. **Do not** put secrets, prod credentials, or real PII samples in docs.
+5. Prefer linking to OpenAPI (when present) over duplicating every field in Markdown.
+6. Client stack is **Next.js** (not Angular) — keep `04-services/CLIENT_DOCUMENT.md` accurate.
+7. Payment/order money paths must mention controls: no raw card storage, audit intent, reconciliation gaps explicitly.
+
+## Language
+
+- Technical service docs may stay English (existing corpus).
+- Business/security/ops index pages may be Vietnamese or bilingual; keep headings consistent within each file.
+---

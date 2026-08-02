@@ -1,7 +1,13 @@
 import { body, param } from "express-validator";
-import { routeParam, ApiResponse, ProductTypeEnum } from "@tabletennisshop/common";
+import {
+  routeParam,
+  ApiResponse,
+  ProductTypeEnum,
+  ProductStatusEnum,
+} from "@tabletennisshop/common";
 import { ProductService } from "../services/product.service";
 import { ProductModel, ProductDoc } from "../models/product.model";
+import { attachGalleryUrls } from "../utils/product-gallery";
 import { Request, Response } from "express";
 import { natsWrapper } from "../NatsWrapper";
 import { ProductCreatedPublisher } from "../events/publishers/ProductCreatedPublisher";
@@ -18,20 +24,34 @@ export class ProductController {
       .withMessage("Type is required")
       .isIn(Object.values(ProductTypeEnum))
       .withMessage("Type must be one of: " + Object.values(ProductTypeEnum).join(", ")),
-    body("attributes").isArray().withMessage("Attributes must be an array"),
+    body("attributes").isObject().withMessage("Attributes must be a JSON object"),
     body("price").isNumeric().withMessage("Price must be a number"),
+    body("status")
+      .optional()
+      .isString()
+      .isIn(Object.values(ProductStatusEnum))
+      .withMessage(
+        "Status must be one of: " + Object.values(ProductStatusEnum).join(", ")
+      ),
   ];
 
   static readonly putProductValidation = [
     param("id").isMongoId().withMessage("Invalid product ID"),
     body("version").isNumeric().withMessage("Version must be a number"),
+    body("status")
+      .optional()
+      .isString()
+      .isIn(Object.values(ProductStatusEnum))
+      .withMessage(
+        "Status must be one of: " + Object.values(ProductStatusEnum).join(", ")
+      ),
   ];
 
   static async getProductBySlug(req: Request, res: Response) {
     const slug = routeParam(req, "slug");
     const product = await ProductService.getProductBaseOnSlug({ slug });
     res.status(200).send({
-      product,
+      product: attachGalleryUrls(product),
     });
   }
 
@@ -68,7 +88,7 @@ export class ProductController {
     res.status(201).json(response);
   }
 
-  static async putProduct(req: Request, res: Response<ApiResponse<ProductDoc>>) {
+  static async putProduct(req: Request, res: Response<ApiResponse>) {
     const id = routeParam(req, "id");
     const body = req.body;
 
@@ -79,7 +99,7 @@ export class ProductController {
 
     res.status(200).send({
       statusCode: 200,
-      data: updatedProduct,
+      data: attachGalleryUrls(updatedProduct),
       success: true,
     });
   }

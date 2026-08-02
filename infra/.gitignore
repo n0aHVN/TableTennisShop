@@ -1,3 +1,7 @@
 keys
 secret.bat
 miniopass.txt
+
+# Local bind-mount data (MinIO + MongoDB) — keep infra/data/.gitkeep only
+data/**
+!data/.gitkeep

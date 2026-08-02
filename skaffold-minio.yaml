@@ -14,10 +14,11 @@ portForward:
   - resourceType: service
     resourceName: product-service
     port: 3000
-    localPort: 3000
+    localPort: 3002
 build:
   local:
     push: false
+    concurrency: 1
   artifacts:
     - image: nguyennoah/product-ttshop
       context: .
@@ -44,4 +45,15 @@ deploy:
             command: ["docker", "pull", "mongo:8.0.10-rc0"]
         - host:
             command: ["docker", "pull", "docker.io/library/nats-streaming:0.17.0"]
+        - host:
+            command:
+              [
+                "kubectl",
+                "wait",
+                "--namespace=ingress-nginx",
+                "--for=condition=ready",
+                "pod",
+                "--selector=app.kubernetes.io/component=controller",
+                "--timeout=180s",
+              ]
   statusCheckDeadlineSeconds: 600

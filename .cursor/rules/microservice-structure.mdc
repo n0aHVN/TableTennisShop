@@ -1,0 +1,23 @@
+---
+description: Microservice src layout — controllers, models, routes, services
+alwaysApply: true
+---
+
+# Microservice folder structure
+
+Each backend microservice (e.g. `auth/`, `product/`, `order/`) keeps domain code under `src/` using these layers:
+
+| Folder | Role |
+|--------|------|
+| **controllers** | HTTP handlers: parse request, call services, send response. No heavy business logic. |
+| **models** | Mongoose schemas / document types for this service’s MongoDB collections. |
+| **routes** | Express routers: wire paths and middleware to controller functions. |
+| **services** | Business logic, orchestration, calls to models and external systems. |
+
+## Conventions
+
+- **New code:** Prefer a **`controllers/`** directory name (plural). Some older services use **`controller/`** (singular); follow the folder that already exists in that service—do not rename in drive-by changes.
+- **Cross-cutting** pieces stay alongside as needed: `utils/`, `events/`, `test/`, `app.ts`, `index.ts`.
+- **Tests:** Colocate under `routes/__test__/`, `services/__test__/`, or next to files as the service already does.
+
+When adding a feature, touch routes → controller → service → model in that dependency direction (routes depend on controllers; controllers depend on services; services depend on models).

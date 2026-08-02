@@ -2,10 +2,13 @@
 import { ProductTypeEnum, ProductStatusEnum } from '@tabletennisshop/common';
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-/** MinIO object reference (bucket key + public URL). */
-export interface ProductImage {
-  key: string;
-  url: string;
+import "./image.model";
+
+/** Gallery entry: refs Image collection + ordering / primary flag. */
+export interface ProductGalleryEntry {
+  imageId: Types.ObjectId;
+  order: number;
+  isPrimary?: boolean;
 }
 
 /** Introduction / marketing video stored in MinIO (same shape as images). */
@@ -14,6 +17,9 @@ export interface IntroductionVideo {
   url: string;
 }
 
+/** Arbitrary key-value specs (blade weight, size chart refs, sponge hardness, etc.). */
+export type ProductAttributes = Record<string, unknown>;
+
 export interface ProductAttrsBase {
   name: string,
   slug: string,
@@ -21,13 +27,13 @@ export interface ProductAttrsBase {
   description: string,
   sport: string,
   type: ProductTypeEnum,
-  attributes?: any,
+  attributes?: ProductAttributes,
   price: number,
   status: ProductStatusEnum,
   /** Optional logical prefix for this product's objects in the MinIO bucket (e.g. `products/abc123/`). */
   minioPrefix?: string,
-  /** Gallery photos in MinIO (multiple). */
-  images?: ProductImage[],
+  /** Gallery refs to Image documents. */
+  images?: ProductGalleryEntry[],
   /** Introduction / promo videos in MinIO (multiple). */
   introductionVideos?: IntroductionVideo[],
 }
@@ -40,11 +46,11 @@ export interface ProductDoc extends Document {
   description: string,
   type: ProductTypeEnum,
   sport: string,
-  attributes?: any,
+  attributes: ProductAttributes,
   status: ProductStatusEnum,
   price: number,
   minioPrefix?: string,
-  images: ProductImage[],
+  images: ProductGalleryEntry[],
   introductionVideos: IntroductionVideo[],
   createdAt: Date,
   updatedAt: Date,
@@ -71,12 +77,16 @@ const ProductSchema = new Schema<ProductDoc>({
   description: { type: String, required: false },
   type: { type: String, enum: Object.values(ProductTypeEnum), required: true }, // Discriminator key
   sport: { type: String, required: true },
-  attributes: { type: [Schema.Types.Mixed], required: false },
+  attributes: { type: Schema.Types.Mixed, required: false, default: {} },
   status: { type: String, enum: Object.values(ProductStatusEnum), default: ProductStatusEnum.OUT_OF_STOCK },
   price: { type: Number, required: true },
   minioPrefix: { type: String, required: false },
   images: {
-    type: [{ key: { type: String, required: true }, url: { type: String, required: true } }],
+    type: [{
+      imageId: { type: Schema.Types.ObjectId, ref: 'Image', required: true },
+      order: { type: Number, required: true },
+      isPrimary: { type: Boolean, default: false },
+    }],
     default: [],
   },
   introductionVideos: {
@@ -95,6 +105,15 @@ ProductSchema.pre<ProductDoc>("save", async function (next) {
   }
   next();
 });
+
+// ProductSchema.pre<ProductDoc>("save", function (next) {
+//   const imgs = this.images ?? [];
+//   const primaryCount = imgs.filter((e) => e.isPrimary).length;
+//   if (primaryCount > 1) {
+//     return next(new Error("Product may have at most one primary gallery image"));
+//   }
+//   next();
+// });
 
 export const ProductModel = mongoose.model<ProductDoc>('Product', ProductSchema);
 

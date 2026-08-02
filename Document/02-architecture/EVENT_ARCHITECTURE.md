@@ -1,5 +1,7 @@
 # Event-Driven Architecture Documentation
 
+> **Taxonomy:** `Document/02-architecture/` · Index: [../README.md](../README.md) · Related: [SYSTEM_ARCHITECTURE.md](./SYSTEM_ARCHITECTURE.md), [adr/](./adr/)
+
 This document describes the cross-service event flow, event catalog, and messaging patterns used in TableTennisShop.
 
 ---

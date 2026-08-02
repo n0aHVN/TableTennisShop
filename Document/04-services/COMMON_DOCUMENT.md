@@ -1,4 +1,7 @@
-# Common Package Documentation
+﻿# Common Package Documentation
+
+> **Taxonomy:** `Document/04-services/` · Index: [../README.md](../README.md)
+
 
 This document describes the `@tabletennisshop/common` shared package, which provides enums, event interfaces, middleware, error classes, and types used across all microservices.
 
@@ -42,13 +45,13 @@ NATS event subjects used across all services.
 | `UserCreated` | `user:created` | (reserved) |
 | `UserUpdated` | `user:updated` | (reserved) |
 | `UserDeleted` | `user:deleted` | (reserved) |
-| `ProductCreated` | `product:created` | product → order, inventory |
-| `ProductUpdated` | `product:updated` | product → order |
+| `ProductCreated` | `product:created` | product â†’ order, inventory |
+| `ProductUpdated` | `product:updated` | product â†’ order |
 | `ProductDeleted` | `product:deleted` | (reserved) |
-| `OrderCreated` | `order:created` | order → payment, inventory, expiration |
-| `OrderUpdated` | `order:updated` | order → payment |
-| `OrderCancelled` | `order:cancelled` | order → payment |
-| `OrderExpired` | `order:expired` | expiration → order |
+| `OrderCreated` | `order:created` | order â†’ payment, inventory, expiration |
+| `OrderUpdated` | `order:updated` | order â†’ payment |
+| `OrderCancelled` | `order:cancelled` | order â†’ payment |
+| `OrderExpired` | `order:expired` | expiration â†’ order |
 | `TokenCreated` | `token:created` | (reserved) |
 | `TokenUpdated` | `token:updated` | (reserved) |
 | `TokenDeleted` | `token:deleted` | (reserved) |
@@ -59,16 +62,16 @@ NATS event subjects used across all services.
 | `RatingCreated` | `rating:created` | (reserved) |
 | `RatingUpdated` | `rating:updated` | (reserved) |
 | `RatingDeleted` | `rating:deleted` | (reserved) |
-| `InventoryCreated` | `inventory:created` | inventory → product, order |
-| `InventoryUpdated` | `inventory:updated` | inventory → product, order |
+| `InventoryCreated` | `inventory:created` | inventory â†’ product, order |
+| `InventoryUpdated` | `inventory:updated` | inventory â†’ product, order |
 | `InventoryDeleted` | `inventory:deleted` | (reserved) |
-| `PaymentCreated` | `payment:created` | payment → order |
+| `PaymentCreated` | `payment:created` | payment â†’ order |
 | `PaymentUpdated` | `payment:updated` | (reserved) |
 | `PaymentExpired` | `payment:expired` | (reserved) |
 | `PaymentCompleted` | `payment:completed` | (reserved) |
 | `ImportCreated` | `import:created` | (reserved) |
-| `ImportItemCreated` | `import-item:created` | inventory → order |
-| `ImportItemUpdated` | `import-item:updated` | inventory → order |
+| `ImportItemCreated` | `import-item:created` | inventory â†’ order |
+| `ImportItemUpdated` | `import-item:updated` | inventory â†’ order |
 
 > Subjects marked as "(reserved)" are defined in the enum but not currently used by any listener or publisher.
 
@@ -439,36 +442,36 @@ type ApiResponse<T = unknown> = {
 
 ```
 common/
-├── enums/
-│   ├── event-subject.enum.ts     # SubjectsEnum
-│   ├── role.enum.ts              # RoleEnum
-│   ├── user-status.enum.ts       # UserStatusEnum
-│   ├── order-status.enum.ts      # OrderStatusEnum
-│   ├── product-type.enum.ts      # ProductTypeEnum
-│   ├── product-status.enum.ts    # ProductStatusEnum
-│   ├── payment-method.enum.ts    # PaymentMethodEnum
-│   └── import-item-status.enum.ts # ImportItemStatusEnum
-├── events/
-│   ├── ListenerAbstract.ts       # Base listener class
-│   ├── PublisherAbstract.ts      # Base publisher class
-│   ├── OrderEventInterface.ts    # Order event types
-│   ├── ProductEventInterface.ts  # Product event types
-│   ├── InventoryEventInterface.ts # Inventory event types
-│   ├── ImportEventInterface.ts   # Import event types
-│   └── PaymentEventInterface.ts  # Payment event types
-├── middlewares/
-│   ├── current-user-middleware.ts
-│   ├── check-authorized-middleware.ts
-│   ├── check-type.middleware.ts
-│   ├── validate-request-middleware.ts
-│   └── error-handler.ts
-├── errors/
-│   ├── custom-error.ts
-│   ├── bad-request-error.ts
-│   ├── not-found-error.ts
-│   ├── not-authorized-error.ts
-│   └── request-validate-error.ts
-├── types/
-│   └── base.ts                   # ApiResponse type
-└── index.ts                      # Barrel export
+â”œâ”€â”€ enums/
+â”‚   â”œâ”€â”€ event-subject.enum.ts     # SubjectsEnum
+â”‚   â”œâ”€â”€ role.enum.ts              # RoleEnum
+â”‚   â”œâ”€â”€ user-status.enum.ts       # UserStatusEnum
+â”‚   â”œâ”€â”€ order-status.enum.ts      # OrderStatusEnum
+â”‚   â”œâ”€â”€ product-type.enum.ts      # ProductTypeEnum
+â”‚   â”œâ”€â”€ product-status.enum.ts    # ProductStatusEnum
+â”‚   â”œâ”€â”€ payment-method.enum.ts    # PaymentMethodEnum
+â”‚   â””â”€â”€ import-item-status.enum.ts # ImportItemStatusEnum
+â”œâ”€â”€ events/
+â”‚   â”œâ”€â”€ ListenerAbstract.ts       # Base listener class
+â”‚   â”œâ”€â”€ PublisherAbstract.ts      # Base publisher class
+â”‚   â”œâ”€â”€ OrderEventInterface.ts    # Order event types
+â”‚   â”œâ”€â”€ ProductEventInterface.ts  # Product event types
+â”‚   â”œâ”€â”€ InventoryEventInterface.ts # Inventory event types
+â”‚   â”œâ”€â”€ ImportEventInterface.ts   # Import event types
+â”‚   â””â”€â”€ PaymentEventInterface.ts  # Payment event types
+â”œâ”€â”€ middlewares/
+â”‚   â”œâ”€â”€ current-user-middleware.ts
+â”‚   â”œâ”€â”€ check-authorized-middleware.ts
+â”‚   â”œâ”€â”€ check-type.middleware.ts
+â”‚   â”œâ”€â”€ validate-request-middleware.ts
+â”‚   â””â”€â”€ error-handler.ts
+â”œâ”€â”€ errors/
+â”‚   â”œâ”€â”€ custom-error.ts
+â”‚   â”œâ”€â”€ bad-request-error.ts
+â”‚   â”œâ”€â”€ not-found-error.ts
+â”‚   â”œâ”€â”€ not-authorized-error.ts
+â”‚   â””â”€â”€ request-validate-error.ts
+â”œâ”€â”€ types/
+â”‚   â””â”€â”€ base.ts                   # ApiResponse type
+â””â”€â”€ index.ts                      # Barrel export
 ```

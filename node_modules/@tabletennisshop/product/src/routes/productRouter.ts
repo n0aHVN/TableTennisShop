@@ -3,6 +3,8 @@ import { ProductController } from "../controller/product.controller";
 import {
   addIntroductionVideos,
   addProductImages,
+  MAX_PRODUCT_IMAGES,
+  MAX_PRODUCT_VIDEOS,
   removeIntroductionVideo,
   removeProductImage,
   upload,
@@ -46,13 +48,17 @@ productRouter.put(
   ProductController.putProduct
 );
 
-productRouter.post("/api/products/:id/images", upload.array("images", 5), addProductImages);
+productRouter.post(
+  "/api/products/:id/images",
+  upload.array("images", MAX_PRODUCT_IMAGES),
+  addProductImages
+);
 
-productRouter.delete("/api/products/:id/images/:key", removeProductImage);
+productRouter.delete("/api/products/:id/images/:imageId", removeProductImage);
 
 productRouter.post(
   "/api/products/:id/videos",
-  uploadVideoMulter.array("videos", 5),
+  uploadVideoMulter.array("videos", MAX_PRODUCT_VIDEOS),
   addIntroductionVideos
 );
 

@@ -1,4 +1,7 @@
-# Expiration Service Documentation
+﻿# Expiration Service Documentation
+
+> **Taxonomy:** `Document/04-services/` · Index: [../README.md](../README.md)
+
 
 This document describes the architecture, event flow, and deployment of the Expiration background worker in TableTennisShop.
 
@@ -48,21 +51,21 @@ The expiration service implements a delayed-job pattern:
 
 ```
 OrderCreated event
-  │
-  ▼
+  â”‚
+  â–¼
 OrderCreatedListener
-  │  calculates: delay = expiresAt - now
-  ▼
+  â”‚  calculates: delay = expiresAt - now
+  â–¼
 Bull Queue ("order:expiration")
-  │  schedules delayed job with { orderId }
-  │  waits for delay period
-  ▼
+  â”‚  schedules delayed job with { orderId }
+  â”‚  waits for delay period
+  â–¼
 Queue Processor
-  │  fires when delay elapses
-  ▼
+  â”‚  fires when delay elapses
+  â–¼
 ExpirationCompletePublisher
-  │  publishes OrderExpired event with { _id: orderId }
-  ▼
+  â”‚  publishes OrderExpired event with { _id: orderId }
+  â–¼
 Order Service (OrderExpiredCompleteListener)
      cancels the order if not already FINISHED
 ```
@@ -105,17 +108,17 @@ Order Service (OrderExpiredCompleteListener)
 
 ```
 expiration/src/
-├── index.ts                # Startup, env checks, NATS connect
-├── NatsWrapper.ts          # NATS Streaming client singleton
-├── queues/
-│   └── expiration-queue.ts # Bull queue definition + processor
-├── events/
-│   ├── listeneres/         # (note: misspelled folder name)
-│   │   ├── OrderCreatedListener.ts
-│   │   └── queueGroupName.ts
-│   └── publishers/
-│       └── OrderExpiredCompletePublisher.ts
-└── __mocks__/              # Test mocks
+â”œâ”€â”€ index.ts                # Startup, env checks, NATS connect
+â”œâ”€â”€ NatsWrapper.ts          # NATS Streaming client singleton
+â”œâ”€â”€ queues/
+â”‚   â””â”€â”€ expiration-queue.ts # Bull queue definition + processor
+â”œâ”€â”€ events/
+â”‚   â”œâ”€â”€ listeneres/         # (note: misspelled folder name)
+â”‚   â”‚   â”œâ”€â”€ OrderCreatedListener.ts
+â”‚   â”‚   â””â”€â”€ queueGroupName.ts
+â”‚   â””â”€â”€ publishers/
+â”‚       â””â”€â”€ OrderExpiredCompletePublisher.ts
+â””â”€â”€ __mocks__/              # Test mocks
 ```
 
 > **Known naming issues:**

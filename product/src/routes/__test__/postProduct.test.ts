@@ -12,7 +12,7 @@ it('creates a product and publishes an event', async () => {
         description: "A test shirt product",
         sport: "table-tennis",
         type: ProductTypeEnum.SHIRT, // or ProductTypeEnum.RACKET, etc.
-        attributes: [],
+        attributes: {},
         price: 199000,
         status: ProductStatusEnum.OUT_OF_STOCK,
 

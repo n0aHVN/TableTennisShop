@@ -1,9 +1,11 @@
 import express from "express";
-import { getLandingHeroVideo, getProductMedia } from "../controller/productMedia.controller";
+import { getMinioMediaByPath, rejectMediaPathMissingKey } from "../controller/productMedia.controller";
 
 const minioRouter = express.Router();
 
-minioRouter.get("/api/media/landing/hero-video", getLandingHeroVideo);
-minioRouter.get("/api/media", getProductMedia);
+/** GET `/api/media/{bucket}` — object key is required; use `/api/media/{bucket}/{key...}`. */
+minioRouter.get("/api/media/:bucket", rejectMediaPathMissingKey);
+/** GET `/api/media/{bucket}/{key...}` — stream object from MinIO (bucket + path key only). */
+minioRouter.get(/^\/api\/media\/[^/]+\/.+$/, getMinioMediaByPath);
 
 export { minioRouter };

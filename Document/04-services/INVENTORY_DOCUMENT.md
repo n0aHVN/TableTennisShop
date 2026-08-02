@@ -1,4 +1,7 @@
-# Inventory Service Documentation
+﻿# Inventory Service Documentation
+
+> **Taxonomy:** `Document/04-services/` · Index: [../README.md](../README.md)
+
 
 This document describes the architecture, APIs, events, and deployment of the Inventory microservice in TableTennisShop.
 
@@ -50,7 +53,7 @@ Base prefix: `/api/inventory`
 | **Method** | `POST` |
 | **Path** | `/api/inventory` |
 | **Auth** | Cookie session (JWT) |
-| **Middleware** | `createInventoryValidator` → `ValidateRequestMiddleware` |
+| **Middleware** | `createInventoryValidator` â†’ `ValidateRequestMiddleware` |
 
 **Validation Rules:**
 
@@ -316,9 +319,9 @@ Tracks each individual physical unit. Every item has a unique `item_code` (facto
 
 **Indexes:**
 
-- `{ product_id: 1, status: 1, createdAt: 1 }` — FIFO assignment queries
-- `{ order_id: 1 }` — Release items on order cancellation
-- `{ item_code: 1 }` — Unique index
+- `{ product_id: 1, status: 1, createdAt: 1 }` â€” FIFO assignment queries
+- `{ order_id: 1 }` â€” Release items on order cancellation
+- `{ item_code: 1 }` â€” Unique index
 
 ### Design Notes
 
@@ -338,7 +341,7 @@ Tracks each individual physical unit. Every item has a unique `item_code` (facto
 | **Method** | `POST` |
 | **Path** | `/api/inventory/import` |
 | **Auth** | Cookie session (JWT) |
-| **Middleware** | `createImportValidator` → `ValidateRequestMiddleware` |
+| **Middleware** | `createImportValidator` â†’ `ValidateRequestMiddleware` |
 
 **Validation Rules:**
 
@@ -397,8 +400,8 @@ Tracks each individual physical unit. Every item has a unique `item_code` (facto
 - Publishes `InventoryUpdated` event.
 
 **Error responses:**
-- `400` — `item_codes` length doesn't match `quantity`.
-- `400` — Duplicate item codes found in database.
+- `400` â€” `item_codes` length doesn't match `quantity`.
+- `400` â€” Duplicate item codes found in database.
 
 ---
 
@@ -460,28 +463,28 @@ Returns only `in_stock` items for a product, sorted oldest first (FIFO order).
 
 ```
 inventory/src/
-├── app.ts              # Express app setup
-├── index.ts            # Startup, env checks, MongoDB + NATS connect
-├── NatsWrapper.ts      # NATS Streaming client singleton
-├── routes/             # Route definitions
-├── controller/         # Endpoint handlers + validation rules
-│   ├── createInventory.controller.ts
-│   ├── getInventoryByProductId.controller.ts
-│   ├── addItem.controller.ts
-│   ├── subjectItem.controller.ts
-│   ├── updateInventory.controller.ts
-│   ├── createImport.controller.ts
-│   └── getImportItems.controller.ts
-├── service/            # Business logic
-│   ├── inventory.service.ts
-│   └── import.service.ts
-├── models/             # Mongoose schemas
-│   ├── inventory.model.ts
-│   ├── import.model.ts
-│   └── import-item.model.ts
-└── events/
-    ├── listeners/      # NATS event listeners
-    └── publisher/      # NATS event publishers
+â”œâ”€â”€ app.ts              # Express app setup
+â”œâ”€â”€ index.ts            # Startup, env checks, MongoDB + NATS connect
+â”œâ”€â”€ NatsWrapper.ts      # NATS Streaming client singleton
+â”œâ”€â”€ routes/             # Route definitions
+â”œâ”€â”€ controller/         # Endpoint handlers + validation rules
+â”‚   â”œâ”€â”€ createInventory.controller.ts
+â”‚   â”œâ”€â”€ getInventoryByProductId.controller.ts
+â”‚   â”œâ”€â”€ addItem.controller.ts
+â”‚   â”œâ”€â”€ subjectItem.controller.ts
+â”‚   â”œâ”€â”€ updateInventory.controller.ts
+â”‚   â”œâ”€â”€ createImport.controller.ts
+â”‚   â””â”€â”€ getImportItems.controller.ts
+â”œâ”€â”€ service/            # Business logic
+â”‚   â”œâ”€â”€ inventory.service.ts
+â”‚   â””â”€â”€ import.service.ts
+â”œâ”€â”€ models/             # Mongoose schemas
+â”‚   â”œâ”€â”€ inventory.model.ts
+â”‚   â”œâ”€â”€ import.model.ts
+â”‚   â””â”€â”€ import-item.model.ts
+â””â”€â”€ events/
+    â”œâ”€â”€ listeners/      # NATS event listeners
+    â””â”€â”€ publisher/      # NATS event publishers
 ```
 
 ---

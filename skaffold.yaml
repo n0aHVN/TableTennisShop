@@ -2,7 +2,44 @@ apiVersion: skaffold/v4beta9
 kind: Config
 metadata:
   name: TableTennisShop
+# All app services use port 3000 in-cluster; localPort must differ per service.
 portForward:
+  - resourceType: service
+    resourceName: client-service
+    port: 3000
+    localPort: 3000
+  - resourceType: service
+    resourceName: auth-service
+    port: 3000
+    localPort: 3001
+  - resourceType: service
+    resourceName: product-service
+    port: 3000
+    localPort: 3002
+  - resourceType: service
+    resourceName: order-service
+    port: 3000
+    localPort: 3003
+  - resourceType: service
+    resourceName: inventory-service
+    port: 3000
+    localPort: 3004
+  - resourceType: service
+    resourceName: payment-service
+    port: 3000
+    localPort: 3005
+  - resourceType: service
+    resourceName: expiration-service
+    port: 3000
+    localPort: 3006
+  - resourceType: service
+    resourceName: config-service
+    port: 3000
+    localPort: 3007
+  - resourceType: service
+    resourceName: expiration-redis-svc
+    port: 6379
+    localPort: 6379
   - resourceType: service
     resourceName: minio-srv
     port: 9000
@@ -14,7 +51,7 @@ portForward:
 build:
   local:
     push: false
-    concurrency: 4
+    concurrency: 1
   artifacts:
   # Auth (context: repo root so file:../common resolves in the image)
     - image: nguyennoah/auth-ttshop
@@ -73,4 +110,16 @@ deploy:
             command: ["docker", "pull", "docker.io/library/nats-streaming:0.17.0"]
         - host:
             command: ["docker", "pull", "minio/minio"]
+        # Admission webhook refuses Ingress until the controller is Ready
+        - host:
+            command:
+              [
+                "kubectl",
+                "wait",
+                "--namespace=ingress-nginx",
+                "--for=condition=ready",
+                "pod",
+                "--selector=app.kubernetes.io/component=controller",
+                "--timeout=180s",
+              ]
   statusCheckDeadlineSeconds: 600

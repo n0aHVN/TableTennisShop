@@ -1,5 +1,7 @@
 # Order Service Documentation
 
+> **Taxonomy:** `Document/04-services/` · FRD: [../01-business/FRD.md](../01-business/FRD.md) · Events: [../02-architecture/EVENT_ARCHITECTURE.md](../02-architecture/EVENT_ARCHITECTURE.md) · Index: [../README.md](../README.md)
+
 This document describes the architecture, APIs, events, analytics, and deployment of the Order microservice in TableTennisShop.
 
 ---

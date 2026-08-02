@@ -15,7 +15,7 @@ type UpdateProductAttrs = Omit<
 
 export class ProductService{
     static async getProductBaseOnSlug({slug}:{slug: string}): Promise<ProductDoc|null>{
-        return await ProductModel.findOne({slug});
+        return await ProductModel.findOne({ slug }).populate("images.imageId");
     }
     static async pagingAllProducts({page, limit}:{page: number, limit: number}){
         const total = await ProductModel.countDocuments();
@@ -51,7 +51,6 @@ export class ProductService{
         if (data.attributes !== undefined) productDoc.attributes = data.attributes;
         if (data.slug !== undefined) productDoc.slug = data.slug;
         if (data.minioPrefix !== undefined) productDoc.minioPrefix = data.minioPrefix;
-        if (data.images !== undefined) productDoc.images = data.images as ProductDoc["images"];
         if (data.introductionVideos !== undefined) {
             productDoc.introductionVideos = data.introductionVideos as ProductDoc["introductionVideos"];
         }
@@ -70,6 +69,7 @@ export class ProductService{
             version: productDoc.version
         });
 
-        return productDoc;
+        const populated = await ProductModel.findById(productDoc._id).populate("images.imageId");
+        return populated!;
     }
 }

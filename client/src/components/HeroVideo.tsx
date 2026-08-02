@@ -2,14 +2,17 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-
-const HERO_VIDEO_PATH = "/api/media/landing/hero-video";
+import { proxiedMediaPath } from "@/lib/media-url";
 
 function heroVideoSrc(): string {
-  const full = process.env.NEXT_PUBLIC_HERO_VIDEO_URL;
-  if (full) return full;
-  const origin = process.env.NEXT_PUBLIC_PRODUCT_API_ORIGIN?.replace(/\/$/, "") ?? "";
-  return origin ? `${origin}${HERO_VIDEO_PATH}` : HERO_VIDEO_PATH;
+  const fullOverride = process.env.NEXT_PUBLIC_HERO_VIDEO_URL;
+  if (fullOverride) return fullOverride;
+  const bucket = process.env.NEXT_PUBLIC_MINIO_BUCKET ?? "landing";
+  const objectKey =
+    process.env.NEXT_PUBLIC_HERO_VIDEO_OBJECT_KEY ?? "FocusWithin.mp4";
+
+  const path = proxiedMediaPath(bucket, objectKey);
+  return path;
 }
 
 export function HeroVideo() {

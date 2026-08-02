@@ -1,14 +1,13 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: minio-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
+# MinIO stores objects under /data in the container.
+#
+# hostPath maps to Windows Explorer path:
+#   D:\LapTrinh\TableTennisShop\infra\data\minio
+# Keep this separate from infra/data/mongo-* so Mongo dirs are not inside MinIO's backend root
+# (otherwise MinIO lists them as bogus buckets).
+#
+# Docker Desktop for Windows exposes host folders under /run/desktop/mnt/host/<drive>/...
+# On Linux/minikube/kind, change hostPath.path to a Linux path on that node.
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,5 +46,6 @@ spec:
               mountPath: /data
       volumes:
         - name: minio-storage
-          persistentVolumeClaim:
-            claimName: minio-pvc
+          hostPath:
+            path: /run/desktop/mnt/host/d/LapTrinh/TableTennisShop/infra/data/minio
+            type: DirectoryOrCreate

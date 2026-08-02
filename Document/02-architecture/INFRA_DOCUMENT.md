@@ -1,5 +1,7 @@
 # Infrastructure Documentation
 
+> **Taxonomy:** `Document/02-architecture/` · Index: [../README.md](../README.md) · Ops: [../05-operations/RUNBOOK.md](../05-operations/RUNBOOK.md)
+
 This document describes the Kubernetes infrastructure, secret management, ingress routing, and deployment orchestration for TableTennisShop.
 
 ---

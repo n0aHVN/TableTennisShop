@@ -1,4 +1,7 @@
-# Auth Service Documentation
+﻿# Auth Service Documentation
+
+> **Taxonomy:** `Document/04-services/` · Index: [../README.md](../README.md)
+
 
 This document describes the architecture, APIs, data model, and deployment of the Auth microservice in TableTennisShop.
 
@@ -79,15 +82,15 @@ HelloWorld
 | **Method** | `POST` |
 | **Path** | `/api/users/signup` |
 | **Auth** | None |
-| **Middleware** | `signupValidationRules` → `ValidateRequestMiddleware` |
+| **Middleware** | `signupValidationRules` â†’ `ValidateRequestMiddleware` |
 
 **Validation Rules:**
 
 | Field | Rules |
 |-------|-------|
-| `username` | Required, string, length 4–100 |
+| `username` | Required, string, length 4â€“100 |
 | `email` | Required, valid email format |
-| `password` | Required, trimmed, length 4–20 |
+| `password` | Required, trimmed, length 4â€“20 |
 | `full_name` | Required |
 | `address` | Required |
 
@@ -134,14 +137,14 @@ HelloWorld
 | **Method** | `POST` |
 | **Path** | `/api/users/signin` |
 | **Auth** | None |
-| **Middleware** | `signinValidationRules` → `ValidateRequestMiddleware` |
+| **Middleware** | `signinValidationRules` â†’ `ValidateRequestMiddleware` |
 
 **Validation Rules:**
 
 | Field | Rules |
 |-------|-------|
 | `email` | Required |
-| `password` | Required, length 4–20 |
+| `password` | Required, length 4â€“20 |
 
 **Request body:**
 
@@ -261,13 +264,13 @@ Clears the session cookie.
 
 ```
 auth/src/
-├── app.ts              # Express app setup and middleware
-├── index.ts            # Startup logic, env checks, MongoDB connect
-├── routes/             # Route definitions
-├── controllers/        # Endpoint handlers + validation rules
-├── services/           # Business logic (authentication, user ops)
-├── models/             # Mongoose schemas/models
-└── routes/__test__/    # Jest tests
+â”œâ”€â”€ app.ts              # Express app setup and middleware
+â”œâ”€â”€ index.ts            # Startup logic, env checks, MongoDB connect
+â”œâ”€â”€ routes/             # Route definitions
+â”œâ”€â”€ controllers/        # Endpoint handlers + validation rules
+â”œâ”€â”€ services/           # Business logic (authentication, user ops)
+â”œâ”€â”€ models/             # Mongoose schemas/models
+â””â”€â”€ routes/__test__/    # Jest tests
 ```
 
 ---

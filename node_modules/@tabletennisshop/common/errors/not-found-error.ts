@@ -1,7 +1,7 @@
 import { CustomError } from "./custom-error";
 
 export class NotFoundError extends CustomError{
-    statusCode: number = 401;
+    statusCode: number = 404;
     constructor(message: string){
         super(message);
         Object.setPrototypeOf(this, NotFoundError.prototype);
